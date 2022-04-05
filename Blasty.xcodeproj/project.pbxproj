@@ -18,6 +18,9 @@
 		8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F427F64ABE000C5CBF /* Trig.swift */; };
 		8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */; };
 		8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */; };
+		8B5F072327FCAD4F000C5CBF /* TileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072127FCAD4F000C5CBF /* TileSet.sks */; };
+		8B5F072427FCAD4F000C5CBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072227FCAD4F000C5CBF /* Assets.xcassets */; };
+		8B5F072627FCB4D6000C5CBF /* Cobbles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072527FCB4D6000C5CBF /* Cobbles.sks */; };
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 /* End PBXBuildFile section */
@@ -35,6 +38,9 @@
 		8B5F06F427F64ABE000C5CBF /* Trig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trig.swift; sourceTree = "<group>"; };
 		8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoystickNode.swift; sourceTree = "<group>"; };
 		8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LauncherParticle.sks; sourceTree = "<group>"; };
+		8B5F072127FCAD4F000C5CBF /* TileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TileSet.sks; sourceTree = "<group>"; };
+		8B5F072227FCAD4F000C5CBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8B5F072527FCB4D6000C5CBF /* Cobbles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Cobbles.sks; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -69,6 +75,8 @@
 		8B1927C627F5FC5700275E69 /* Blasty */ = {
 			isa = PBXGroup;
 			children = (
+				8B5F072127FCAD4F000C5CBF /* TileSet.sks */,
+				8B5F072527FCB4D6000C5CBF /* Cobbles.sks */,
 				8B1927CD27F5FC5700275E69 /* GameScene.swift */,
 				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
 				8B5F072027FC91F6000C5CBF /* Particles */,
@@ -87,6 +95,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
+				8B5F072227FCAD4F000C5CBF /* Assets.xcassets */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
@@ -160,9 +169,12 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5F072327FCAD4F000C5CBF /* TileSet.sks in Resources */,
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
 				8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
+				8B5F072627FCB4D6000C5CBF /* Cobbles.sks in Resources */,
+				8B5F072427FCAD4F000C5CBF /* Assets.xcassets in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
 			);

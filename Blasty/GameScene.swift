@@ -42,8 +42,85 @@ class GameScene: SKScene {
     private var lastPlayerVector: CGVector?
     
     let sceneCamera = SKCameraNode()
+    let map = SKNode()
     
     override func didMove(to view: SKView) {
+        
+        // MARK: - Map
+        addChild(map)
+        map.xScale = 1
+        map.yScale = 1
+        
+        // MARK: - Tileset
+        let tileSet = SKTileSet(named: "Sample Grid Tile Set")!
+        let size = 128
+        let tileSize = CGSize(width: size, height: size)
+        let columns = 64
+        let rows = 64
+        
+        let halfWidth = CGFloat(columns) / 2.0 * tileSize.width
+        let halfHeight = CGFloat(rows) / 2.0 * tileSize.height
+        
+        let waterTiles = tileSet.tileGroups.first { $0.name == "Water" }
+        let grassTiles = tileSet.tileGroups.first { $0.name == "Grass"}
+        let sandTiles = tileSet.tileGroups.first { $0.name == "Sand"}
+        let cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone"}
+        
+        let bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
+        bottomLayer.fill(with: waterTiles)
+//        map.addChild(bottomLayer)
+        
+        // create the noise map
+        let noiseMap = makeNoiseMap(columns: columns, rows: rows)
+
+        // create our grass/water layer
+        let topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
+
+        // make SpriteKit do the work of placing specific tiles
+        topLayer.enableAutomapping = true
+        
+        for column in 0 ..< columns {
+            for row in 0 ..< rows {
+                
+                let location = vector2(Int32(row), Int32(column))
+                let terrainHeight = noiseMap.value(at: location)
+
+                if terrainHeight < 0 {
+                    topLayer.setTileGroup(cobbleTiles, forColumn: column, row: row)
+                    
+                } else {
+//                    topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
+                }
+            }
+        }
+        for column in 0 ..< columns {
+            for row in 0 ..< rows {
+                
+                if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
+                    
+                    let tileArray = tileDefinition.textures
+                    let tileTexture = tileArray[0]
+                    
+                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+                    
+//                    let tileNode = SKSpriteNode(texture: tileTexture, size: tileTexture.size())
+                    let tileNode = SKNode()
+                    tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height ))
+                    tileNode.physicsBody?.affectedByGravity = false
+                    tileNode.physicsBody?.isDynamic = false
+
+                    tileNode.position = CGPoint(x: x, y: y)
+                    
+                    addChild(tileNode)
+                     
+                    tileNode.position = CGPoint(x: tileNode.position.x + map.position.x, y: tileNode.position.y + map.position.y)
+                }
+            }
+        }
+
+        // add the grass/water layer to our main map node
+        map.addChild(topLayer)
         
         
         scene?.scaleMode = .aspectFit
@@ -54,7 +131,7 @@ class GameScene: SKScene {
         sky = SKSpriteNode(imageNamed: "Sky")
         sky?.scale(to: CGSize(width: 128000, height: 72000))
         sky?.zPosition = -10
-        addChild(sky!)
+//        addChild(sky!)
         
         
         // MARK: - Physics Delegate
@@ -82,21 +159,21 @@ class GameScene: SKScene {
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
-        scene?.camera?.setScale(1.5)
+        scene?.camera?.setScale(2)
         
         
         // Ground
-        ground = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 20, height: 300), pos: CGPoint(x: 0, y: -250), rot: 0)
-        self.addChild(ground!)
+        ground = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 20, height: 30), pos: CGPoint(x: 0, y: -450), rot: 0)
+//        self.addChild(ground!)
         
         ceiling = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 10, height: 60), pos: CGPoint(x: 0, y: 550), rot: 1)
-        self.addChild(ceiling!)
+//        self.addChild(ceiling!)
         
         
         // Wall
         wall = TerrainNode(size: CGSize(width: (scene?.frame.width)!, height: 60), pos: CGPoint(x: 40, y: -250), rot: 0.5)
         wall?.name = "wall"
-        self.addChild(wall!)
+//        self.addChild(wall!)
         
         
 //        // Breaker check
@@ -119,35 +196,34 @@ class GameScene: SKScene {
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
         
+//        if player!.isMoving { return }
         joystickActive = true
         
-        if !player!.isMoving {
-            for touch in touches {
-                
-                let location = touch.location(in: self)
-                
-                var displace = camera!.position //should be in center of screen
-                displace.x = displace.x - frame.size.width / 2
-                displace.y = displace.y - frame.size.height / 2
-                
-                if location.y < frame.size.height * 0.5 + displace.y {
-                    if location.x >= frame.size.width * 0.5 + displace.x {
-                        // RHS
-                        joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
-                        
-                        joystick?.setBaseAlpha(joystickData.strength)
-                        joystick?.setBaseScale(joystickData.strength)
-                        
-                        launcher!.setLauncherAlpha(joystickData.strength)
-                        launcher!.setLauncherScale(joystickData.strength)
-                        launcher!.setLauncherAngle(joystickData.angle)
-                        launcher!.setEmitterStrength(joystickData.strength)
-                        
-                    }
-                }
-            }
+        for touch in touches {
+            
+            let location = touch.location(in: self)
+            
+            var displace = camera!.position //should be in center of screen
+            displace.x = displace.x - frame.size.width / 2
+            displace.y = displace.y - frame.size.height / 2
+            
+            if location.y > frame.size.height * 0.5 + displace.y { return }
+            
+            if location.x <= frame.size.width * 0.5 + displace.x { return }
+            
+            
+            // We're touching the right side of the screen
+            joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
+            
+            joystick?.setBaseAlpha(joystickData.strength)
+            joystick?.setBaseScale(joystickData.strength)
+            
+            launcher!.setLauncherAlpha(joystickData.strength)
+            launcher!.setLauncherScale(joystickData.strength)
+            launcher!.setLauncherAngle(joystickData.angle)
+            launcher!.setEmitterStrength(joystickData.strength)
+                    
         }
     }
     
@@ -180,7 +256,6 @@ class GameScene: SKScene {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick!.centerStick()
-        
     }
     
     
@@ -189,7 +264,6 @@ class GameScene: SKScene {
     override func update(_ currentTime: TimeInterval) {
 
         let playerVector = player?.physicsBody?.velocity
-        print(abs(playerVector!.dx.rounded()))
         
         if abs(playerVector!.dx.rounded()) >= 10.0 || abs(playerVector!.dy.rounded()) >= 10.0 {
             player?.isMoving = true
@@ -258,4 +332,16 @@ extension GameScene: SKPhysicsContactDelegate {
             secondNode.physicsBody?.affectedByGravity = true
         }
     }
+}
+
+func makeNoiseMap(columns: Int, rows: Int) -> GKNoiseMap {
+    let source = GKPerlinNoiseSource()
+    source.persistence = 0.9
+
+    let noise = GKNoise(source)
+    let size = vector2(1.0, 1.0)
+    let origin = vector2(0.0, 0.0)
+    let sampleCount = vector2(Int32(columns), Int32(rows))
+
+    return GKNoiseMap(noise, size: size, origin: origin, sampleCount: sampleCount, seamless: true)
 }
