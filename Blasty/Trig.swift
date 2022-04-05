@@ -1,0 +1,26 @@
+//
+//
+//
+// Created by Swift Goose on 3/31/22 AT 4:46 PM.
+// Copyright (c) 2022 Swift Goose. All rights reserved.
+//
+// YouTube: https://www.youtube.com/channel/UCeHYBwcVqOoyyNHiAf3ZrLg
+//
+
+import SpriteKit
+
+extension CGPoint {
+    static func -(lhs: CGPoint, rhs: CGPoint) -> CGVector {
+        return CGVector(dx: lhs.x - rhs.x, dy: lhs.y - rhs.y)
+    }
+}
+
+func length(_ x: CGFloat, _ y: CGFloat) -> CGFloat {
+    return sqrt(pow(x, 2) + pow(y, 2))
+}
+
+func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
+    let xDist = a.x - b.x
+    let yDist = a.y - b.y
+    return CGFloat(sqrt(xDist * xDist + yDist * yDist))
+}
