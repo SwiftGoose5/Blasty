@@ -14,12 +14,18 @@ class LauncherParentNode: SKNode {
     
     private var launcher: SKShapeNode?
     private var launcherNode: LauncherNode?
-    private var launcherTip: LauncherTipNode?
-    var launcherEmitter: SKEmitterNode?
+
+    var launcherEmitter: SKEmitterNode
+    private var emitterBirthRate = CGFloat(1200)
+    private var emitterSpeed = CGFloat(1200)
     
     private var lengthScaleFactor = CGFloat(10.0)
     
     override init() {
+        
+        launcherEmitter = SKEmitterNode(fileNamed: "LauncherParticle")!
+        launcherEmitter.alpha = 0
+        
         super.init()
         
         name = "launcherParent"
@@ -27,41 +33,41 @@ class LauncherParentNode: SKNode {
         alpha = 1
         position = CGPoint(x: 0, y: 0)
         
-//        launcherNode = LauncherNode()
-        
-        launcherEmitter = SKEmitterNode(fileNamed: "LauncherParticle")
-        addChild(launcherEmitter!)
+        addChild(launcherEmitter)
         
         
         launcher = SKShapeNode(rect: CGRect(x: 0, y: 0, width: 15, height: 30), cornerRadius: 8)
-        launcher?.fillColor = .white
         launcher?.alpha = 0.5
         launcher?.zPosition = -1
-        
-//        launcherTip = LauncherTipNode()
-//        launcherNode?.addChild(launcherTip!)
-        
-        addChild(launcher!)
-//        addChild(launcherNode!)
+//        addChild(launcher!)
     }
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
     }
     
+    func resetEmitter() {
+        launcherEmitter.particleBirthRate = emitterBirthRate
+        launcherEmitter.speed = emitterSpeed
+    }
+    
+    func setEmitterStrength(_ strength: CGFloat) {
+        launcherEmitter.particleBirthRate = emitterBirthRate * strength
+        launcherEmitter.speed = emitterSpeed * strength
+    }
     
     func setLauncherAngle(_ angle: CGFloat) {
         launcher!.zRotation = angle + .pi/2
-        launcherEmitter!.zRotation = angle - .pi/2
+        launcherEmitter.zRotation = angle - .pi/2
     }
     
     func setLauncherScale(_ strength: CGFloat) {
         launcher!.yScale = strength * lengthScaleFactor
-//        launcherTip?.updatePosition(strength / lengthScaleFactor)
     }
     
     func setLauncherAlpha(_ alpha: CGFloat) {
         launcher!.alpha = alpha
+        launcherEmitter.alpha = alpha
     }
     
     
@@ -83,28 +89,3 @@ class LauncherNode: SKSpriteNode {
     }
 }
 
-class LauncherTipNode: SKSpriteNode {
-    init() {
-        let texture = SKTexture(imageNamed: "launcherTip")
-        
-        super.init(texture: texture, color: .white, size: texture.size())
-        
-        name = "launcherTip"
-        zPosition = 3
-        alpha = 1
-//        xScale = 4
-//        yScale = 4
-//        position = CGPoint(x: texture.size().width / 2, y: texture.size().height / 2)
-//        position = CGPoint(x: 0, y: 0)
-
-        anchorPoint = CGPoint(x: 0.5, y: 0.5)
-    }
-    
-    func updatePosition(_ scale: CGFloat) {
-        yScale /= scale
-    }
-    
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
-    }
-}

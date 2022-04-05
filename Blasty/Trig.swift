@@ -15,6 +15,14 @@ extension CGPoint {
     }
 }
 
+func angleDegrees(_ rad: CGFloat) -> CGFloat {
+    return rad * 180 / .pi
+}
+
+func angleRadians(_ point1: CGPoint, _ point2: CGPoint) -> CGFloat {
+    return CGFloat(-atan2(point1.x - point2.x, point1.y - point2.y))
+}
+
 func length(_ x: CGFloat, _ y: CGFloat) -> CGFloat {
     return sqrt(pow(x, 2) + pow(y, 2))
 }

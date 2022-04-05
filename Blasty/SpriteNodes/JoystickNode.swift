@@ -24,32 +24,42 @@ struct JoystickData {
 
 class Joystick : SKNode {
     
-    private let baseRadius: CGFloat = 120
-    private var baseAlpha: CGFloat = 0.3
+    private let baseRadius: CGFloat = 200
+    private var baseAlpha: CGFloat = 0
+    private var baseFillAlpha: CGFloat = 0.3
     
     private var base: SKShapeNode
+    private var baseFill: SKShapeNode
     private var stick: SKSpriteNode
     
     override init() {
         base = SKShapeNode(circleOfRadius: baseRadius)
+        baseFill = SKShapeNode(circleOfRadius: baseRadius)
         stick = SKSpriteNode(imageNamed: "Joystick")
         
         super.init()
         
-        base.zPosition = 1
+        base.zPosition = 2
         base.fillColor = .orange
         base.strokeColor = .clear
         base.alpha = baseAlpha
+        base.setScale(0)
+        
+        baseFill.zPosition = 1
+        baseFill.fillColor = .black
+        baseFill.strokeColor = .clear
+        baseFill.alpha = baseFillAlpha
         
         stick.zPosition = 2
 
         addChild(base)
+        addChild(baseFill)
         addChild(stick)
     }
     
     func moveStick(jsLocation: CGPoint, touchLocation: CGPoint) -> JoystickData {
         
-        let vector = CGVector(dx: touchLocation.x - jsLocation.x, dy: touchLocation.y - jsLocation.y)
+        var vector = CGVector(dx: touchLocation.x - jsLocation.x, dy: touchLocation.y - jsLocation.y)
         
         var angle = atan(vector.dy / vector.dx)
         var strength = CGFloat(0.0)
@@ -73,6 +83,9 @@ class Joystick : SKNode {
                     angle = -.pi + angle
                 }
             }
+            
+            vector.dx = newX
+            vector.dy = newY
             
             stick.position = CGPoint(x: newX, y: newY)
             strength = CGFloat(1.0)
@@ -110,11 +123,11 @@ class Joystick : SKNode {
 extension Joystick {
     
     func setBaseScale(_ scale: CGFloat) {
-        base.setScale(scale * 3)
+        base.setScale(scale)
     }
     
     func resetBaseScale() {
-        base.setScale(1)
+        base.setScale(0)
     }
     
     func setBaseAlpha(_ alpha: CGFloat) {
@@ -123,5 +136,6 @@ extension Joystick {
     
     func resetBaseAlpha() {
         base.alpha = baseAlpha
+        baseFill.alpha = baseFillAlpha
     }
 }

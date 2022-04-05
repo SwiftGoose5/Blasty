@@ -82,11 +82,11 @@ class GameScene: SKScene {
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
-        scene?.camera?.setScale(2)
+        scene?.camera?.setScale(1.5)
         
         
         // Ground
-        ground = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 20, height: 60), pos: CGPoint(x: 0, y: -250), rot: 0)
+        ground = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 20, height: 300), pos: CGPoint(x: 0, y: -250), rot: 0)
         self.addChild(ground!)
         
         ceiling = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 10, height: 60), pos: CGPoint(x: 0, y: 550), rot: 1)
@@ -108,50 +108,21 @@ class GameScene: SKScene {
 //        self.addChild(wall2!)
         
     }
-    
-    
-    func touchDown(atPoint pos : CGPoint) {
-        
-        startTouch = pos
-        joystickActive = true
-    }
-    
-    func touchMoved(toPoint pos : CGPoint) {
-        
-//        var rad = CGFloat(-atan2(startTouch!.x - pos.x,
-//                                startTouch!.y - pos.y))
-//        var angle = rad * 180 / .pi
-//        print(angle)
-        
-//        player?.launcherNode.alpha = distance(startTouch!, pos) / 500
-//        player?.launcherNode.yScale = distance(startTouch!, pos) / 50
-//        player?.launcherNode.zRotation = CGFloat(-atan2(startTouch!.x - pos.x, startTouch!.y - pos.y))
-        
-//        launchIndicator?.alpha = distance(startTouch!, pos) / 200
-//        launchIndicator?.yScale = distance(startTouch!, pos) / 50
-//        launchIndicator?.zRotation = CGFloat(-atan2(startTouch!.x - pos.x, startTouch!.y - pos.y))
-    }
-    
-    func touchUp(atPoint pos : CGPoint) {
-//        player?.launcherNode.alpha = 0
-//        launcher?.setLauncherAlpha(0)
-//
-//
-//        player?.physicsBody?.isDynamic = true
-////        player?.physicsBody?.applyImpulse(CGVector(dx: pos.x - startTouch!.x, dy: pos.y - startTouch!.y))
-////        player?.physicsBody?.applyAngularImpulse(0.1)
-//        player?.physicsBody?.applyImpulse(CGVector(dx: startTouch!.x - pos.x, dy: startTouch!.y - pos.y))
-//
-    }
+
+
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
-        for t in touches { self.touchDown(atPoint: t.location(in: self)) }
+        for touch in touches {
+            startTouch = touch.location(in: self)
+            joystickActive = true
+        }
     }
     
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
 //        for t in touches { self.touchMoved(toPoint: t.location(in: self)) }
         
         joystickActive = true
+        
         if !player!.isMoving {
             for touch in touches {
                 
@@ -167,11 +138,13 @@ class GameScene: SKScene {
                         joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
                         
                         joystick?.setBaseAlpha(joystickData.strength)
-//                        joystick?.setBaseScale(joystickData.strength)
+                        joystick?.setBaseScale(joystickData.strength)
                         
                         launcher!.setLauncherAlpha(joystickData.strength)
                         launcher!.setLauncherScale(joystickData.strength)
                         launcher!.setLauncherAngle(joystickData.angle)
+                        launcher!.setEmitterStrength(joystickData.strength)
+                        
                     }
                 }
             }
@@ -179,12 +152,12 @@ class GameScene: SKScene {
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-//        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
         
         for touch in touches {
             let location = touch.location(in: self)
             
             launcher?.setLauncherAlpha(0)
+            launcher?.resetEmitter()
 
             
             player?.physicsBody?.isDynamic = true
@@ -207,7 +180,6 @@ class GameScene: SKScene {
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
         joystick!.centerStick()
-        for t in touches { self.touchUp(atPoint: t.location(in: self)) }
         
     }
     
@@ -215,7 +187,7 @@ class GameScene: SKScene {
     // MARK: - Update
     
     override func update(_ currentTime: TimeInterval) {
-        // Called before each frame is rendered
+
         let playerVector = player?.physicsBody?.velocity
         print(abs(playerVector!.dx.rounded()))
         
