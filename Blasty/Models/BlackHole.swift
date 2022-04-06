@@ -17,7 +17,7 @@ class BlackHole: SKSpriteNode {
     
     init() {
         let texture = SKTexture(imageNamed: "BlackHole")
-        let scale = 2.0
+        let scale = 3.0
     
         super.init(texture: texture, color: .white, size: texture.size())
         

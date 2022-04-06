@@ -79,7 +79,7 @@ extension MapFactory {
                 let location = vector2(Int32(row), Int32(column))
                 let terrainHeight = noiseMap.value(at: location)
 
-                if terrainHeight < -0.3 {
+                if terrainHeight < -0.7 {
                     topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
                 } else {
 //                    topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
@@ -90,7 +90,6 @@ extension MapFactory {
     
     func buildTilePhysics() {
         let blackHolePoint = RNGFactory.colRow
-        print("setting bh: \(blackHolePoint)")
         
         for column in 0 ..< columns {
             for row in 0 ..< rows {
@@ -98,27 +97,30 @@ extension MapFactory {
                 if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
                     let tileArray = tileDefinition.textures
                     let tileTexture = tileArray[0]
-//                    if tileTexture.description.contains("Grass") { print("contains grass"); break }
+                    
+                    if !tileTexture.description.contains("Center") {
+                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+                        let tileNode = SKNode()
 
-                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-                    let tileNode = SKNode()
+                        tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+                        tileNode.physicsBody?.affectedByGravity = false
+                        tileNode.physicsBody?.isDynamic = false
 
-                    tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
-                    tileNode.physicsBody?.affectedByGravity = false
-                    tileNode.physicsBody?.isDynamic = false
+                        tileNode.position = CGPoint(x: x, y: y)
 
-                    tileNode.position = CGPoint(x: x, y: y)
+                        addChild(tileNode)
 
-                    addChild(tileNode)
+                        tileNode.position = CGPoint(x: tileNode.position.x + position.x,
+                                                    y: tileNode.position.y + position.y)
+                    }
 
-                    tileNode.position = CGPoint(x: tileNode.position.x + position.x,
-                                                y: tileNode.position.y + position.y)
+                    
                     
                 }
                 
                 if column == blackHolePoint[0] && row == blackHolePoint[1] {
-                    print("placing blackhole at row: \(row)    col: \(column)")
+                    print("placing blackhole at row: \(column)    col: \(row)")
                     let blackHole = BlackHole()
                     
                     let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
@@ -142,8 +144,8 @@ extension MapFactory {
     func makeNoiseMap(columns: Int, rows: Int, seed: Int32 = DateFactory.dateSeed) -> GKNoiseMap {
         let source = GKPerlinNoiseSource()
         source.persistence = 1
-        source.octaveCount = 5
-        source.frequency = 8
+        source.octaveCount = 2
+        source.frequency = 120
         source.lacunarity = 1
         source.seed = seed
         
