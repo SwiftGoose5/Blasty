@@ -14,7 +14,7 @@ struct DateFactory {
     static var dateSeed : Int32 {
         let date = Date()
         let dateFormatter = DateFormatter()
-        dateFormatter.dateFormat = "SddMMyyyy"
+        dateFormatter.dateFormat = "ddMMyyyyss"
         return Int32(dateFormatter.string(from: date))!
     }
 }

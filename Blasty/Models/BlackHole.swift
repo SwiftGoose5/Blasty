@@ -17,8 +17,7 @@ class BlackHole: SKSpriteNode {
     
     init() {
         let texture = SKTexture(imageNamed: "BlackHole")
-        let scale = 1.5
-        
+        let scale = 2.0
     
         super.init(texture: texture, color: .white, size: texture.size())
         
@@ -40,8 +39,8 @@ class BlackHole: SKSpriteNode {
         physicsBody?.mass = 1000
         
         emitter = SKEmitterNode(fileNamed: "BlackHole")!
-        emitter!.alpha = 0.5
-//        emitter!.zPosition = -1
+        emitter!.alpha = 0.8
+        emitter!.zPosition = -1
         addChild(emitter!)
         
         

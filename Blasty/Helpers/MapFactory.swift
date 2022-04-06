@@ -14,8 +14,8 @@ import GameplayKit
 class MapFactory: SKNode {
 
     private let size = 128
-    private let columns = 32
-    private let rows = 32
+    private let columns = 64
+    private let rows = 64
     
     private var tileSize = CGSize(width: 0, height: 0)
     private var halfWidth = CGFloat(0)
@@ -42,9 +42,9 @@ class MapFactory: SKNode {
         halfWidth = CGFloat(columns) / 2.0 * tileSize.width
         halfHeight = CGFloat(rows) / 2.0 * tileSize.height
         
-        tileSet = SKTileSet(named: "Cobbles")!
+        tileSet = SKTileSet(named: "StockTile")!
         
-        grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
+        grassTiles = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
 //        waterTiles = tileSet.tileGroups.first { $0.name == "Water" }!
 //        sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
 //        cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
@@ -89,6 +89,9 @@ extension MapFactory {
     }
     
     func buildTilePhysics() {
+        let blackHolePoint = RNGFactory.colRow
+        print("setting bh: \(blackHolePoint)")
+        
         for column in 0 ..< columns {
             for row in 0 ..< rows {
                 
@@ -111,6 +114,22 @@ extension MapFactory {
 
                     tileNode.position = CGPoint(x: tileNode.position.x + position.x,
                                                 y: tileNode.position.y + position.y)
+                    
+                }
+                
+                if column == blackHolePoint[0] && row == blackHolePoint[1] {
+                    print("placing blackhole at row: \(row)    col: \(column)")
+                    let blackHole = BlackHole()
+                    
+                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+                    
+                    blackHole.position = CGPoint(x: x, y: y)
+                    
+                    addChild(blackHole)
+                    
+                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
+                                                y: blackHole.position.y + position.y)
                 }
             }
         }

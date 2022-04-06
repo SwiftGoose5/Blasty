@@ -54,13 +54,14 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
-            print("Done loading!")
+            
         }
         
-        let blackHole = BlackHole()
-        blackHole.position = CGPoint(x: 0, y: 1000)
-        addChild(blackHole)
+//        let blackHole = BlackHole()
+//        blackHole.position = CGPoint(x: 0, y: 1000)
+//        addChild(blackHole)
         
         backgroundColor = .blue
         
@@ -122,7 +123,7 @@ class GameScene: SKScene {
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
-        scene?.camera?.setScale(2)
+        scene?.camera?.setScale(2.0)
         
         
         // Ground
@@ -308,7 +309,7 @@ extension GameScene: SKPhysicsContactDelegate {
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
         
-        print("contact between \(firstNode.name) and \(secondNode.name)")
+//        print("contact between \(firstNode.name) and \(secondNode.name)")
         
 //        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
 //            player.physicsBody?.isDynamic = false
