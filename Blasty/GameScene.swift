@@ -14,8 +14,9 @@ import GameplayKit
 enum CollisionType: UInt32 {
     case player = 1
     case ground = 2
-    case enemy = 4
+    case victory = 4
     case enemySpell = 8
+    case field = 16
 }
 
 class GameScene: SKScene {
@@ -57,6 +58,10 @@ class GameScene: SKScene {
             print("Done loading!")
         }
         
+        let blackHole = BlackHole()
+        blackHole.position = CGPoint(x: 0, y: 1000)
+        addChild(blackHole)
+        
         backgroundColor = .blue
         
         // MARK: - Cloud1
@@ -90,8 +95,6 @@ class GameScene: SKScene {
         addChild(mapFactory)
         
         
-        
-        scene?.scaleMode = .aspectFit
         isUserInteractionEnabled = true
         
         
@@ -305,14 +308,25 @@ extension GameScene: SKPhysicsContactDelegate {
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
         
-//        print("contact between \(firstNode.name) and \(secondNode.name)")
+        print("contact between \(firstNode.name) and \(secondNode.name)")
         
-        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
-            player.physicsBody?.isDynamic = false
-        }
+//        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
+//            player.physicsBody?.isDynamic = false
+//        }
+//
+//        if secondNode.name == "wall2", let player = firstNode as? PlayerNode {
+//            secondNode.physicsBody?.affectedByGravity = true
+//        }
         
-        if secondNode.name == "wall2", let player = firstNode as? PlayerNode {
-            secondNode.physicsBody?.affectedByGravity = true
+        if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
+            print("Victory!")
+            
+            blackHole.field?.isEnabled = false
+            player.physicsBody?.collisionBitMask = 0
+            player.physicsBody?.contactTestBitMask = 0
+            player.physicsBody?.affectedByGravity = false
+            player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            player.run(SKAction.move(to: blackHole.position, duration: 1))
         }
     }
 }

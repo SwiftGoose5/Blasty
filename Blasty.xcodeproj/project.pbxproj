@@ -25,6 +25,9 @@
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 		8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1BAC927FDD91B00C72602 /* DateFactory.swift */; };
+		8BF1BACC27FDE35A00C72602 /* BlackHole.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1BACB27FDE35A00C72602 /* BlackHole.swift */; };
+		8BF1BACF27FDE53800C72602 /* BlackHole.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8BF1BACD27FDE53800C72602 /* BlackHole.sks */; };
+		8BF1BAD027FDE53800C72602 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8BF1BACE27FDE53800C72602 /* Assets.xcassets */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -47,6 +50,9 @@
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 		8BF1BAC927FDD91B00C72602 /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
+		8BF1BACB27FDE35A00C72602 /* BlackHole.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BlackHole.swift; sourceTree = "<group>"; };
+		8BF1BACD27FDE53800C72602 /* BlackHole.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = BlackHole.sks; sourceTree = "<group>"; };
+		8BF1BACE27FDE53800C72602 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -84,7 +90,7 @@
 				8B1927CD27F5FC5700275E69 /* GameScene.swift */,
 				8BF1BAC827FDD90700C72602 /* Helpers */,
 				8B5F072027FC91F6000C5CBF /* Particles */,
-				8B5F06F627F781F1000C5CBF /* SpriteNodes */,
+				8B5F06F627F781F1000C5CBF /* Models */,
 				8B1927CF27F5FC5700275E69 /* GameViewController.swift */,
 				8B1927C727F5FC5700275E69 /* AppDelegate.swift */,
 				8B1927C927F5FC5700275E69 /* GameScene.sks */,
@@ -95,21 +101,24 @@
 			path = Blasty;
 			sourceTree = "<group>";
 		};
-		8B5F06F627F781F1000C5CBF /* SpriteNodes */ = {
+		8B5F06F627F781F1000C5CBF /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
+				8BF1BACB27FDE35A00C72602 /* BlackHole.swift */,
 			);
-			path = SpriteNodes;
+			path = Models;
 			sourceTree = "<group>";
 		};
 		8B5F072027FC91F6000C5CBF /* Particles */ = {
 			isa = PBXGroup;
 			children = (
 				8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */,
+				8BF1BACD27FDE53800C72602 /* BlackHole.sks */,
+				8BF1BACE27FDE53800C72602 /* Assets.xcassets */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -184,11 +193,13 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5F072327FCAD4F000C5CBF /* StockTile.sks in Resources */,
+				8BF1BACF27FDE53800C72602 /* BlackHole.sks in Resources */,
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
 				8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
 				8B5F072827FCDDAB000C5CBF /* Cobbles.sks in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
+				8BF1BAD027FDE53800C72602 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -211,6 +222,7 @@
 				8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */,
 				8B1927C827F5FC5700275E69 /* AppDelegate.swift in Sources */,
 				8B5F06F127F62434000C5CBF /* TerrainNode.swift in Sources */,
+				8BF1BACC27FDE35A00C72602 /* BlackHole.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -83,7 +83,7 @@ extension SkyFactory {
                 let location = vector2(Int32(row), Int32(column))
                 let terrainHeight = noiseMap.value(at: location)
 
-                if terrainHeight < 0.6 {
+                if terrainHeight < 0.5 {
 //                    topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
                     
                 } else {
@@ -101,6 +101,9 @@ extension SkyFactory {
     func makeNoiseMap(columns: Int, rows: Int, seed: Int32 = DateFactory.dateSeed) -> GKNoiseMap {
         let source = GKPerlinNoiseSource()
         source.persistence = 1
+        source.octaveCount = 5
+        source.frequency = 8
+        source.lacunarity = 1
         source.seed = seed
 
         let noise = GKNoise(source)

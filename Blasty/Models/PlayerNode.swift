@@ -26,8 +26,9 @@ class PlayerNode: SKSpriteNode {
         
         self.physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
         physicsBody?.categoryBitMask = CollisionType.player.rawValue
-        physicsBody?.collisionBitMask = CollisionType.ground.rawValue
-        physicsBody?.contactTestBitMask = CollisionType.ground.rawValue
+        physicsBody?.collisionBitMask = CollisionType.ground.rawValue | CollisionType.victory.rawValue
+        physicsBody?.contactTestBitMask = CollisionType.ground.rawValue | CollisionType.victory.rawValue
+        physicsBody?.fieldBitMask = CollisionType.field.rawValue
         physicsBody?.isDynamic = true
         physicsBody?.affectedByGravity = true
         physicsBody?.allowsRotation = true

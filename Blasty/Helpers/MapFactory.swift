@@ -95,7 +95,6 @@ extension MapFactory {
                 if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
                     let tileArray = tileDefinition.textures
                     let tileTexture = tileArray[0]
-//                    print(tileTexture.description)
 //                    if tileTexture.description.contains("Grass") { print("contains grass"); break }
 
                     let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
