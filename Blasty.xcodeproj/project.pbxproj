@@ -20,7 +20,9 @@
 		8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */; };
 		8B5F072327FCAD4F000C5CBF /* TileSet.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072127FCAD4F000C5CBF /* TileSet.sks */; };
 		8B5F072427FCAD4F000C5CBF /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072227FCAD4F000C5CBF /* Assets.xcassets */; };
-		8B5F072627FCB4D6000C5CBF /* Cobbles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072527FCB4D6000C5CBF /* Cobbles.sks */; };
+		8B5F072827FCDDAB000C5CBF /* Cobbles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072727FCDDAB000C5CBF /* Cobbles.sks */; };
+		8B5F072A27FD1402000C5CBF /* MapFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072927FD1402000C5CBF /* MapFactory.swift */; };
+		8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072D27FD3863000C5CBF /* SkyFactory.swift */; };
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 /* End PBXBuildFile section */
@@ -40,7 +42,9 @@
 		8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LauncherParticle.sks; sourceTree = "<group>"; };
 		8B5F072127FCAD4F000C5CBF /* TileSet.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = TileSet.sks; sourceTree = "<group>"; };
 		8B5F072227FCAD4F000C5CBF /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
-		8B5F072527FCB4D6000C5CBF /* Cobbles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Cobbles.sks; sourceTree = "<group>"; };
+		8B5F072727FCDDAB000C5CBF /* Cobbles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Cobbles.sks; sourceTree = "<group>"; };
+		8B5F072927FD1402000C5CBF /* MapFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFactory.swift; sourceTree = "<group>"; };
+		8B5F072D27FD3863000C5CBF /* SkyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFactory.swift; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -76,9 +80,11 @@
 			isa = PBXGroup;
 			children = (
 				8B5F072127FCAD4F000C5CBF /* TileSet.sks */,
-				8B5F072527FCB4D6000C5CBF /* Cobbles.sks */,
+				8B5F072727FCDDAB000C5CBF /* Cobbles.sks */,
 				8B1927CD27F5FC5700275E69 /* GameScene.swift */,
 				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
+				8B5F072927FD1402000C5CBF /* MapFactory.swift */,
+				8B5F072D27FD3863000C5CBF /* SkyFactory.swift */,
 				8B5F072027FC91F6000C5CBF /* Particles */,
 				8B5F06F627F781F1000C5CBF /* SpriteNodes */,
 				8B1927CF27F5FC5700275E69 /* GameViewController.swift */,
@@ -94,8 +100,8 @@
 		8B5F06F627F781F1000C5CBF /* SpriteNodes */ = {
 			isa = PBXGroup;
 			children = (
-				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
 				8B5F072227FCAD4F000C5CBF /* Assets.xcassets */,
+				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
@@ -173,7 +179,7 @@
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
 				8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
-				8B5F072627FCB4D6000C5CBF /* Cobbles.sks in Resources */,
+				8B5F072827FCDDAB000C5CBF /* Cobbles.sks in Resources */,
 				8B5F072427FCAD4F000C5CBF /* Assets.xcassets in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
@@ -187,9 +193,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B5F072A27FD1402000C5CBF /* MapFactory.swift in Sources */,
 				8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */,
 				8B1927CE27F5FC5700275E69 /* GameScene.swift in Sources */,
 				8B1927D027F5FC5700275E69 /* GameViewController.swift in Sources */,
+				8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */,
 				8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */,
 				8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */,
 				8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */,
@@ -351,6 +359,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",
@@ -381,6 +390,7 @@
 				INFOPLIST_KEY_UISupportedInterfaceOrientations = UIInterfaceOrientationLandscapeLeft;
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPad = "UIInterfaceOrientationPortrait UIInterfaceOrientationPortraitUpsideDown UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
 				INFOPLIST_KEY_UISupportedInterfaceOrientations_iPhone = "UIInterfaceOrientationPortrait UIInterfaceOrientationLandscapeLeft UIInterfaceOrientationLandscapeRight";
+				IPHONEOS_DEPLOYMENT_TARGET = 15.0;
 				LD_RUNPATH_SEARCH_PATHS = (
 					"$(inherited)",
 					"@executable_path/Frameworks",

@@ -24,7 +24,7 @@ struct JoystickData {
 
 class Joystick : SKNode {
     
-    private let baseRadius: CGFloat = 200
+    private let baseRadius: CGFloat = 300
     private var baseAlpha: CGFloat = 0
     private var baseFillAlpha: CGFloat = 0.3
     
