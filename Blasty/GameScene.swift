@@ -53,6 +53,10 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
+        SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
+            print("Done loading!")
+        }
+        
         backgroundColor = .blue
         
         // MARK: - Cloud1
@@ -76,25 +80,19 @@ class GameScene: SKScene {
         cloud3.zPosition = -2
         cloud3.alpha = 0.2
         
-        addChild(cloud1)
-        addChild(cloud2)
-        addChild(cloud3)
+//        addChild(cloud1)
+//        addChild(cloud2)
+//        addChild(cloud3)
         
 
         // MARK: - Map
-        addChild(mapFactory)
         addChild(skyFactory)
+        addChild(mapFactory)
+        
         
         
         scene?.scaleMode = .aspectFit
         isUserInteractionEnabled = true
-        
-        
-        // MARK: - Sky
-        sky = SKSpriteNode(imageNamed: "BlueSky")
-        sky?.scale(to: CGSize(width: 128000, height: 72000))
-        sky?.zPosition = -10
-//        addChild(sky!)
         
         
         // MARK: - Physics Delegate
