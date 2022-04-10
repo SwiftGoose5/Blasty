@@ -7,7 +7,6 @@
 // YouTube: https://www.youtube.com/channel/UCeHYBwcVqOoyyNHiAf3ZrLg
 //
 
-
 import SpriteKit
 import GameplayKit
 
@@ -28,9 +27,10 @@ class MapFactory: SKNode {
     private var topLayer = SKTileMapNode()
     
     private var waterTiles = SKTileGroup()
-    private var grassTiles = SKTileGroup()
-    private var sandTiles = SKTileGroup()
+    private var sandyCobble = SKTileGroup()
+    private var grassyWater = SKTileGroup()
     private var cobbleTiles = SKTileGroup()
+    private var grassTiles = SKTileGroup()
     
     override init() {
         super.init()
@@ -44,9 +44,10 @@ class MapFactory: SKNode {
         
         tileSet = SKTileSet(named: "StockTile")!
         
-        grassTiles = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
+        sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
 //        waterTiles = tileSet.tileGroups.first { $0.name == "Water" }!
-//        sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
+        grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
+        grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
 //        cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
         
 //        bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
@@ -56,9 +57,11 @@ class MapFactory: SKNode {
         topLayer.enableAutomapping = true
 //        bottomLayer.fill(with: waterTiles)
         
-        buildTileSet()
-        buildTilePhysics()
         
+        DispatchQueue.main.async {
+            self.buildTileSet()
+            self.buildTilePhysics()
+        }
         
         DispatchQueue.main.async {
             self.addChild(self.topLayer)
@@ -80,9 +83,9 @@ extension MapFactory {
                 let terrainHeight = noiseMap.value(at: location)
 
                 if terrainHeight < -0.7 {
+                    topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
+                } else if terrainHeight > 0.9 {
                     topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
-                } else {
-//                    topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
                 }
             }
         }
@@ -90,6 +93,7 @@ extension MapFactory {
     
     func buildTilePhysics() {
         let blackHolePoint = RNGFactory.colRow
+        print("bhp: \(blackHolePoint)")
         
         for column in 0 ..< columns {
             for row in 0 ..< rows {
@@ -106,6 +110,14 @@ extension MapFactory {
                         tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
                         tileNode.physicsBody?.affectedByGravity = false
                         tileNode.physicsBody?.isDynamic = false
+                        
+                        // Check for grass aka spike texture
+                        if tileTexture.description.contains("Grass") {
+                            tileNode.name = "spikes"
+                            tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
+                            tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
+                            tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
+                        }
 
                         tileNode.position = CGPoint(x: x, y: y)
 
@@ -120,7 +132,6 @@ extension MapFactory {
                 }
                 
                 if column == blackHolePoint[0] && row == blackHolePoint[1] {
-                    print("placing blackhole at row: \(column)    col: \(row)")
                     let blackHole = BlackHole()
                     
                     let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)

@@ -19,9 +19,9 @@
 		8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */; };
 		8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */; };
 		8B5F072327FCAD4F000C5CBF /* StockTile.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072127FCAD4F000C5CBF /* StockTile.sks */; };
-		8B5F072827FCDDAB000C5CBF /* Cobbles.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072727FCDDAB000C5CBF /* Cobbles.sks */; };
 		8B5F072A27FD1402000C5CBF /* MapFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072927FD1402000C5CBF /* MapFactory.swift */; };
 		8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072D27FD3863000C5CBF /* SkyFactory.swift */; };
+		8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7524892800BA55001B4BC1 /* ButtonNode.swift */; };
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 		8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1BAC927FDD91B00C72602 /* DateFactory.swift */; };
@@ -44,9 +44,9 @@
 		8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoystickNode.swift; sourceTree = "<group>"; };
 		8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LauncherParticle.sks; sourceTree = "<group>"; };
 		8B5F072127FCAD4F000C5CBF /* StockTile.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StockTile.sks; sourceTree = "<group>"; };
-		8B5F072727FCDDAB000C5CBF /* Cobbles.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = Cobbles.sks; sourceTree = "<group>"; };
 		8B5F072927FD1402000C5CBF /* MapFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFactory.swift; sourceTree = "<group>"; };
 		8B5F072D27FD3863000C5CBF /* SkyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFactory.swift; sourceTree = "<group>"; };
+		8B7524892800BA55001B4BC1 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 		8BF1BAC927FDD91B00C72602 /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
@@ -107,6 +107,7 @@
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
+				8B7524892800BA55001B4BC1 /* ButtonNode.swift */,
 				8BF1BACB27FDE35A00C72602 /* BlackHole.swift */,
 			);
 			path = Models;
@@ -137,7 +138,6 @@
 			isa = PBXGroup;
 			children = (
 				8B5F072127FCAD4F000C5CBF /* StockTile.sks */,
-				8B5F072727FCDDAB000C5CBF /* Cobbles.sks */,
 			);
 			path = Textures;
 			sourceTree = "<group>";
@@ -205,7 +205,6 @@
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
 				8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
-				8B5F072827FCDDAB000C5CBF /* Cobbles.sks in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
 			);
@@ -231,6 +230,7 @@
 				8B1927C827F5FC5700275E69 /* AppDelegate.swift in Sources */,
 				8B5F06F127F62434000C5CBF /* TerrainNode.swift in Sources */,
 				8BF1BACC27FDE35A00C72602 /* BlackHole.swift in Sources */,
+				8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

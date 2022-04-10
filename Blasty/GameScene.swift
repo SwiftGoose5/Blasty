@@ -14,8 +14,8 @@ import GameplayKit
 enum CollisionType: UInt32 {
     case player = 1
     case ground = 2
-    case victory = 4
-    case enemySpell = 8
+    case spikes = 4
+    case victory = 8
     case field = 16
 }
 
@@ -44,6 +44,8 @@ class GameScene: SKScene {
     private var joystick : Joystick?
     private var joystickActive = false
     
+    private var button : Button?
+    
     private var launcher: LauncherParentNode?
     
     let sceneCamera = SKCameraNode()
@@ -54,15 +56,10 @@ class GameScene: SKScene {
     
     override func didMove(to view: SKView) {
         
-        
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
-        
-//        let blackHole = BlackHole()
-//        blackHole.position = CGPoint(x: 0, y: 1000)
-//        addChild(blackHole)
-        
+
         backgroundColor = .blue
         
         // MARK: - Cloud1
@@ -106,6 +103,10 @@ class GameScene: SKScene {
         // MARK: - Joystick
         joystick = Joystick()
         addChild(joystick!)
+        
+        // MARK: - Button
+        button = Button()
+        addChild(button!)
 
         
         // MARK: - Player
@@ -154,8 +155,41 @@ class GameScene: SKScene {
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
+            
+            
+            let location = touch.location(in: self)
+            
+            
+            
+            
+            var displace = camera!.position //should be in center of screen
+            
+//            displace.x = displace.x - frame.size.width / 2
+//            displace.y = displace.y - frame.size.height / 2
+//
+//            if displace.x < 0 { displace.x *= -1 }
+//            if displace.y < 0 { displace.y *= -1 }
+            
+            
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x <= frame.size.width * 0.5 - displace.x {
+            if location.y < displace.y {
+                if location.x <= displace.x {
+                    print("joystick starting to move")
+                    
+                    joystickActive = true
+                }
+            }
+            
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x >= frame.size.width * 0.5 + displace.x {
+            if location.y < displace.y {
+                if location.x >= displace.x {
+                    print("button was pressed")
+                }
+            }
+            
             startTouch = touch.location(in: self)
-            joystickActive = true
         }
     }
     
@@ -169,30 +203,56 @@ class GameScene: SKScene {
             let location = touch.location(in: self)
             
             var displace = camera!.position //should be in center of screen
-            displace.x = displace.x - frame.size.width / 2
-            displace.y = displace.y - frame.size.height / 2
+//            displace.x = displace.x - frame.size.width / 2
+//            displace.y = displace.y - frame.size.height / 2
             
-            if location.y > frame.size.height * 0.5 + displace.y { return }
+//            if location.y > frame.size.height * 0.5 + displace.y { return }
+//
+//            if location.x >= frame.size.width * 0.5 - displace.x { return }
             
-            if location.x <= frame.size.width * 0.5 + displace.x { return }
+//            joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
+//
+//            joystick?.setBaseAlpha(joystickData.strength)
+//            joystick?.setBaseScale(joystickData.strength)
+//
+//            launcher!.setLauncherAlpha(joystickData.strength)
+//            launcher!.setLauncherScale(joystickData.strength)
+//            launcher!.setLauncherAngle(joystickData.angle)
+//            launcher!.setEmitterStrength(joystickData.strength)
             
+//            if displace.x < 0 { displace.x *= -1 }
+//            if displace.y < 0 { displace.y *= -1 }
+//
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x <= frame.size.width * 0.5 - displace.x {
+            if location.y < displace.y {
+                if location.x <= displace.x {
+                    // We're touching the right side of the screen
+                    joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
+                    
+                    joystick?.setBaseAlpha(joystickData.strength)
+                    joystick?.setBaseScale(joystickData.strength)
+                    
+                    launcher!.setLauncherAlpha(joystickData.strength)
+                    launcher!.setLauncherScale(joystickData.strength)
+                    launcher!.setLauncherAngle(joystickData.angle)
+                    launcher!.setEmitterStrength(joystickData.strength)
+                }
+            }
             
-            // We're touching the right side of the screen
-            joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
-            
-            joystick?.setBaseAlpha(joystickData.strength)
-            joystick?.setBaseScale(joystickData.strength)
-            
-            launcher!.setLauncherAlpha(joystickData.strength)
-            launcher!.setLauncherScale(joystickData.strength)
-            launcher!.setLauncherAngle(joystickData.angle)
-            launcher!.setEmitterStrength(joystickData.strength)
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x >= frame.size.width * 0.5 + displace.x {
+            if location.y < displace.y {
+                if location.x >= displace.x {
+//                    print("button still being pressed")
+                }
+            }
+
                     
         }
     }
     
     override func touchesEnded(_ touches: Set<UITouch>, with event: UIEvent?) {
-        
         for touch in touches {
             let location = touch.location(in: self)
             
@@ -200,17 +260,63 @@ class GameScene: SKScene {
             launcher?.resetEmitter()
 
             
-            player?.physicsBody?.isDynamic = true
+//            player?.physicsBody?.isDynamic = true
         
-            player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength,
-                                                       dy: joystickData.vector.dy * -joystickData.strength))
+//            if !joystickActive { return }
+            
+            
+            var displace = camera!.position //should be in center of screen
+//            displace.x = displace.x - frame.size.width / 2
+//            displace.y = displace.y - frame.size.height / 2
+            
+//            if location.y > frame.size.height * 0.5 + displace.y { return }
+//
+//            if location.x <= frame.size.width * 0.5 + displace.x { return }
+//
+//            player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength,
+//                                                       dy: joystickData.vector.dy * -joystickData.strength))
+            
+            
+            // flip signs
+//            if displace.x < 0 { displace.x *= -1 }
+//            if displace.y < 0 { displace.y *= -1 }
+            
+            
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x <= frame.size.width * 0.5 - displace.x {
+            if location.y < displace.y {
+                if location.x <= displace.x {
+                    // Joystick finished moving
+//                    print("joystick done moving")
+                    joystickActive = false
+                    joystick!.centerStick()
+                    joystick!.resetBaseAlpha()
+                    joystick!.resetBaseScale()
+                    joystickData = JoystickData()
+                }
+            }
+            
+//            if location.y < frame.size.height * 0.5 - displace.y {
+//                if location.x >= frame.size.width * 0.5 + displace.x {
+            if location.y < displace.y {
+                if location.x >= displace.x {
+//                    print("button done pressing")
+                    
+                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
+                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
+                }
+            }
+            
+            
+            
+//            joystickActive = false
         }
         
 //        joystickActive = false
-        joystick!.centerStick()
-        joystick!.resetBaseAlpha()
-        joystick!.resetBaseScale()
-        joystickData = JoystickData()
+//        joystick!.centerStick()
+//        joystick!.resetBaseAlpha()
+//        joystick!.resetBaseScale()
+//        joystickData = JoystickData()
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
@@ -232,7 +338,9 @@ class GameScene: SKScene {
 //            joystick!.alpha = 1
 //        }
         
+        
         if abs(player!.position.x) > 10000 || abs(player!.position.y) > 10000 {
+            player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player?.position = CGPoint(x: 0, y: 0)
         }
         
@@ -252,37 +360,14 @@ class GameScene: SKScene {
 //            player?.physicsBody?.velocity.dy = -100
 //        }
         
+        joystick?.position.x = player!.position.x - frame.width / 2
+        joystick?.position.y = player!.position.y - frame.height / 3
         
+        button?.position.x = player!.position.x + frame.width / 2
+        button?.position.y = player!.position.y - frame.height / 3
         
-//        if abs(playerVector!.dx) > abs(lastPlayerVector!.dx) {
-//            let xVel = abs(playerVector!.dx)
-//            print("xvel: \(xVel)")
-//            camera?.run(SKAction.scale(to: xVel / 400, duration: 0.8))
-//        }
-//
-//        if abs(playerVector!.dy) > abs(lastPlayerVector!.dy) {
-//            let yVel = abs(playerVector!.dy)
-//            print("yvel: \(yVel)")
-//            camera?.run(SKAction.scale(to: yVel / 400, duration: 0.8))
-//        }
-//
-//        if abs(playerVector!.dx) <= 30 && abs(playerVector!.dy) <= 30 {
-//            camera?.run(SKAction.scale(to: CGSize(width: 0, height: 0), duration: 0.8))
-//        }
-        
-//        camera?.run(SKAction.move(to: player!.position, duration: 0))
-        
-
-        
-//        if !jsActive {
-//            js?.position.x = player!.position.x + frame.width / 3
-//            js?.position.y = player!.position.y - frame.height / 6
-//        }
-        
-        joystick?.position.x = player!.position.x + frame.width / 3
-        joystick?.position.y = player!.position.y - frame.height / 6
         launcher?.position = player!.position
-        camera!.position = player!.position
+        sceneCamera.position = player!.position
         
         cloud1.position.x = player!.position.x + player!.position.x * -cloud1Speed
         cloud2.position.x = player!.position.x + player!.position.x * -cloud2Speed
@@ -319,6 +404,11 @@ extension GameScene: SKPhysicsContactDelegate {
 //            secondNode.physicsBody?.affectedByGravity = true
 //        }
         
+//        if let player = firstNode as? PlayerNode, secondNode.name == "spikes" {
+//            // dead
+//            player.run(SKAction.scale(to: 0, duration: 0.75))
+//        }
+        
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
             print("Victory!")
             
@@ -330,16 +420,4 @@ extension GameScene: SKPhysicsContactDelegate {
             player.run(SKAction.move(to: blackHole.position, duration: 1))
         }
     }
-}
-
-func makeNoiseMap(columns: Int, rows: Int) -> GKNoiseMap {
-    let source = GKPerlinNoiseSource()
-    source.persistence = 1
-
-    let noise = GKNoise(source)
-    let size = vector2(1.0, 1.0)
-    let origin = vector2(0.0, 0.0)
-    let sampleCount = vector2(Int32(columns), Int32(rows))
-
-    return GKNoiseMap(noise, size: size, origin: origin, sampleCount: sampleCount, seamless: true)
 }
