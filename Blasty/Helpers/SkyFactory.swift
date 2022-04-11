@@ -35,10 +35,10 @@ class SkyFactory: SKNode {
     override init() {
         super.init()
         
-        self.xScale = 4
-        self.yScale = 4
-        self.alpha = 0.3
-        self.zPosition = -5
+        xScale = 4
+        yScale = 4
+        alpha = 0.2
+        zPosition = -5
         
         noiseMap = makeNoiseMap(columns: columns, rows: rows)
         
@@ -62,11 +62,8 @@ class SkyFactory: SKNode {
         
         buildTileSet()
         
-        DispatchQueue.main.async {
-            self.addChild(self.topLayer)
-            self.addChild(self.bottomLayer)
-        }
-        
+        addChild(topLayer)
+        addChild(bottomLayer)
     }
 
     

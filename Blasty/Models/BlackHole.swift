@@ -12,12 +12,13 @@ import SpriteKit
 
 class BlackHole: SKSpriteNode {
     
+    let scale = 3.0
+    
     var emitter: SKEmitterNode?
     var field: SKFieldNode?
     
     init() {
         let texture = SKTexture(imageNamed: "BlackHole")
-        let scale = 3.0
     
         super.init(texture: texture, color: .white, size: texture.size())
         

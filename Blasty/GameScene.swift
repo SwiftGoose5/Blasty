@@ -20,15 +20,6 @@ enum CollisionType: UInt32 {
 }
 
 class GameScene: SKScene {
-    var sky: SKSpriteNode?
-    
-    var cloud1 = SKSpriteNode()
-    var cloud2 = SKSpriteNode()
-    var cloud3 = SKSpriteNode()
-    let cloud1Speed = CGFloat(0.3)
-    let cloud2Speed = CGFloat(0.4)
-    let cloud3Speed = CGFloat(0.6)
-    
     var player: PlayerNode?
     var ground: TerrainNode?
     var ceiling: TerrainNode?
@@ -50,22 +41,34 @@ class GameScene: SKScene {
     var launcher: LauncherParentNode?
     
     let sceneCamera = SKCameraNode()
-    let map = SKNode()
     
-    private var mapFactory = MapFactory()
-    private var skyFactory = SkyFactory()
+    let map = SKNode()
+    let mapFactory = MapFactory()
+    
+    let skyFactory = SkyFactory()
+    var cloud1 = SKSpriteNode()
+    var cloud2 = SKSpriteNode()
+    var cloud3 = SKSpriteNode()
+    let cloud1Speed = CGFloat(0.3)
+    let cloud2Speed = CGFloat(0.4)
+    let cloud3Speed = CGFloat(0.6)
+    
+    var startingPlatform = StartingPlatform()
     
     override func didMove(to view: SKView) {
-        
-        print(Date())
         
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
-
-        backgroundColor = .blue
         
-        // MARK: - Cloud1
+        addChild(startingPlatform)
+        
+
+        backgroundColor = .purple
+
+        // MARK: - Sky & Clouds
+        addChild(skyFactory)
+        
         let cloud1Texture = SKTexture(imageNamed: "Cloud1")
         cloud1 = SKSpriteNode(texture: cloud1Texture, size: cloud1Texture.size())
         cloud1.setScale(20)
@@ -85,22 +88,19 @@ class GameScene: SKScene {
         cloud3.setScale(10)
         cloud3.zPosition = -2
         cloud3.alpha = 0.2
-        
 //        addChild(cloud1)
 //        addChild(cloud2)
 //        addChild(cloud3)
         
-
-        // MARK: - Map
-        addChild(skyFactory)
-        addChild(mapFactory)
         
         
-        isUserInteractionEnabled = true
+        
+        
         
         
         // MARK: - Physics Delegate
         physicsWorld.contactDelegate = self
+        isUserInteractionEnabled = true
         
         
         // MARK: - Joystick
@@ -114,6 +114,7 @@ class GameScene: SKScene {
         
         // MARK: - Player
         player = PlayerNode()
+        player!.position = CGPoint(x: 0, y: -5368)
         addChild(player!)
         startTouch = CGPoint(x: 0, y: 0)
         endTouch = CGPoint(x: 0, y: 0)
@@ -127,7 +128,7 @@ class GameScene: SKScene {
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
-        scene?.camera?.setScale(3)
+        sceneCamera.setScale(3)
         
         
         // Ground
@@ -152,6 +153,10 @@ class GameScene: SKScene {
 //        wall2?.physicsBody?.mass = 0.5
 //        self.addChild(wall2!)
         
+        // MARK: - Map
+        addChild(mapFactory)
+//        addChild(frameFactory)
+        
     }
 
 
@@ -161,11 +166,8 @@ class GameScene: SKScene {
             
             
             let location = touch.location(in: self)
-            
-            
-            
-            
-            var displace = camera!.position //should be in center of screen
+
+//            var displace = camera!.position //should be in center of screen
             
 //            displace.x = displace.x - frame.size.width / 2
 //            displace.y = displace.y - frame.size.height / 2
@@ -176,18 +178,16 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < displace.y {
-                if location.x <= displace.x {
-                    print("joystick starting to move")
-                    
+            if location.y < sceneCamera.position.y {
+                if location.x <= sceneCamera.position.x {
                     joystickActive = true
                 }
             }
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < displace.y {
-                if location.x >= displace.x {
+            if location.y < sceneCamera.position.y {
+                if location.x >= sceneCamera.position.x {
 //                    buttonData.startTime = Date()
                     button!.isPressed = true
                 }
@@ -206,7 +206,7 @@ class GameScene: SKScene {
             
             let location = touch.location(in: self)
             
-            var displace = camera!.position //should be in center of screen
+//            var displace = camera!.position //should be in center of screen
 //            displace.x = displace.x - frame.size.width / 2
 //            displace.y = displace.y - frame.size.height / 2
             
@@ -229,8 +229,8 @@ class GameScene: SKScene {
 //
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < displace.y {
-                if location.x <= displace.x {
+            if location.y < sceneCamera.position.y {
+                if location.x <= sceneCamera.position.x {
                     // We're touching the right side of the screen
                     joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
                     
@@ -246,8 +246,8 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < displace.y {
-                if location.x >= displace.x {
+            if location.y < sceneCamera.position.y {
+                if location.x >= sceneCamera.position.x {
 //                    print("button still being pressed")
                 }
             }
@@ -269,7 +269,7 @@ class GameScene: SKScene {
 //            if !joystickActive { return }
             
             
-            var displace = camera!.position //should be in center of screen
+//            var displace = camera!.position //should be in center of screen
 //            displace.x = displace.x - frame.size.width / 2
 //            displace.y = displace.y - frame.size.height / 2
             
@@ -288,22 +288,22 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < displace.y {
-                if location.x <= displace.x {
+            if location.y < sceneCamera.position.y {
+                if location.x <= sceneCamera.position.x {
                     // Joystick finished moving
 //                    print("joystick done moving")
                     joystickActive = false
                     joystick!.centerStick()
                     joystick!.resetBaseAlpha()
                     joystick!.resetBaseScale()
-                    joystickData = JoystickData()
+//                    joystickData = JoystickData()
                 }
             }
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < displace.y {
-                if location.x >= displace.x {
+            if location.y < sceneCamera.position.y {
+                if location.x >= sceneCamera.position.x {
 //                    print("button done pressing")
                     
                     button!.isPressed = false
@@ -311,6 +311,8 @@ class GameScene: SKScene {
 //                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
 //                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
                     
+                    // Reset velocity?
+                    player?.physicsBody?.velocity.dy = 0
                     player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
                                                                dy: joystickData.vector.dy * buttonData.strength))
                 }
@@ -425,8 +427,6 @@ extension GameScene: SKPhysicsContactDelegate {
 //        }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
-            print("Victory!")
-            
             blackHole.field?.isEnabled = false
             player.physicsBody?.collisionBitMask = 0
             player.physicsBody?.contactTestBitMask = 0

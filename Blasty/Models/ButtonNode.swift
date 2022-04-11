@@ -15,7 +15,7 @@ struct ButtonData {
     var endTime : Double
     
     var strength : Double {
-        return (endTime - startTime) / maxTime * 20
+        return (endTime - startTime) / maxTime * 24
     }
     
     init(_ startTime: Double = 0, _ endTime: Double = 0) {

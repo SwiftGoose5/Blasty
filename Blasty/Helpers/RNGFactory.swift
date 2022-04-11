@@ -18,7 +18,7 @@ struct RNGFactory {
         let rs = GKMersenneTwisterRandomSource()
         rs.seed = UInt64(DateFactory.dateSeed)
         
-        let rd = GKRandomDistribution(randomSource: rs, lowestValue: 0, highestValue: 127)
+        let rd = GKRandomDistribution(randomSource: rs, lowestValue: 0, highestValue: 63)
         
         for _ in 0 ..< 2 {
             arr.append(rd.nextInt())
