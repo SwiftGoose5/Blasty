@@ -11,9 +11,9 @@
 import SpriteKit
 
 struct JoystickData {
-    var angle : CGFloat
-    var strength : CGFloat
-    var vector : CGVector
+    let angle : CGFloat
+    let strength : CGFloat
+    let vector : CGVector
     
     init(_ angle: CGFloat = 0, _ strength: CGFloat = 0, _ vector: CGVector = CGVector(dx: 0, dy: 0)) {
         self.angle = angle

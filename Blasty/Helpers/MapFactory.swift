@@ -84,7 +84,7 @@ extension MapFactory {
 
                 if terrainHeight < -0.7 {
                     topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
-                } else if terrainHeight > 0.9 {
+                } else if terrainHeight > 0.95 {
                     topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
                 }
             }
@@ -98,49 +98,82 @@ extension MapFactory {
         for column in 0 ..< columns {
             for row in 0 ..< rows {
                 
-                if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
-                    let tileArray = tileDefinition.textures
-                    let tileTexture = tileArray[0]
-                    
-                    if !tileTexture.description.contains("Center") {
-                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-                        let tileNode = SKNode()
+                guard let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) else { continue }
+                
+                let tileArray = tileDefinition.textures
+                let tileTexture = tileArray[0]
+                
+                if tileTexture.description.contains("Center") { continue }
+                
+                let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+                let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+                let tileNode = SKNode()
 
-                        tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
-                        tileNode.physicsBody?.affectedByGravity = false
-                        tileNode.physicsBody?.isDynamic = false
-                        
-                        // Check for grass aka spike texture
-                        if tileTexture.description.contains("Grass") {
-                            tileNode.name = "spikes"
-                            tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
-                            tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
-                            tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
-                        }
-
-                        tileNode.position = CGPoint(x: x, y: y)
-
-                        addChild(tileNode)
-
-                        tileNode.position = CGPoint(x: tileNode.position.x + position.x,
-                                                    y: tileNode.position.y + position.y)
-                    }
-
-                    
-                    
+                tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+                tileNode.physicsBody?.affectedByGravity = false
+                tileNode.physicsBody?.isDynamic = false
+                
+                if tileTexture.description.contains("Grass") {
+                    tileNode.name = "spikes"
+                    tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
+                    tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
+                    tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
                 }
+
+                tileNode.position = CGPoint(x: x, y: y)
+
+                addChild(tileNode)
+
+                tileNode.position = CGPoint(x: tileNode.position.x + position.x,
+                                            y: tileNode.position.y + position.y)
+                
+                
+                
+                
+                
+//                if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
+//                    let tileArray = tileDefinition.textures
+//                    let tileTexture = tileArray[0]
+//
+//
+//
+//                    if !tileTexture.description.contains("Center") {
+//                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+//                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+//                        let tileNode = SKNode()
+//
+//                        tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+//                        tileNode.physicsBody?.affectedByGravity = false
+//                        tileNode.physicsBody?.isDynamic = false
+//
+//                        // Check for grass aka spike texture
+//                        if tileTexture.description.contains("Grass") {
+//                            tileNode.name = "spikes"
+//                            tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
+//                            tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
+//                            tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
+//                        }
+//
+//                        tileNode.position = CGPoint(x: x, y: y)
+//
+//                        addChild(tileNode)
+//
+//                        tileNode.position = CGPoint(x: tileNode.position.x + position.x,
+//                                                    y: tileNode.position.y + position.y)
+//                    }
+//                }
+                
                 
                 if column == blackHolePoint[0] && row == blackHolePoint[1] {
                     let blackHole = BlackHole()
-                    
+
                     let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
                     let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-                    
+
                     blackHole.position = CGPoint(x: x, y: y)
-                    
+
                     addChild(blackHole)
-                    
+
                     blackHole.position = CGPoint(x: blackHole.position.x + position.x,
                                                 y: blackHole.position.y + position.y)
                 }

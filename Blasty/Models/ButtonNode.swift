@@ -8,10 +8,29 @@
 //
 
 import SpriteKit
+
+struct ButtonData {
+    let maxTime : Double = 3.0
+    var startTime : Double
+    var endTime : Double
+    
+    var strength : Double {
+        return (endTime - startTime) / maxTime * 20
+    }
+    
+    init(_ startTime: Double = 0, _ endTime: Double = 0) {
+        self.startTime = startTime
+        self.endTime = endTime
+    }
+}
+
+
 class Button : SKNode {
     
     private var baseScale: CGFloat = 1
     private var baseAlpha: CGFloat = 1
+    
+    var isPressed = false
     
     private var button: SKSpriteNode
     
@@ -25,6 +44,11 @@ class Button : SKNode {
 
         addChild(button)
     }
+    
+    func pressButton(at startTime: CGFloat) -> ButtonData {
+        return ButtonData(startTime)
+    }
+    
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")

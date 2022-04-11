@@ -20,33 +20,34 @@ enum CollisionType: UInt32 {
 }
 
 class GameScene: SKScene {
+    var sky: SKSpriteNode?
     
-    var joystickData = JoystickData()
-    
-    private var sky: SKSpriteNode?
-    private var cloud1 = SKSpriteNode()
-    private var cloud2 = SKSpriteNode()
-    private var cloud3 = SKSpriteNode()
+    var cloud1 = SKSpriteNode()
+    var cloud2 = SKSpriteNode()
+    var cloud3 = SKSpriteNode()
     let cloud1Speed = CGFloat(0.3)
     let cloud2Speed = CGFloat(0.4)
     let cloud3Speed = CGFloat(0.6)
     
-    private var player: PlayerNode?
-    private var ground: TerrainNode?
-    private var ceiling: TerrainNode?
+    var player: PlayerNode?
+    var ground: TerrainNode?
+    var ceiling: TerrainNode?
     
-    private var wall: TerrainNode?
-    private var wall2: TerrainNode?
+    var wall: TerrainNode?
+    var wall2: TerrainNode?
     
-    private var startTouch : CGPoint?
-    private var endTouch : CGPoint?
+    var startTouch : CGPoint?
+    var endTouch : CGPoint?
     
-    private var joystick : Joystick?
-    private var joystickActive = false
+    var joystick : Joystick?
+    var joystickActive = false
+    var joystickData = JoystickData()
     
-    private var button : Button?
+    var button : Button?
+    var buttonData = ButtonData()
     
-    private var launcher: LauncherParentNode?
+    
+    var launcher: LauncherParentNode?
     
     let sceneCamera = SKCameraNode()
     let map = SKNode()
@@ -55,6 +56,8 @@ class GameScene: SKScene {
     private var skyFactory = SkyFactory()
     
     override func didMove(to view: SKView) {
+        
+        print(Date())
         
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
@@ -124,7 +127,7 @@ class GameScene: SKScene {
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
-        scene?.camera?.setScale(2.0)
+        scene?.camera?.setScale(3)
         
         
         // Ground
@@ -185,7 +188,8 @@ class GameScene: SKScene {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
             if location.y < displace.y {
                 if location.x >= displace.x {
-                    print("button was pressed")
+//                    buttonData.startTime = Date()
+                    button!.isPressed = true
                 }
             }
             
@@ -302,8 +306,13 @@ class GameScene: SKScene {
                 if location.x >= displace.x {
 //                    print("button done pressing")
                     
-                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
-                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
+                    button!.isPressed = false
+                    
+//                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
+//                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
+                    
+                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
+                                                               dy: joystickData.vector.dy * buttonData.strength))
                 }
             }
             
@@ -327,6 +336,12 @@ class GameScene: SKScene {
     // MARK: - Update
     
     override func update(_ currentTime: TimeInterval) {
+        
+        if button!.isPressed {
+            buttonData.startTime = currentTime
+        } else {
+            buttonData.endTime = currentTime
+        }
 
 //        let playerVector = player?.physicsBody?.velocity
 //        
@@ -360,11 +375,11 @@ class GameScene: SKScene {
 //            player?.physicsBody?.velocity.dy = -100
 //        }
         
-        joystick?.position.x = player!.position.x - frame.width / 2
-        joystick?.position.y = player!.position.y - frame.height / 3
+        joystick?.position.x = player!.position.x - frame.width / 1.25
+        joystick?.position.y = player!.position.y - frame.height / 2.5
         
-        button?.position.x = player!.position.x + frame.width / 2
-        button?.position.y = player!.position.y - frame.height / 3
+        button?.position.x = player!.position.x + frame.width / 1.25
+        button?.position.y = player!.position.y - frame.height / 2.5
         
         launcher?.position = player!.position
         sceneCamera.position = player!.position
