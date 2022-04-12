@@ -36,7 +36,7 @@ class StartingPlatform: SKNode {
 
 extension StartingPlatform {
     func buildPlatform() {
-        leftLabelNode.text = "Left stick steers!"
+        leftLabelNode.text = "Use stick to steer!"
         leftLabelNode.fontSize = 120
         leftLabelNode.position = CGPoint(x: -1000, y: -5500)
         
@@ -44,11 +44,11 @@ extension StartingPlatform {
         centerLabelNode.fontSize = 150
         centerLabelNode.position = CGPoint(x: 0, y: -5000)
         
-        centerUnderLabelNode.text = "Mind the grass please :>"
+        centerUnderLabelNode.text = "Mind the green grass please :>"
         centerUnderLabelNode.fontSize = 100
         centerUnderLabelNode.position = CGPoint(x: 0, y: -4400)
         
-        rightLabelNode.text = "Right stick jumps!"
+        rightLabelNode.text = "Tap or hold to jump!"
         rightLabelNode.fontSize = 120
         rightLabelNode.position = CGPoint(x: 1000, y: -5500)
         

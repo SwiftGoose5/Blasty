@@ -23,6 +23,16 @@
 		8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072D27FD3863000C5CBF /* SkyFactory.swift */; };
 		8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7524892800BA55001B4BC1 /* ButtonNode.swift */; };
 		8B75248C28049359001B4BC1 /* StartingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248B28049359001B4BC1 /* StartingPlatform.swift */; };
+		8B7524902804C7E7001B4BC1 /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248F2804C7E7001B4BC1 /* Collectible.swift */; };
+		8B7524932804C89F001B4BC1 /* CollectibleParticle.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B7524912804C89F001B4BC1 /* CollectibleParticle.sks */; };
+		8B7524942804C89F001B4BC1 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 8B7524922804C89F001B4BC1 /* Assets.xcassets */; };
+		8B752496280518A7001B4BC1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B752495280518A7001B4BC1 /* Constants.swift */; };
+		8B8181E9280600EB00A2D503 /* flute_a.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E6280600BA00A2D503 /* flute_a.m4a */; };
+		8B8181EA280600EB00A2D503 /* flute_b.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E5280600BA00A2D503 /* flute_b.m4a */; };
+		8B8181EB280600EB00A2D503 /* flute_c.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E4280600BA00A2D503 /* flute_c.m4a */; };
+		8B8181EC280600EB00A2D503 /* flute_d.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E8280600BA00A2D503 /* flute_d.m4a */; };
+		8B8181ED280600EB00A2D503 /* flute_g.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E7280600BA00A2D503 /* flute_g.m4a */; };
+		8B8181F02806025D00A2D503 /* flute_complete.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181EF2806018B00A2D503 /* flute_complete.m4a */; };
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 		8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1BAC927FDD91B00C72602 /* DateFactory.swift */; };
@@ -49,6 +59,16 @@
 		8B5F072D27FD3863000C5CBF /* SkyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFactory.swift; sourceTree = "<group>"; };
 		8B7524892800BA55001B4BC1 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		8B75248B28049359001B4BC1 /* StartingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingPlatform.swift; sourceTree = "<group>"; };
+		8B75248F2804C7E7001B4BC1 /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
+		8B7524912804C89F001B4BC1 /* CollectibleParticle.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = CollectibleParticle.sks; sourceTree = "<group>"; };
+		8B7524922804C89F001B4BC1 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
+		8B752495280518A7001B4BC1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		8B8181E4280600BA00A2D503 /* flute_c.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_c.m4a; sourceTree = "<group>"; };
+		8B8181E5280600BA00A2D503 /* flute_b.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_b.m4a; sourceTree = "<group>"; };
+		8B8181E6280600BA00A2D503 /* flute_a.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_a.m4a; sourceTree = "<group>"; };
+		8B8181E7280600BA00A2D503 /* flute_g.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_g.m4a; sourceTree = "<group>"; };
+		8B8181E8280600BA00A2D503 /* flute_d.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_d.m4a; sourceTree = "<group>"; };
+		8B8181EF2806018B00A2D503 /* flute_complete.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_complete.m4a; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 		8BF1BAC927FDD91B00C72602 /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
@@ -93,6 +113,7 @@
 				8B5F072027FC91F6000C5CBF /* Particles */,
 				8B5F06F627F781F1000C5CBF /* Models */,
 				8B1927CF27F5FC5700275E69 /* GameViewController.swift */,
+				8B4137302805CB7E003BB1D0 /* Sounds */,
 				8B1927C727F5FC5700275E69 /* AppDelegate.swift */,
 				8B1927C927F5FC5700275E69 /* GameScene.sks */,
 				8B1927D127F5FC5700275E69 /* Main.storyboard */,
@@ -102,12 +123,26 @@
 			path = Blasty;
 			sourceTree = "<group>";
 		};
+		8B4137302805CB7E003BB1D0 /* Sounds */ = {
+			isa = PBXGroup;
+			children = (
+				8B8181E6280600BA00A2D503 /* flute_a.m4a */,
+				8B8181E5280600BA00A2D503 /* flute_b.m4a */,
+				8B8181E4280600BA00A2D503 /* flute_c.m4a */,
+				8B8181E8280600BA00A2D503 /* flute_d.m4a */,
+				8B8181E7280600BA00A2D503 /* flute_g.m4a */,
+				8B8181EF2806018B00A2D503 /* flute_complete.m4a */,
+			);
+			path = Sounds;
+			sourceTree = "<group>";
+		};
 		8B5F06F627F781F1000C5CBF /* Models */ = {
 			isa = PBXGroup;
 			children = (
 				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
 				8B75248B28049359001B4BC1 /* StartingPlatform.swift */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
+				8B75248F2804C7E7001B4BC1 /* Collectible.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
 				8B7524892800BA55001B4BC1 /* ButtonNode.swift */,
@@ -121,6 +156,8 @@
 			children = (
 				8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */,
 				8BF1BACD27FDE53800C72602 /* BlackHole.sks */,
+				8B7524912804C89F001B4BC1 /* CollectibleParticle.sks */,
+				8B7524922804C89F001B4BC1 /* Assets.xcassets */,
 			);
 			path = Particles;
 			sourceTree = "<group>";
@@ -129,6 +166,7 @@
 			isa = PBXGroup;
 			children = (
 				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
+				8B752495280518A7001B4BC1 /* Constants.swift */,
 				8BF1BAC927FDD91B00C72602 /* DateFactory.swift */,
 				8BF1BAD127FE15D600C72602 /* RNGFactory.swift */,
 				8B5F072927FD1402000C5CBF /* MapFactory.swift */,
@@ -203,12 +241,20 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				8B8181E9280600EB00A2D503 /* flute_a.m4a in Resources */,
+				8B8181EA280600EB00A2D503 /* flute_b.m4a in Resources */,
+				8B8181EB280600EB00A2D503 /* flute_c.m4a in Resources */,
+				8B8181EC280600EB00A2D503 /* flute_d.m4a in Resources */,
+				8B8181ED280600EB00A2D503 /* flute_g.m4a in Resources */,
+				8B8181F02806025D00A2D503 /* flute_complete.m4a in Resources */,
 				8B5F072327FCAD4F000C5CBF /* StockTile.sks in Resources */,
 				8BF1BACF27FDE53800C72602 /* BlackHole.sks in Resources */,
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
 				8B5F071F27FB948E000C5CBF /* LauncherParticle.sks in Resources */,
+				8B7524932804C89F001B4BC1 /* CollectibleParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
+				8B7524942804C89F001B4BC1 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -221,6 +267,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				8B5F072A27FD1402000C5CBF /* MapFactory.swift in Sources */,
+				8B752496280518A7001B4BC1 /* Constants.swift in Sources */,
 				8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */,
 				8B75248C28049359001B4BC1 /* StartingPlatform.swift in Sources */,
 				8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */,
@@ -234,6 +281,7 @@
 				8B1927C827F5FC5700275E69 /* AppDelegate.swift in Sources */,
 				8B5F06F127F62434000C5CBF /* TerrainNode.swift in Sources */,
 				8BF1BACC27FDE35A00C72602 /* BlackHole.swift in Sources */,
+				8B7524902804C7E7001B4BC1 /* Collectible.swift in Sources */,
 				8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -18,12 +18,36 @@ struct RNGFactory {
         let rs = GKMersenneTwisterRandomSource()
         rs.seed = UInt64(DateFactory.dateSeed)
         
-        let rd = GKRandomDistribution(randomSource: rs, lowestValue: 0, highestValue: 63)
+        let rd = GKRandomDistribution(randomSource: rs, lowestValue: 0, highestValue: columns - 1)
         
         for _ in 0 ..< 2 {
             arr.append(rd.nextInt())
         }
         
         return arr
+    }
+    
+    static var coordinateSet: [[Int]] {
+        var set = [[Int]]()
+        var coordinate = [Int]()
+        
+        let source = GKMersenneTwisterRandomSource()
+        
+        // Make from 1 - 5 because 0 is the location of the black hole
+        for i in 1 ... 5 {
+            source.seed = UInt64(DateFactory.dateSeed + Int32(i))
+            
+            let distribution = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: columns - 1)
+            
+            for _ in 0 ... 1 {
+                coordinate.append(distribution.nextInt())
+            }
+            
+            set.append(coordinate)
+            
+            coordinate = [Int]()
+        }
+
+        return set
     }
 }

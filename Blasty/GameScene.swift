@@ -17,6 +17,7 @@ enum CollisionType: UInt32 {
     case spikes = 4
     case victory = 8
     case field = 16
+    case collectible = 32
 }
 
 class GameScene: SKScene {
@@ -312,7 +313,8 @@ class GameScene: SKScene {
 //                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
                     
                     // Reset velocity?
-                    player?.physicsBody?.velocity.dy = 0
+//                    player?.physicsBody?.velocity.dy = 0
+                    
                     player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
                                                                dy: joystickData.vector.dy * buttonData.strength))
                 }
@@ -358,7 +360,7 @@ class GameScene: SKScene {
         
         if abs(player!.position.x) > 10000 || abs(player!.position.y) > 10000 {
             player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-            player?.position = CGPoint(x: 0, y: 0)
+            player?.position = CGPoint(x: 0, y: -5300)
         }
         
 //        if playerVector!.dx >= 100 {
@@ -411,7 +413,7 @@ extension GameScene: SKPhysicsContactDelegate {
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
         
-//        print("contact between \(firstNode.name) and \(secondNode.name)")
+        print("contact between \(firstNode.name) and \(secondNode.name)")
         
 //        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
 //            player.physicsBody?.isDynamic = false
@@ -425,6 +427,15 @@ extension GameScene: SKPhysicsContactDelegate {
 //            // dead
 //            player.run(SKAction.scale(to: 0, duration: 0.75))
 //        }
+        
+        if let collectible = firstNode as? Collectible {
+            
+            collectible.collect(collectibleCount)
+            collectible.physicsBody?.contactTestBitMask = 0
+            collectible.physicsBody?.categoryBitMask = 0
+            
+            collectibleCount += 1
+        }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
             blackHole.field?.isEnabled = false

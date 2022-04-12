@@ -13,8 +13,8 @@ import GameplayKit
 class MapFactory: SKNode {
 
     private let size = 128
-    private let columns = 64
-    private let rows = 64
+//    private let columns = 64
+//    private let rows = 64
 
     private var tileSize = CGSize(width: 0, height: 0)
     private var halfWidth = CGFloat(0)
@@ -59,7 +59,9 @@ class MapFactory: SKNode {
 //        bottomLayer.fill(with: waterTiles)
         
         buildTileSet()
-        buildTilePhysics()
+//        buildTilePhysics()
+        buildCollectibles()
+        buildBlackHole()
         addChild(topLayer)
 
     }
@@ -77,7 +79,7 @@ extension MapFactory {
                 let location = vector2(Int32(row), Int32(column))
                 let terrainHeight = noiseMap.value(at: location)
 
-                if terrainHeight < -0.7 {
+                if terrainHeight < -0.8 {
                     topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
                 } else if terrainHeight > 0.98 {
                     topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
@@ -87,26 +89,26 @@ extension MapFactory {
     }
     
     func buildTilePhysics() {
-        let blackHolePoint = RNGFactory.colRow
+//        let blackHolePoint = RNGFactory.colRow
         
         for column in 0 ..< columns {
             for row in 0 ..< rows {
                 
-                if column == blackHolePoint[0] && row == blackHolePoint[1] {
-                    print("spawning BH at cr: \(blackHolePoint)")
-                    
-                    let blackHole = BlackHole()
-
-                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-
-                    blackHole.position = CGPoint(x: x, y: y)
-
-                    addChild(blackHole)
-
-                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
-                                                y: blackHole.position.y + position.y)
-                }
+//                if column == blackHolePoint[0] && row == blackHolePoint[1] {
+//                    print("spawning BH at cr: \(blackHolePoint)")
+//
+//                    let blackHole = BlackHole()
+//
+//                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+//                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+//
+//                    blackHole.position = CGPoint(x: x, y: y)
+//
+//                    addChild(blackHole)
+//
+//                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
+//                                                y: blackHole.position.y + position.y)
+//                }
                 
                 guard let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) else { continue }
                 
@@ -136,11 +138,7 @@ extension MapFactory {
 
                 tileNode.position = CGPoint(x: tileNode.position.x + position.x,
                                             y: tileNode.position.y + position.y)
-                
-                
-                
-                
-                
+
 //                if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
 //                    let tileArray = tileDefinition.textures
 //                    let tileTexture = tileArray[0]
@@ -172,10 +170,88 @@ extension MapFactory {
 //                                                    y: tileNode.position.y + position.y)
 //                    }
 //                }
-                
-                
             }
         }
+    }
+    
+    func buildBlackHole() {
+        let blackHolePoint = RNGFactory.colRow
+        let blackHole = BlackHole()
+        
+        let x = CGFloat(blackHolePoint[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
+        let y = CGFloat(blackHolePoint[1]) * tileSize.height - halfHeight + (tileSize.height / 2)
+
+        blackHole.position = CGPoint(x: x, y: y)
+        
+        addChild(blackHole)
+
+        blackHole.position = CGPoint(x: blackHole.position.x + position.x,
+                                     y: blackHole.position.y + position.y)
+        
+        print("bh: \(blackHolePoint)")
+        
+//        for column in 0 ..< columns {
+//            for row in 0 ..< rows {
+//                
+//                if column == blackHolePoint[0] && row == blackHolePoint[1] {
+//                    print("spawning BH at cr: \(blackHolePoint)")
+//                    
+//                    
+//
+//                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+//                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+//
+//                    blackHole.position = CGPoint(x: x, y: y)
+//
+//                    addChild(blackHole)
+//
+//                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
+//                                                y: blackHole.position.y + position.y)
+//                }
+//            }
+//        }
+    }
+    
+    func buildCollectibles() {
+        for collectible in collectibleSet.collectibles {
+            print(collectible.coords)
+            
+            if collectible.coords != [0,0] {
+                let x = CGFloat(collectible.coords[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
+                let y = CGFloat(collectible.coords[1]) * tileSize.height - halfHeight + (tileSize.height / 2)
+                
+                collectible.position = CGPoint(x: x, y: y)
+            }
+            addChild(collectible)
+//            
+//            collectible.position = CGPoint(x: collectible.position.x + position.x,
+//                                           y: collectible.position.y + position.y)
+        }
+        
+//        for column in 0 ..< columns {
+//            for row in 0 ..< rows {
+//                for collectible in set.collectibles {
+//                    
+//                    if column == collectible.coords[0] && row == collectible.coords[1] {
+//                        print("collectible coord: \(column) x \(row)")
+//                        
+//                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
+//                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
+//
+//                        collectible.position = CGPoint(x: x, y: y)
+//
+//                        addChild(collectible)
+//
+//                        collectible.position = CGPoint(x: collectible.position.x + position.x,
+//                                                    y: collectible.position.y + position.y)
+//                    }
+//                }
+//            }
+//        }
+        
+//        let constantCollectible = Collectible()
+//        constantCollectible.position = CGPoint(x: 0, y: -5684)
+//        addChild(constantCollectible)
     }
 }
 
