@@ -22,8 +22,14 @@ enum CollisionType: UInt32 {
 
 class GameScene: SKScene {
     var player: PlayerNode?
+    var playerLives = PlayerLives()
+    
+    var playerCollectibles = PlayerCollectibles()
+    
     var ground: TerrainNode?
     var ceiling: TerrainNode?
+    
+    var backgroundLabels = BackgroundLabels()
     
     var wall: TerrainNode?
     var wall2: TerrainNode?
@@ -38,6 +44,10 @@ class GameScene: SKScene {
     var button : Button?
     var buttonData = ButtonData()
     
+    var lastCollectibleIndex = -1
+//    var score = Score()
+    
+    var lastSpikeHit = ""
     
     var launcher: LauncherParentNode?
     
@@ -62,7 +72,17 @@ class GameScene: SKScene {
             
         }
         
+        addChild(playerLives)
+        addChild(playerCollectibles)
+        
         addChild(startingPlatform)
+        
+//        score.zPosition = 10
+//        addChild(score)
+        
+        addChild(backgroundLabels)
+        
+        
         
 
         backgroundColor = .purple
@@ -89,7 +109,7 @@ class GameScene: SKScene {
         cloud3.setScale(10)
         cloud3.zPosition = -2
         cloud3.alpha = 0.2
-//        addChild(cloud1)
+        addChild(cloud1)
 //        addChild(cloud2)
 //        addChild(cloud3)
         
@@ -361,6 +381,8 @@ class GameScene: SKScene {
         if abs(player!.position.x) > 10000 || abs(player!.position.y) > 10000 {
             player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player?.position = CGPoint(x: 0, y: -5300)
+            lifeCount += 1
+            playerLives.updateLives()
         }
         
 //        if playerVector!.dx >= 100 {
@@ -391,12 +413,25 @@ class GameScene: SKScene {
         cloud1.position.x = player!.position.x + player!.position.x * -cloud1Speed
         cloud2.position.x = player!.position.x + player!.position.x * -cloud2Speed
         cloud3.position.x = player!.position.x + player!.position.x * -cloud3Speed
-        skyFactory.position.x = player!.position.x + player!.position.x * -cloud3Speed
+     
         
         cloud1.position.y = player!.position.y + player!.position.y * -cloud1Speed
         cloud2.position.y = player!.position.y + player!.position.y * -cloud2Speed
         cloud3.position.y = player!.position.y + player!.position.y * -cloud3Speed
+        
+        skyFactory.position.x = player!.position.x + player!.position.x * -cloud3Speed
         skyFactory.position.y = player!.position.y + player!.position.y * -cloud3Speed
+        
+        backgroundLabels.position.y = player!.position.y + player!.position.y * -cloud3Speed
+        
+//        score.position.x = player!.position.x
+//        score.position.y = player!.position.y + frame.height - 50
+        
+        playerLives.position.x = player!.position.x + frame.width / 2
+        playerLives.position.y = player!.position.y + frame.height - 50
+        
+        playerCollectibles.position.x = player!.position.x + frame.width / 2
+        playerCollectibles.position.y = player!.position.y + frame.height - 300
     }
 }
 
@@ -423,18 +458,32 @@ extension GameScene: SKPhysicsContactDelegate {
 //            secondNode.physicsBody?.affectedByGravity = true
 //        }
         
-//        if let player = firstNode as? PlayerNode, secondNode.name == "spikes" {
-//            // dead
-//            player.run(SKAction.scale(to: 0, duration: 0.75))
-//        }
+        if let player = firstNode as? PlayerNode, let _ = secondNode.name?.contains("spikes") {
+            
+            // don't hit the same spike more than once
+            if lastSpikeHit == secondNode.name! { return }
+            
+            player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            player.run(SKAction.move(to: CGPoint(x: 0, y: -5300), duration: 0))
+            
+            lifeCount += 1
+            print("player lives: \(lifeCount)")
+
+            lastSpikeHit = secondNode.name!
+        }
+        
         
         if let collectible = firstNode as? Collectible {
             
-            collectible.collect(collectibleCount)
-            collectible.physicsBody?.contactTestBitMask = 0
-            collectible.physicsBody?.categoryBitMask = 0
+            // don't hit the same collectible more than once
+            if lastCollectibleIndex == collectible.index { return }
             
+            collectible.collect(collectibleCount)
             collectibleCount += 1
+            lastCollectibleIndex = collectible.index
+            
+//            score.updateScore()
+            playerCollectibles.updateScore()
         }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {

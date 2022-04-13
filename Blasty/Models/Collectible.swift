@@ -11,6 +11,7 @@
 
 import SpriteKit
 
+
 struct CollectibleSet {
     var collectibles: [Collectible] = []
     
@@ -33,6 +34,8 @@ struct CollectibleSet {
 
 class Collectible: SKSpriteNode {
     
+    let cTexture = SKTexture(imageNamed: "Collectible")
+    
     var emitter = SKEmitterNode()
     var coords: [Int] = []
     var index: Int = 0
@@ -40,10 +43,9 @@ class Collectible: SKSpriteNode {
     
     init(at coords: [Int] = []) {
         self.coords = coords
-        let texture = SKTexture(imageNamed: "Collectible")
         
-        super.init(texture: texture, color: .white, size: texture.size())
-        physicsBody = SKPhysicsBody(texture: texture, size: texture.size())
+        super.init(texture: cTexture, color: .white, size: cTexture.size())
+        physicsBody = SKPhysicsBody(texture: cTexture, size: cTexture.size())
         
         setupCollectible()
     }
@@ -84,11 +86,10 @@ class Collectible: SKSpriteNode {
         }
         
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
-        let blowup = SKAction.scale(to: 1.3, duration: 0.1)
+        let blowup = SKAction.scale(to: 1.4, duration: 0.1)
         let fade = SKAction.fadeOut(withDuration: 0.1)
-        let group = SKAction.group([sound, blowup, fade])
-        let seq = SKAction.sequence([group, .removeFromParent()])
-        run(seq)
+        let group = SKAction.group([sound, blowup, fade, .removeFromParent()])
+        run(group)
     }
     
     required init?(coder aDecoder: NSCoder) {

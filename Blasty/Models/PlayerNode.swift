@@ -12,6 +12,7 @@ import SpriteKit
 
 class PlayerNode: SKSpriteNode {
     
+
     var isMoving = false
     
     init() {

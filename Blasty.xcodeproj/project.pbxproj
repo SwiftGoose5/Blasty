@@ -33,6 +33,11 @@
 		8B8181EC280600EB00A2D503 /* flute_d.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E8280600BA00A2D503 /* flute_d.m4a */; };
 		8B8181ED280600EB00A2D503 /* flute_g.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181E7280600BA00A2D503 /* flute_g.m4a */; };
 		8B8181F02806025D00A2D503 /* flute_complete.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181EF2806018B00A2D503 /* flute_complete.m4a */; };
+		8B8181F2280604A700A2D503 /* Score.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8181F1280604A700A2D503 /* Score.swift */; };
+		8B8181F428061CC600A2D503 /* BackgroundLabels.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8181F328061CC600A2D503 /* BackgroundLabels.swift */; };
+		8B8181F6280620FC00A2D503 /* PlayerLives.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8181F5280620FC00A2D503 /* PlayerLives.swift */; };
+		8B8181F828071FA900A2D503 /* PlayerCollectibles.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B8181F728071FA900A2D503 /* PlayerCollectibles.swift */; };
+		8B8181FA2807476600A2D503 /* pop.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B8181F92807476600A2D503 /* pop.m4a */; };
 		8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24027F61736008EC7A8 /* PlayerNode.swift */; };
 		8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */; };
 		8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8BF1BAC927FDD91B00C72602 /* DateFactory.swift */; };
@@ -69,6 +74,11 @@
 		8B8181E7280600BA00A2D503 /* flute_g.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_g.m4a; sourceTree = "<group>"; };
 		8B8181E8280600BA00A2D503 /* flute_d.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_d.m4a; sourceTree = "<group>"; };
 		8B8181EF2806018B00A2D503 /* flute_complete.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = flute_complete.m4a; sourceTree = "<group>"; };
+		8B8181F1280604A700A2D503 /* Score.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Score.swift; sourceTree = "<group>"; };
+		8B8181F328061CC600A2D503 /* BackgroundLabels.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BackgroundLabels.swift; sourceTree = "<group>"; };
+		8B8181F5280620FC00A2D503 /* PlayerLives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLives.swift; sourceTree = "<group>"; };
+		8B8181F728071FA900A2D503 /* PlayerCollectibles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCollectibles.swift; sourceTree = "<group>"; };
+		8B8181F92807476600A2D503 /* pop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop.m4a; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 		8BF1BAC927FDD91B00C72602 /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
@@ -126,6 +136,7 @@
 		8B4137302805CB7E003BB1D0 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				8B8181F92807476600A2D503 /* pop.m4a */,
 				8B8181E6280600BA00A2D503 /* flute_a.m4a */,
 				8B8181E5280600BA00A2D503 /* flute_b.m4a */,
 				8B8181E4280600BA00A2D503 /* flute_c.m4a */,
@@ -140,9 +151,13 @@
 			isa = PBXGroup;
 			children = (
 				8B5F06F027F62434000C5CBF /* TerrainNode.swift */,
+				8B8181F1280604A700A2D503 /* Score.swift */,
+				8B8181F328061CC600A2D503 /* BackgroundLabels.swift */,
 				8B75248B28049359001B4BC1 /* StartingPlatform.swift */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
+				8B8181F5280620FC00A2D503 /* PlayerLives.swift */,
 				8B75248F2804C7E7001B4BC1 /* Collectible.swift */,
+				8B8181F728071FA900A2D503 /* PlayerCollectibles.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
 				8B7524892800BA55001B4BC1 /* ButtonNode.swift */,
@@ -247,6 +262,7 @@
 				8B8181EC280600EB00A2D503 /* flute_d.m4a in Resources */,
 				8B8181ED280600EB00A2D503 /* flute_g.m4a in Resources */,
 				8B8181F02806025D00A2D503 /* flute_complete.m4a in Resources */,
+				8B8181FA2807476600A2D503 /* pop.m4a in Resources */,
 				8B5F072327FCAD4F000C5CBF /* StockTile.sks in Resources */,
 				8BF1BACF27FDE53800C72602 /* BlackHole.sks in Resources */,
 				8B1927D327F5FC5700275E69 /* Main.storyboard in Resources */,
@@ -271,17 +287,21 @@
 				8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */,
 				8B75248C28049359001B4BC1 /* StartingPlatform.swift in Sources */,
 				8BF1BACA27FDD91B00C72602 /* DateFactory.swift in Sources */,
+				8B8181F828071FA900A2D503 /* PlayerCollectibles.swift in Sources */,
 				8B1927CE27F5FC5700275E69 /* GameScene.swift in Sources */,
 				8B1927D027F5FC5700275E69 /* GameViewController.swift in Sources */,
 				8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */,
+				8B8181F428061CC600A2D503 /* BackgroundLabels.swift in Sources */,
 				8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */,
 				8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */,
 				8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */,
+				8B8181F6280620FC00A2D503 /* PlayerLives.swift in Sources */,
 				8BF1BAD227FE15D600C72602 /* RNGFactory.swift in Sources */,
 				8B1927C827F5FC5700275E69 /* AppDelegate.swift in Sources */,
 				8B5F06F127F62434000C5CBF /* TerrainNode.swift in Sources */,
 				8BF1BACC27FDE35A00C72602 /* BlackHole.swift in Sources */,
 				8B7524902804C7E7001B4BC1 /* Collectible.swift in Sources */,
+				8B8181F2280604A700A2D503 /* Score.swift in Sources */,
 				8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

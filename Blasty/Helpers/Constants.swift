@@ -14,6 +14,15 @@ import Foundation
 let columns = 64
 let rows = 64
 
+
+
 // MARK: - Collectibles
+let totalCollectibles = 6
 let collectibleSet = CollectibleSet()
 var collectibleCount = 0
+
+
+
+// MARK: - Player
+let totalLives = 6
+var lifeCount = 0

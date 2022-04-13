@@ -126,10 +126,10 @@ extension MapFactory {
                 tileNode.physicsBody?.isDynamic = false
                 
                 if tileTexture.description.contains("Grass") {
-                    tileNode.name = "spikes"
+                    tileNode.name = "spike\(column)\(row)"
                     tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
-                    tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
-                    tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
+//                    tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
+//                    tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
                 }
 
                 tileNode.position = CGPoint(x: x, y: y)
@@ -187,8 +187,6 @@ extension MapFactory {
 
         blackHole.position = CGPoint(x: blackHole.position.x + position.x,
                                      y: blackHole.position.y + position.y)
-        
-        print("bh: \(blackHolePoint)")
         
 //        for column in 0 ..< columns {
 //            for row in 0 ..< rows {
