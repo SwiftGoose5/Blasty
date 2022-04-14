@@ -169,8 +169,8 @@
 		8B5F072027FC91F6000C5CBF /* Particles */ = {
 			isa = PBXGroup;
 			children = (
-				8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */,
 				8BF1BACD27FDE53800C72602 /* BlackHole.sks */,
+				8B5F071E27FB948E000C5CBF /* LauncherParticle.sks */,
 				8B7524912804C89F001B4BC1 /* CollectibleParticle.sks */,
 				8B7524922804C89F001B4BC1 /* Assets.xcassets */,
 			);

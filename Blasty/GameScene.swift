@@ -72,6 +72,11 @@ class GameScene: SKScene {
             
         }
         
+        
+        playerLives.setScale(1.25)
+        playerLives.alpha = 0.8
+        playerCollectibles.setScale(1.25)
+        playerCollectibles.alpha = 0.8
         addChild(playerLives)
         addChild(playerCollectibles)
         
@@ -210,6 +215,7 @@ class GameScene: SKScene {
             if location.y < sceneCamera.position.y {
                 if location.x >= sceneCamera.position.x {
 //                    buttonData.startTime = Date()
+                    print("button considered pushed")
                     button!.isPressed = true
                 }
             }
@@ -221,7 +227,7 @@ class GameScene: SKScene {
     override func touchesMoved(_ touches: Set<UITouch>, with event: UIEvent?) {
         
 //        if player!.isMoving { return }
-        joystickActive = true
+        
         
         for touch in touches {
             
@@ -252,7 +258,7 @@ class GameScene: SKScene {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
             if location.y < sceneCamera.position.y {
                 if location.x <= sceneCamera.position.x {
-                    // We're touching the right side of the screen
+                    // We're touching the left side of the screen
                     joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
                     
                     joystick?.setBaseAlpha(joystickData.strength)
@@ -327,7 +333,9 @@ class GameScene: SKScene {
                 if location.x >= sceneCamera.position.x {
 //                    print("button done pressing")
                     
-                    button!.isPressed = false
+                    if !button!.isPressed { continue }
+                    
+                    
                     
 //                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
 //                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
@@ -337,6 +345,8 @@ class GameScene: SKScene {
                     
                     player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
                                                                dy: joystickData.vector.dy * buttonData.strength))
+                    
+                    button!.isPressed = false
                 }
             }
             
@@ -430,8 +440,8 @@ class GameScene: SKScene {
         playerLives.position.x = player!.position.x + frame.width / 2
         playerLives.position.y = player!.position.y + frame.height - 50
         
-        playerCollectibles.position.x = player!.position.x + frame.width / 2
-        playerCollectibles.position.y = player!.position.y + frame.height - 300
+        playerCollectibles.position.x = player!.position.x - frame.width
+        playerCollectibles.position.y = player!.position.y + frame.height - 50
     }
 }
 
@@ -467,6 +477,7 @@ extension GameScene: SKPhysicsContactDelegate {
             player.run(SKAction.move(to: CGPoint(x: 0, y: -5300), duration: 0))
             
             lifeCount += 1
+            playerLives.updateLives()
             print("player lives: \(lifeCount)")
 
             lastSpikeHit = secondNode.name!
@@ -484,6 +495,11 @@ extension GameScene: SKPhysicsContactDelegate {
             
 //            score.updateScore()
             playerCollectibles.updateScore()
+            
+            if collectibleCount == 6 {
+                print("spawning black hole")
+                mapFactory.buildBlackHole()
+            }
         }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {

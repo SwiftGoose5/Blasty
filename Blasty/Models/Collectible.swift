@@ -18,8 +18,9 @@ struct CollectibleSet {
     init() {
         let coordinateSet = RNGFactory.coordinateSet
         
-        for i in 0 ... 4 {
-            let collectible = Collectible(at: coordinateSet[i])
+        for i in 0 ..< totalCollectibles - 1 {
+//            let collectible = Collectible(at: coordinateSet[i])
+            let collectible = Collectible()
             collectible.index = i
             collectibles.append(collectible)
         }

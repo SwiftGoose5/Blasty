@@ -27,7 +27,7 @@ class PlayerLives: SKNode {
             
             life.name = "life\(index)"
             life.zPosition = 10
-            life.setScale(2)
+            life.setScale(1)
             lives.append(life)
             
             addChild(life)
@@ -35,7 +35,7 @@ class PlayerLives: SKNode {
             
             
             // fill the containers behind
-            let container = SKShapeNode(circleOfRadius: texture.size().width / 2)
+            let container = SKShapeNode(circleOfRadius: texture.size().width / 2 + 10)
             
             container.name = "lifeContainer\(index)"
             container.zPosition = 9
@@ -55,8 +55,8 @@ class PlayerLives: SKNode {
         let current = lives[lifeCount - 1]
 
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
-        let blowup = SKAction.scale(to: 2.4, duration: 0.1)
-        let fade = SKAction.fadeOut(withDuration: 0.1)
+        let blowup = SKAction.scale(to: 2.5, duration: 0.2)
+        let fade = SKAction.fadeOut(withDuration: 0.2)
         let group = SKAction.group([blowup, fade])
         let seq = SKAction.sequence([sound, group, .removeFromParent()])
         

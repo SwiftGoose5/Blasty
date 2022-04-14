@@ -33,6 +33,8 @@ class MapFactory: SKNode {
     private var cobbleTiles = SKTileGroup()
     private var grassTiles = SKTileGroup()
     
+    private var availableCoordinates = [[Int]]()
+    
     override init() {
         super.init()
         
@@ -59,11 +61,9 @@ class MapFactory: SKNode {
 //        bottomLayer.fill(with: waterTiles)
         
         buildTileSet()
-//        buildTilePhysics()
+        buildTilePhysics()
         buildCollectibles()
-        buildBlackHole()
         addChild(topLayer)
-
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -83,6 +83,8 @@ extension MapFactory {
                     topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
                 } else if terrainHeight > 0.98 {
                     topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
+                } else {
+                    availableCoordinates.append([column, row])
                 }
             }
         }
@@ -175,7 +177,12 @@ extension MapFactory {
     }
     
     func buildBlackHole() {
-        let blackHolePoint = RNGFactory.colRow
+        var blackHolePoint = RNGFactory.colRow
+        
+        while !availableCoordinates.contains(blackHolePoint) {
+            blackHolePoint = RNGFactory.colRow
+        }
+        
         let blackHole = BlackHole()
         
         let x = CGFloat(blackHolePoint[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
@@ -185,8 +192,8 @@ extension MapFactory {
         
         addChild(blackHole)
 
-        blackHole.position = CGPoint(x: blackHole.position.x + position.x,
-                                     y: blackHole.position.y + position.y)
+//        blackHole.position = CGPoint(x: blackHole.position.x + position.x,
+//                                     y: blackHole.position.y + position.y)
         
 //        for column in 0 ..< columns {
 //            for row in 0 ..< rows {
@@ -209,12 +216,16 @@ extension MapFactory {
 //            }
 //        }
     }
-    
     func buildCollectibles() {
         for collectible in collectibleSet.collectibles {
-            print(collectible.coords)
             
             if collectible.coords != [0,0] {
+                
+                let coordIndex = RNGFactory.getSingleAvailablePoint(collectible.index, availableCoordinates.count)
+                collectible.coords = availableCoordinates[coordIndex]
+//                collectible.coords = RNGFactory.getSingleAvailablePoint(collectible.index, availableCoordinates.count)
+                print(collectible.coords)
+                
                 let x = CGFloat(collectible.coords[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
                 let y = CGFloat(collectible.coords[1]) * tileSize.height - halfHeight + (tileSize.height / 2)
                 

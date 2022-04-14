@@ -27,7 +27,7 @@ class PlayerCollectibles: SKNode {
             
             collectible.name = "collectible\(index)"
             collectible.zPosition = 10
-            collectible.setScale(1.0)
+            collectible.setScale(1)
             collectible.alpha = 0
             collectibles.append(collectible)
             
@@ -36,7 +36,7 @@ class PlayerCollectibles: SKNode {
             
             
             // fill the containers behind
-            let container = SKShapeNode(circleOfRadius: texture.size().width / 4)
+            let container = SKShapeNode(circleOfRadius: texture.size().width / 4 + 10)
             
             container.name = "collectibleContainer\(index)"
             container.zPosition = 9
@@ -53,10 +53,10 @@ class PlayerCollectibles: SKNode {
     func updateScore() {
         
         let current = collectibles[collectibleCount - 1]
-        current.run(SKAction.scale(to: 1.6, duration: 0))
+        current.run(SKAction.scale(to: 2.5, duration: 0))
         
         let appear = SKAction.fadeIn(withDuration: 0.3)
-        let blowdown = SKAction.scale(to: 1.0, duration: 0.4)
+        let blowdown = SKAction.scale(to: 0.5, duration: 0.4)
         let group = SKAction.group([appear, blowdown])
         
         current.run(group)

@@ -14,8 +14,8 @@ import GameplayKit
 class SkyFactory: SKNode {
 
     private let size = 128
-    private let columns = 32
-    private let rows = 32
+    private let columns = 128
+    private let rows = 128
     
     private var tileSize = CGSize(width: 0, height: 0)
     private var halfWidth = CGFloat(0)
@@ -31,12 +31,12 @@ class SkyFactory: SKNode {
     private var grassTiles = SKTileGroup()
     private var sandTiles = SKTileGroup()
     private var cobbleTiles = SKTileGroup()
+    private var cobblyWater = SKTileGroup()
     
     override init() {
         super.init()
         
-        xScale = 4
-        yScale = 4
+        setScale(1)
         alpha = 0.2
         zPosition = -5
         
@@ -52,6 +52,7 @@ class SkyFactory: SKNode {
         grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
         sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
         cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
+        cobblyWater = tileSet.tileGroups.first { $0.name == "CobblyWater" }!
         
         bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
@@ -80,8 +81,8 @@ extension SkyFactory {
                 let location = vector2(Int32(row), Int32(column))
                 let terrainHeight = noiseMap.value(at: location)
 
-                if terrainHeight < 0.5 {
-//                    topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
+                if terrainHeight < 0 {
+//                    topLayer.setTileGroup(cobblyWater, forColumn: column, row: row)
                     
                 } else {
 //                    topLayer.setTileGroup(sandTiles, forColumn: column, row: row)

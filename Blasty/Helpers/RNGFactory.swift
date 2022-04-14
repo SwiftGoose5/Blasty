@@ -50,4 +50,20 @@ struct RNGFactory {
 
         return set
     }
+    
+    static func getSingleAvailablePoint(_ index: Int, _ highestValue: Int) -> Int {
+        let source = GKMersenneTwisterRandomSource()
+        var coordinate = [Int]()
+        
+        source.seed = UInt64(DateFactory.dateSeed + Int32(index + 1))
+        
+        let distribution = GKRandomDistribution(randomSource: source, lowestValue: 0, highestValue: highestValue - 1)
+        
+        return distribution.nextInt()
+//        for _ in 0 ... 1 {
+//            coordinate.append(distribution.nextInt())
+//        }
+//        
+//        return coordinate
+    }
 }
