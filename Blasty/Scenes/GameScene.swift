@@ -11,14 +11,6 @@
 import SpriteKit
 import GameplayKit
 
-enum CollisionType: UInt32 {
-    case player = 1
-    case ground = 2
-    case spikes = 4
-    case victory = 8
-    case field = 16
-    case collectible = 32
-}
 
 class GameScene: SKScene {
     var player: PlayerNode?
@@ -80,6 +72,7 @@ class GameScene: SKScene {
         addChild(playerLives)
         addChild(playerCollectibles)
         
+        startingPlatform.buildPlatform()
         addChild(startingPlatform)
         
 //        score.zPosition = 10
@@ -125,6 +118,7 @@ class GameScene: SKScene {
         
         
         // MARK: - Physics Delegate
+        scaleMode = .aspectFill
         physicsWorld.contactDelegate = self
         isUserInteractionEnabled = true
         
@@ -140,7 +134,7 @@ class GameScene: SKScene {
         
         // MARK: - Player
         player = PlayerNode()
-        player!.position = CGPoint(x: 0, y: -5368)
+        player!.position = CGPoint(x: 0, y: mapFactory.position.y - 5368)
         addChild(player!)
         startTouch = CGPoint(x: 0, y: 0)
         endTouch = CGPoint(x: 0, y: 0)
@@ -392,7 +386,13 @@ class GameScene: SKScene {
             player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player?.position = CGPoint(x: 0, y: -5300)
             lifeCount += 1
-            playerLives.updateLives()
+            
+            if lifeCount >= totalLives {
+                // game over
+            } else {
+                playerLives.updateLives()
+            }
+            
         }
         
 //        if playerVector!.dx >= 100 {
@@ -474,10 +474,16 @@ extension GameScene: SKPhysicsContactDelegate {
             if lastSpikeHit == secondNode.name! { return }
             
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-            player.run(SKAction.move(to: CGPoint(x: 0, y: -5300), duration: 0))
+            player.run(SKAction.move(to: CGPoint(x: 0, y: mapFactory.position.y - 5300), duration: 0))
             
             lifeCount += 1
-            playerLives.updateLives()
+            
+            if lifeCount >= totalLives {
+                // game over
+            } else {
+                playerLives.updateLives()
+            }
+            
             print("player lives: \(lifeCount)")
 
             lastSpikeHit = secondNode.name!
@@ -497,7 +503,6 @@ extension GameScene: SKPhysicsContactDelegate {
             playerCollectibles.updateScore()
             
             if collectibleCount == 6 {
-                print("spawning black hole")
                 mapFactory.buildBlackHole()
             }
         }
