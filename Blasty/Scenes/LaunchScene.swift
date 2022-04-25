@@ -19,7 +19,6 @@ class LaunchScene: SKScene {
     var startingPlatform = StartingPlatform()
     
     var portal = BlackHole()
-    var portalLabel = SKLabelNode()
 
     var joystick = Joystick()
     var joystickActive = false
@@ -38,33 +37,21 @@ class LaunchScene: SKScene {
     
     var dailyScene = SKScene()
     
-    let progressTexture = SKTexture(imageNamed: "ProgressBar")
-    let progressContainerTexture = SKTexture(imageNamed: "ProgressBarContainer")
-    var progressBar = SKSpriteNode()
-    var progressContainer = SKSpriteNode()
-    var progressCount = CGFloat(1)
-    var progressBarMaxScale = CGFloat(10)
+    var progressCount = 1
+    let pg = ProgressBar()
+    
     
     override func didMove(to view: SKView) {
+        DispatchQueue.global(qos: .default).async { [weak self] in
+            self!.dailyScene = SKScene(fileNamed: "GameScene")!
+            self!.dailyScene.scaleMode = .aspectFill
+        }
         
         // MARK: - Progress Bar
-        progressContainer = SKSpriteNode(texture: progressContainerTexture, size: progressContainerTexture.size())
-        progressContainer.physicsBody = SKPhysicsBody(texture: progressContainerTexture, size: progressContainerTexture.size())
-        progressContainer.physicsBody?.affectedByGravity = false
-        progressContainer.physicsBody?.isDynamic = false
-        progressContainer.xScale = 21
-        progressContainer.yScale = 2.8
-        
-        progressBarMaxScale = 20
-        
-        progressBar = SKSpriteNode(texture: progressTexture, size: progressTexture.size())
-        progressBar.anchorPoint = CGPoint(x: 0, y: 0.5)
-        progressBar.position = CGPoint(x: -progressTexture.size().width / 2 * progressBarMaxScale, y: 0)
-        progressBar.xScale = 0
-        progressBar.yScale = 2
-        
-        addChild(progressContainer)
-        addChild(progressBar)
+
+        pg.getSceneFrame(frame)
+        pg.buildProgressBar()
+        addChild(pg)
         
         // MARK: - Cloud
         let cloud1Texture = SKTexture(imageNamed: "Cloud1")
@@ -78,15 +65,6 @@ class LaunchScene: SKScene {
         
         addChild(skyFactory)
         addChild(cloud1)
-        
-        // MARK: - Black Hole Switches
-        portalLabel.text = "Daily Challenge"
-        portalLabel.fontName = "Helvetica Neue Bold"
-        portalLabel.fontSize = 140
-        portalLabel.position = CGPoint(x: 0, y: 2400)
-        addChild(portalLabel)
-        
-        
 
         // MARK: - Physics Delegate
         scaleMode = .aspectFill
@@ -119,9 +97,7 @@ class LaunchScene: SKScene {
         addProgressObserver()
         
         
-        DispatchQueue.global(qos: .userInteractive).async { [weak self] in
-            self!.dailyScene = SKScene(fileNamed: "GameScene")!
-        }
+        
     }
 
 
@@ -246,15 +222,27 @@ class LaunchScene: SKScene {
 
 // MARK: - Progress Notification Listener
 extension LaunchScene {
-    func updateProgressBar() {
-        progressBar.run(SKAction.scaleX(to: CGFloat(progressCount / CGFloat(columns)) * progressBarMaxScale, duration: 0.2))
-    }
-    
     func addProgressObserver() {
         NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [self] note in
-            self.updateProgressBar()
+            print("\(progressCount)/\(columns)")
             self.progressCount += 1
+            
+            if self.progressCount <= columns { return }
+            
+            print("building portal")
+            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+                self.buildPortal()
+            }
+            
         }
+    }
+    
+    func buildPortal() {
+        
+//        addChild(portal)
+        
+        let transition = SKTransition.fade(withDuration: 3)
+        self.view?.presentScene(dailyScene, transition: transition)
     }
 }
 

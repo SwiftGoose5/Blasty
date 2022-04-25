@@ -37,30 +37,36 @@ extension StartingPlatform {
     func buildPlatform(isStart: Bool = false) {
         
         if isStart {
-            leftLabelNode.text = "This side aims"
-            leftLabelNode.fontSize = 120
-            leftLabelNode.position = CGPoint(x: -1100, y: 0)
+            leftLabelNode.fontName = "Helvetica Neue Bold"
+            leftLabelNode.text = "Touch left to aim"
+            leftLabelNode.fontSize = 110
+            leftLabelNode.position = CGPoint(x: -1100, y: -400)
             
+            centerLabelNode.fontName = "Helvetica Neue Bold"
             centerLabelNode.text = "Loading Today's Challenge"
             centerLabelNode.fontSize = 150
             centerLabelNode.position = CGPoint(x: 0, y: 600)
             
+            centerUnderLabelNode.fontName = "Helvetica Neue Bold"
             centerUnderLabelNode.text = "Next Challenge Available: "
             centerUnderLabelNode.fontSize = 100
             centerUnderLabelNode.position = CGPoint(x: 0, y: 400)
             addChild(centerUnderLabelNode)
             
-            rightLabelNode.text = "This side jumps"
-            rightLabelNode.fontSize = 120
-            rightLabelNode.position = CGPoint(x: 1100, y: 0)
+            rightLabelNode.fontName = "Helvetica Neue Bold"
+            rightLabelNode.text = "Touch right to jump"
+            rightLabelNode.fontSize = 110
+            rightLabelNode.position = CGPoint(x: 1100, y: -400)
             
             addChild(leftLabelNode)
             addChild(rightLabelNode)
             
         } else {
+            centerLabelNode.fontName = "Helvetica Neue Bold"
             centerLabelNode.text = "^^ Activate the Portal ^^"
             centerLabelNode.position = CGPoint(x: 0, y: -5000)
             
+            centerUnderLabelNode.fontName = "Helvetica Neue Bold"
             centerUnderLabelNode.text = "Mind the green grass please :>"
             centerUnderLabelNode.fontSize = 120
             centerUnderLabelNode.position = isStart ? CGPoint(x: 0, y: 1200) : CGPoint(x: 0, y: -4400)

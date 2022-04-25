@@ -96,8 +96,8 @@ class MapFactory: SKNode {
             addChild(topLayer)
         } else {
             buildTileSet()
-            buildTilePhysics()
             buildCollectibles()
+            buildTilePhysics()
             addChild(topLayer)
         }
     }
