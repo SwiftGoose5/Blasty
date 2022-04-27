@@ -36,8 +36,8 @@ class GameScene: SKScene {
     var lastCollectibleIndex = -1
 //    var score = Score()
     
-    var lastSpikeHit = ""
     var lastSpikeHitTime = Double(0)
+    var lastSpikeDate = Date()
     
     var launcher = LauncherParentNode()
     
@@ -436,12 +436,11 @@ extension GameScene: SKPhysicsContactDelegate {
         
         if let player = firstNode as? PlayerNode, let _ = secondNode.name?.contains("sand") {
             
-            // don't hit the same spike more than once
-            let currentTime = Date()
+            // sometimes too many collisions are detected, so we have to get the last date and time
+            lastSpikeHitTime = Date().timeIntervalSince(lastSpikeDate)
             print("lastHitTime: \(lastSpikeHitTime)")
             
-            if lastSpikeHitTime > 0.0015 { return }
-            if lastSpikeHit == secondNode.name! { return }
+            if lastSpikeHitTime < 1 { return }
             
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player.run(SKAction.move(to: CGPoint(x: 0, y: mapFactory.position.y - 5300), duration: 0))
@@ -457,9 +456,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 
             }
             
-            lastSpikeHit = secondNode.name!
-            let lastTime = Date()
-            lastSpikeHitTime = lastTime.timeIntervalSince(currentTime)
+            lastSpikeDate = Date()
         }
         
         
