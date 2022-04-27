@@ -21,8 +21,8 @@ class LaunchScene: SKScene {
     var portal = BlackHole()
 
     var joystick = Joystick()
-    var joystickActive = false
     var joystickData = JoystickData()
+    var joystickActive = false
     
     var button = Button()
     var buttonData = ButtonData()
@@ -32,39 +32,54 @@ class LaunchScene: SKScene {
     let sceneCamera = SKCameraNode()
     
     let skyFactory = SkyFactory()
-    var cloud1 = SKSpriteNode()
-    let cloud1Speed = CGFloat(0.3)
+    let skySpeed = CGFloat(0.6)
+    
+    var cloud = SKSpriteNode()
+    let cloudSpeed = CGFloat(0.3)
+    let cloudTexture = SKTexture(imageNamed: "Cloud1")
     
     var dailyScene = SKScene()
     
     var progressCount = 1
-    let pg = ProgressBar()
+    let progressBar = ProgressBar()
     
+    var nextDayLabelNode = SKLabelNode()
+
     
     override func didMove(to view: SKView) {
-        DispatchQueue.global(qos: .default).async { [weak self] in
-            self!.dailyScene = SKScene(fileNamed: "GameScene")!
-            self!.dailyScene.scaleMode = .aspectFill
+        
+        if !isDayComplete {
+            DispatchQueue.global(qos: .default).async { [weak self] in
+                self!.dailyScene = SKScene(fileNamed: "GameScene")!
+                self!.dailyScene.scaleMode = .aspectFill
+            }
         }
+        
+        nextDayLabelNode.fontName = "Helvetica Neue Bold"
+        nextDayLabelNode.fontSize = 150
+        nextDayLabelNode.position.y = 400
+        addChild(nextDayLabelNode)
+        
+        nextDayLabelNode.isHidden = !isDayComplete
+
         
         // MARK: - Progress Bar
 
-        pg.getSceneFrame(frame)
-        pg.buildProgressBar()
-        addChild(pg)
+        progressBar.getSceneFrame(frame)
+        progressBar.buildProgressBar()
+        addChild(progressBar)
         
         // MARK: - Cloud
-        let cloud1Texture = SKTexture(imageNamed: "Cloud1")
-        cloud1 = SKSpriteNode(texture: cloud1Texture, size: cloud1Texture.size())
-        cloud1.setScale(20)
-        cloud1.zPosition = -4
-        cloud1.alpha = 0.2
+        cloud = SKSpriteNode(texture: cloudTexture, size: cloudTexture.size())
+        cloud.setScale(20)
+        cloud.zPosition = -4
+        cloud.alpha = 0.2
         
         startingPlatform.buildPlatform(isStart: true)
         addChild(startingPlatform)
         
         addChild(skyFactory)
-        addChild(cloud1)
+        addChild(cloud)
 
         // MARK: - Physics Delegate
         scaleMode = .aspectFill
@@ -81,7 +96,7 @@ class LaunchScene: SKScene {
 
         
         // MARK: - Player
-        player.position = CGPoint(x: 0, y: 300)
+        player.position = CGPoint(x: 0, y: 310)
         addChild(player)
         
         
@@ -197,7 +212,7 @@ class LaunchScene: SKScene {
         
         if abs(player.position.x) > 10000 || abs(player.position.y) > 10000 {
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-            player.position = CGPoint(x: 0, y: 300)
+            player.position = CGPoint(x: 0, y: 310)
             
             run(SKAction.playSoundFileNamed("pop.m4a", waitForCompletion: false))
         }
@@ -212,11 +227,23 @@ class LaunchScene: SKScene {
         launcher.position = player.position
         sceneCamera.position = player.position
         
-        cloud1.position.x = player.position.x + player.position.x * -cloud1Speed
-        cloud1.position.y = player.position.y + player.position.y * -cloud1Speed
+        cloud.position.x = player.position.x + player.position.x * -cloudSpeed
+        cloud.position.y = player.position.y + player.position.y * -cloudSpeed
         
-        skyFactory.position.x = player.position.x + player.position.x * -cloud1Speed
-        skyFactory.position.y = player.position.y + player.position.y * -cloud1Speed
+        skyFactory.position.x = player.position.x + player.position.x * -skySpeed
+        skyFactory.position.y = player.position.y + player.position.y * -skySpeed
+        
+        timeUntilMidnight = Date().numberOfSecondsUntilMidnight!
+        
+        secondsUntilMidnight = Int(timeUntilMidnight) % 3600 % 60
+        minutesUntilMidnight = Int(timeUntilMidnight) % 3600 / 60
+        hoursUntilMidnight   = Int(timeUntilMidnight) / 3600
+        
+        let seconds = secondsUntilMidnight < 10 ? "0\(secondsUntilMidnight)" : String(secondsUntilMidnight)
+        let minutes = minutesUntilMidnight < 10 ? "0\(minutesUntilMidnight)" : String(minutesUntilMidnight)
+        let hours   = hoursUntilMidnight   < 10 ? "0\(hoursUntilMidnight)"   : String(hoursUntilMidnight)
+        
+        nextDayLabelNode.text = "\(hours) : \(minutes) : \(seconds)"
     }
 }
 
@@ -229,20 +256,16 @@ extension LaunchScene {
             
             if self.progressCount <= columns { return }
             
-            print("building portal")
-            DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
-                self.buildPortal()
-            }
+            portal.setScale(0)
+            addChild(portal)
+            portal.run(SKAction.scale(to: 100, duration: 1.5))
             
+            // Wait 1.5 seconds for scene to finish loading
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                let transition = SKTransition.fade(withDuration: 2)
+                self.view?.presentScene(self.dailyScene, transition: transition)
+            }
         }
-    }
-    
-    func buildPortal() {
-        
-//        addChild(portal)
-        
-        let transition = SKTransition.fade(withDuration: 3)
-        self.view?.presentScene(dailyScene, transition: transition)
     }
 }
 
@@ -260,7 +283,11 @@ extension LaunchScene: SKPhysicsContactDelegate {
         let secondNode = sortedNodes[1]
         
         print("contact between \(firstNode.name) and \(secondNode.name)")
-
+        
+//        if nodeA.name == "L" {
+//            firstNode.physicsBody?.affectedByGravity = true
+//        }
+        
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
             blackHole.field?.isEnabled = false
             player.physicsBody?.collisionBitMask = 0
@@ -271,3 +298,4 @@ extension LaunchScene: SKPhysicsContactDelegate {
         }
     }
 }
+

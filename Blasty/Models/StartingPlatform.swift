@@ -38,23 +38,30 @@ extension StartingPlatform {
         
         if isStart {
             leftLabelNode.fontName = "Helvetica Neue Bold"
-            leftLabelNode.text = "Touch left to aim"
+            leftLabelNode.text = "Hold left to aim"
             leftLabelNode.fontSize = 110
             leftLabelNode.position = CGPoint(x: -1100, y: -400)
             
-            centerLabelNode.fontName = "Helvetica Neue Bold"
-            centerLabelNode.text = "Loading Today's Challenge"
-            centerLabelNode.fontSize = 150
-            centerLabelNode.position = CGPoint(x: 0, y: 600)
+            if isDayComplete {
+                centerLabelNode.fontName = "Helvetica Neue Bold"
+                centerLabelNode.text = "Next Challenge Available In:"
+                centerLabelNode.fontSize = 150
+                centerLabelNode.position = CGPoint(x: 0, y: 600)
+            } else {
+                centerLabelNode.fontName = "Helvetica Neue Bold"
+                centerLabelNode.text = "Loading Today's Challenge"
+                centerLabelNode.fontSize = 150
+                centerLabelNode.position = CGPoint(x: 0, y: 600)
+            }
             
-            centerUnderLabelNode.fontName = "Helvetica Neue Bold"
-            centerUnderLabelNode.text = "Next Challenge Available: "
-            centerUnderLabelNode.fontSize = 100
-            centerUnderLabelNode.position = CGPoint(x: 0, y: 400)
-            addChild(centerUnderLabelNode)
+//            centerUnderLabelNode.fontName = "Helvetica Neue Bold"
+//            centerUnderLabelNode.text = "Next Challenge Available: "
+//            centerUnderLabelNode.fontSize = 100
+//            centerUnderLabelNode.position = CGPoint(x: 0, y: 400)
+//            addChild(centerUnderLabelNode)
             
             rightLabelNode.fontName = "Helvetica Neue Bold"
-            rightLabelNode.text = "Touch right to jump"
+            rightLabelNode.text = "Touch/Hold right to jump"
             rightLabelNode.fontSize = 110
             rightLabelNode.position = CGPoint(x: 1100, y: -400)
             
@@ -64,6 +71,7 @@ extension StartingPlatform {
         } else {
             centerLabelNode.fontName = "Helvetica Neue Bold"
             centerLabelNode.text = "^^ Activate the Portal ^^"
+            centerLabelNode.fontSize = 150
             centerLabelNode.position = CGPoint(x: 0, y: -5000)
             
             centerUnderLabelNode.fontName = "Helvetica Neue Bold"

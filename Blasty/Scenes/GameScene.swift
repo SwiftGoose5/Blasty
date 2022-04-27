@@ -13,7 +13,7 @@ import GameplayKit
 
 
 class GameScene: SKScene {
-    var player: PlayerNode?
+    var player = PlayerNode()
     var playerLives = PlayerLives()
     
     var playerCollectibles = PlayerCollectibles()
@@ -26,22 +26,20 @@ class GameScene: SKScene {
     var wall: TerrainNode?
     var wall2: TerrainNode?
     
-    var startTouch : CGPoint?
-    var endTouch : CGPoint?
-    
-    var joystick : Joystick?
+    var joystick = Joystick()
     var joystickActive = false
     var joystickData = JoystickData()
     
-    var button : Button?
+    var button = Button()
     var buttonData = ButtonData()
     
     var lastCollectibleIndex = -1
 //    var score = Score()
     
     var lastSpikeHit = ""
+    var lastSpikeHitTime = Double(0)
     
-    var launcher: LauncherParentNode?
+    var launcher = LauncherParentNode()
     
     let sceneCamera = SKCameraNode()
     
@@ -49,20 +47,25 @@ class GameScene: SKScene {
     let mapFactory = MapFactory()
     
     let skyFactory = SkyFactory()
-    var cloud1 = SKSpriteNode()
-    var cloud2 = SKSpriteNode()
-    var cloud3 = SKSpriteNode()
-    let cloud1Speed = CGFloat(0.3)
-    let cloud2Speed = CGFloat(0.4)
-    let cloud3Speed = CGFloat(0.6)
+    let skySpeed = CGFloat(0.6)
+    
+    let cloud1Texture = SKTexture(imageNamed: "Cloud1")
+    
+    var cloud = SKSpriteNode()
+    let cloudSpeed = CGFloat(0.3)
+    
     
     var startingPlatform = StartingPlatform()
+    
+    var launchScene = SKScene()
     
     override func didMove(to view: SKView) {
         
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
+        
+        launchScene = SKScene(fileNamed: "LaunchScene")!
         
         
         playerLives.setScale(1.25)
@@ -79,70 +82,43 @@ class GameScene: SKScene {
 //        addChild(score)
         
         addChild(backgroundLabels)
-        
-        
-        
 
         backgroundColor = .purple
 
         // MARK: - Sky & Clouds
         addChild(skyFactory)
         
-        let cloud1Texture = SKTexture(imageNamed: "Cloud1")
-        cloud1 = SKSpriteNode(texture: cloud1Texture, size: cloud1Texture.size())
-        cloud1.setScale(20)
-        cloud1.zPosition = -4
-        cloud1.alpha = 0.2
         
+        cloud = SKSpriteNode(texture: cloud1Texture, size: cloud1Texture.size())
+        cloud.setScale(20)
+        cloud.zPosition = -4
+        cloud.alpha = 0.2
         
-        let cloud2Texture = SKTexture(imageNamed: "Cloud2")
-        cloud2 = SKSpriteNode(texture: cloud2Texture, size: cloud2Texture.size())
-        cloud2.setScale(15)
-        cloud2.zPosition = -3
-        cloud2.alpha = 0.4
-        
-        
-        let cloud3Texture = SKTexture(imageNamed: "Cloud3")
-        cloud3 = SKSpriteNode(texture: cloud3Texture, size: cloud3Texture.size())
-        cloud3.setScale(10)
-        cloud3.zPosition = -2
-        cloud3.alpha = 0.2
-        addChild(cloud1)
-//        addChild(cloud2)
-//        addChild(cloud3)
-        
-        
-        
-        
-        
-        
-        
+        addChild(cloud)
+
         // MARK: - Physics Delegate
-        scaleMode = .aspectFill
         physicsWorld.contactDelegate = self
         isUserInteractionEnabled = true
         
         
         // MARK: - Joystick
         joystick = Joystick()
-        addChild(joystick!)
+        addChild(joystick)
         
         // MARK: - Button
         button = Button()
-        addChild(button!)
+        addChild(button)
 
         
         // MARK: - Player
         player = PlayerNode()
-        player!.position = CGPoint(x: 0, y: mapFactory.position.y - 5368)
-        addChild(player!)
-        startTouch = CGPoint(x: 0, y: 0)
-        endTouch = CGPoint(x: 0, y: 0)
+        player.position = CGPoint(x: 0, y: mapFactory.position.y - 5368)
+        addChild(player)
         
         
         // MARK: - Launcher
         launcher = LauncherParentNode()
-        addChild(launcher!)
+        addChild(launcher)
         
         
         // MARK: - Camera
@@ -175,7 +151,6 @@ class GameScene: SKScene {
         
         // MARK: - Map
         addChild(mapFactory)
-//        addChild(frameFactory)
         
     }
 
@@ -209,12 +184,9 @@ class GameScene: SKScene {
             if location.y < sceneCamera.position.y {
                 if location.x >= sceneCamera.position.x {
 //                    buttonData.startTime = Date()
-                    print("button considered pushed")
-                    button!.isPressed = true
+                    button.isPressed = true
                 }
             }
-            
-            startTouch = touch.location(in: self)
         }
     }
     
@@ -253,15 +225,15 @@ class GameScene: SKScene {
             if location.y < sceneCamera.position.y {
                 if location.x <= sceneCamera.position.x {
                     // We're touching the left side of the screen
-                    joystickData = joystick!.moveStick(jsLocation: joystick!.position, touchLocation: location)
+                    joystickData = joystick.moveStick(jsLocation: joystick.position, touchLocation: location)
                     
-                    joystick?.setBaseAlpha(joystickData.strength)
-                    joystick?.setBaseScale(joystickData.strength)
-                    
-                    launcher!.setLauncherAlpha(joystickData.strength)
-                    launcher!.setLauncherScale(joystickData.strength)
-                    launcher!.setLauncherAngle(joystickData.angle)
-                    launcher!.setEmitterStrength(joystickData.strength)
+                    joystick.setBaseAlpha(joystickData.strength)
+                    joystick.setBaseScale(joystickData.strength)
+                
+                    launcher.setLauncherAlpha(joystickData.strength)
+                    launcher.setLauncherScale(joystickData.strength)
+                    launcher.setLauncherAngle(joystickData.angle)
+                    launcher.setEmitterStrength(joystickData.strength)
                 }
             }
             
@@ -281,8 +253,8 @@ class GameScene: SKScene {
         for touch in touches {
             let location = touch.location(in: self)
             
-            launcher?.setLauncherAlpha(0)
-            launcher?.resetEmitter()
+            launcher.setLauncherAlpha(0)
+            launcher.resetEmitter()
 
             
 //            player?.physicsBody?.isDynamic = true
@@ -314,9 +286,9 @@ class GameScene: SKScene {
                     // Joystick finished moving
 //                    print("joystick done moving")
                     joystickActive = false
-                    joystick!.centerStick()
-                    joystick!.resetBaseAlpha()
-                    joystick!.resetBaseScale()
+                    joystick.centerStick()
+                    joystick.resetBaseAlpha()
+                    joystick.resetBaseScale()
 //                    joystickData = JoystickData()
                 }
             }
@@ -327,7 +299,7 @@ class GameScene: SKScene {
                 if location.x >= sceneCamera.position.x {
 //                    print("button done pressing")
                     
-                    if !button!.isPressed { continue }
+                    if !button.isPressed { continue }
                     
                     
                     
@@ -337,10 +309,10 @@ class GameScene: SKScene {
                     // Reset velocity?
 //                    player?.physicsBody?.velocity.dy = 0
                     
-                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
-                                                               dy: joystickData.vector.dy * buttonData.strength))
+                    player.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * buttonData.strength,
+                                                              dy: joystickData.vector.dy * buttonData.strength))
                     
-                    button!.isPressed = false
+                    button.isPressed = false
                 }
             }
             
@@ -357,7 +329,7 @@ class GameScene: SKScene {
     }
     
     override func touchesCancelled(_ touches: Set<UITouch>, with event: UIEvent?) {
-        joystick!.centerStick()
+        joystick.centerStick()
     }
     
     
@@ -365,7 +337,7 @@ class GameScene: SKScene {
     
     override func update(_ currentTime: TimeInterval) {
         
-        if button!.isPressed {
+        if button.isPressed {
             buttonData.startTime = currentTime
         } else {
             buttonData.endTime = currentTime
@@ -382,66 +354,61 @@ class GameScene: SKScene {
 //        }
         
         
-        if abs(player!.position.x) > 10000 || abs(player!.position.y) > 10000 {
-            player?.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-            player?.position = CGPoint(x: 0, y: -5300)
+        if abs(player.position.x) > 10000 || abs(player.position.y) > 10000 {
+            player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
+            player.position = CGPoint(x: 0, y: -5300)
             lifeCount += 1
             
             if lifeCount >= totalLives {
                 // game over
+                playerLives.updateLives()
+                
+                wasVictory = false
+                transitionToLaunchScreen()
             } else {
                 playerLives.updateLives()
             }
             
         }
-        
-//        if playerVector!.dx >= 100 {
-//            player?.physicsBody?.velocity.dx = 100
+
+//        if (player.physicsBody?.velocity.dx)! >= 100 {
+//            player.physicsBody?.velocity.dx = 100
 //        }
 //
-//        if playerVector!.dx <= -100 {
-//            player?.physicsBody?.velocity.dx = -100
-//        }
-//        
-//        if playerVector!.dy > 100 {
-//            player?.physicsBody?.velocity.dy = 100
+//        if (player.physicsBody?.velocity.dx)! <= -100 {
+//            player.physicsBody?.velocity.dx = -100
 //        }
 //
-//        if playerVector!.dy <= -100 {
-//            player?.physicsBody?.velocity.dy = -100
+//        if (player.physicsBody?.velocity.dy)! > 100 {
+//            player.physicsBody?.velocity.dy = 100
+//        }
+//
+//        if (player.physicsBody?.velocity.dy)! <= -100 {
+//            player.physicsBody?.velocity.dy = -100
 //        }
         
-        joystick?.position.x = player!.position.x - frame.width / 1.25
-        joystick?.position.y = player!.position.y - frame.height / 2.5
+        joystick.position.x = player.position.x - frame.width / 1.25
+        joystick.position.y = player.position.y - frame.height / 2.5
         
-        button?.position.x = player!.position.x + frame.width / 1.25
-        button?.position.y = player!.position.y - frame.height / 2.5
+        button.position.x = player.position.x + frame.width / 1.25
+        button.position.y = player.position.y - frame.height / 2.5
         
-        launcher?.position = player!.position
-        sceneCamera.position = player!.position
+        launcher.position = player.position
+        sceneCamera.position = player.position
         
-        cloud1.position.x = player!.position.x + player!.position.x * -cloud1Speed
-        cloud2.position.x = player!.position.x + player!.position.x * -cloud2Speed
-        cloud3.position.x = player!.position.x + player!.position.x * -cloud3Speed
-     
+        cloud.position.x = player.position.x + player.position.x * -cloudSpeed
+        cloud.position.y = player.position.y + player.position.y * -cloudSpeed
+
+        skyFactory.position.x = player.position.x + player.position.x * -skySpeed
+        skyFactory.position.y = player.position.y + player.position.y * -skySpeed
         
-        cloud1.position.y = player!.position.y + player!.position.y * -cloud1Speed
-        cloud2.position.y = player!.position.y + player!.position.y * -cloud2Speed
-        cloud3.position.y = player!.position.y + player!.position.y * -cloud3Speed
+        backgroundLabels.position.y = player.position.y + player.position.y * -skySpeed
         
-        skyFactory.position.x = player!.position.x + player!.position.x * -cloud3Speed
-        skyFactory.position.y = player!.position.y + player!.position.y * -cloud3Speed
+        playerLives.position.x = player.position.x + frame.width / 2
+        playerLives.position.y = player.position.y + frame.height - 50
         
-        backgroundLabels.position.y = player!.position.y + player!.position.y * -cloud3Speed
-        
-//        score.position.x = player!.position.x
-//        score.position.y = player!.position.y + frame.height - 50
-        
-        playerLives.position.x = player!.position.x + frame.width / 2
-        playerLives.position.y = player!.position.y + frame.height - 50
-        
-        playerCollectibles.position.x = player!.position.x - frame.width
-        playerCollectibles.position.y = player!.position.y + frame.height - 50
+        playerCollectibles.position.x = player.position.x - frame.width
+        playerCollectibles.position.y = player.position.y + frame.height - 50
     }
 }
 
@@ -458,7 +425,6 @@ extension GameScene: SKPhysicsContactDelegate {
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
         
-        print("contact between \(firstNode.name) and \(secondNode.name)")
         
 //        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
 //            player.physicsBody?.isDynamic = false
@@ -468,9 +434,13 @@ extension GameScene: SKPhysicsContactDelegate {
 //            secondNode.physicsBody?.affectedByGravity = true
 //        }
         
-        if let player = firstNode as? PlayerNode, let _ = secondNode.name?.contains("spikes") {
+        if let player = firstNode as? PlayerNode, let _ = secondNode.name?.contains("sand") {
             
             // don't hit the same spike more than once
+            let currentTime = Date()
+            print("lastHitTime: \(lastSpikeHitTime)")
+            
+            if lastSpikeHitTime > 0.0015 { return }
             if lastSpikeHit == secondNode.name! { return }
             
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
@@ -478,15 +448,18 @@ extension GameScene: SKPhysicsContactDelegate {
             
             lifeCount += 1
             
+            playerLives.updateLives()
+            
             if lifeCount >= totalLives {
                 // game over
-            } else {
-                playerLives.updateLives()
+                wasVictory = true
+                transitionToLaunchScreen()
+                
             }
             
-            print("player lives: \(lifeCount)")
-
             lastSpikeHit = secondNode.name!
+            let lastTime = Date()
+            lastSpikeHitTime = lastTime.timeIntervalSince(currentTime)
         }
         
         
@@ -513,7 +486,17 @@ extension GameScene: SKPhysicsContactDelegate {
             player.physicsBody?.contactTestBitMask = 0
             player.physicsBody?.affectedByGravity = false
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
-            player.run(SKAction.move(to: blackHole.position, duration: 1))
+            player.run(SKAction.move(to: blackHole.position, duration: 0.2))
         }
+    }
+}
+
+extension GameScene {
+    func transitionToLaunchScreen() {
+        isDayComplete = true
+        
+        let transition = SKTransition.fade(withDuration: 2)
+        launchScene.scaleMode = .aspectFill
+        self.view?.presentScene(launchScene, transition: transition)
     }
 }

@@ -32,6 +32,7 @@ class MapFactory: SKNode {
     private var grassyWater = SKTileGroup()
     private var cobbleTiles = SKTileGroup()
     private var grassTiles = SKTileGroup()
+    private var sandTiles = SKTileGroup()
     
     private var availableCoordinates = [[Int]]()
     
@@ -48,11 +49,12 @@ class MapFactory: SKNode {
         tileSet = SKTileSet(named: "StockTile")!
         
         sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
-        cobblySand = tileSet.tileGroups.first { $0.name == "CobblySand" }!
+        cobblySand  = tileSet.tileGroups.first { $0.name == "CobblySand" }!
         grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
-        grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
+        grassTiles  = tileSet.tileGroups.first { $0.name == "Grass" }!
         cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
-//        waterTiles = tileSet.tileGroups.first { $0.name == "Water" }!
+        sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
+        waterTiles  = tileSet.tileGroups.first { $0.name == "Water" }!
         
 //        bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
@@ -161,9 +163,9 @@ extension MapFactory {
                 let terrainHeight = noiseMap.value(at: location)
 
                 if terrainHeight < -0.8 {
-                    topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
-                } else if terrainHeight > 0.98 {
-                    topLayer.setTileGroup(grassTiles, forColumn: column, row: row)
+                    topLayer.setTileGroup(cobbleTiles, forColumn: column, row: row)
+                } else if terrainHeight > 0.99 {
+                    topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
                 } else {
                     availableCoordinates.append([column, row])
                 }
@@ -213,8 +215,8 @@ extension MapFactory {
                 tileNode.physicsBody?.affectedByGravity = false
                 tileNode.physicsBody?.isDynamic = false
                 
-                if tileTexture.description.contains("Grass") {
-                    tileNode.name = "spike\(column)\(row)"
+                if tileTexture.description.contains("Sand") {
+                    tileNode.name = "sand\(column)\(row)"
                     tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
 //                    tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
 //                    tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
@@ -310,7 +312,6 @@ extension MapFactory {
                 let coordIndex = RNGFactory.getSingleAvailablePoint(collectible.index, availableCoordinates.count)
                 collectible.coords = availableCoordinates[coordIndex]
 //                collectible.coords = RNGFactory.getSingleAvailablePoint(collectible.index, availableCoordinates.count)
-                print(collectible.coords)
                 
                 let x = CGFloat(collectible.coords[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
                 let y = CGFloat(collectible.coords[1]) * tileSize.height - halfHeight + (tileSize.height / 2)

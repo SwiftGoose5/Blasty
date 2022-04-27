@@ -21,6 +21,8 @@
 		8B1EA9A0280F3444001FE930 /* LoadingScene.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1EA99F280F3444001FE930 /* LoadingScene.swift */; };
 		8B1EA9A2280F34B8001FE930 /* LoadingScene.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B1EA9A1280F34B8001FE930 /* LoadingScene.sks */; };
 		8B1EA9A4280F365C001FE930 /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B1EA9A3280F365C001FE930 /* ProgressBar.swift */; };
+		8B3EF07628199D6E00346C5B /* Date+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3EF07528199D6E00346C5B /* Date+Extension.swift */; };
+		8B3EF0782819A4D000346C5B /* LostScreen.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B3EF0772819A4D000346C5B /* LostScreen.swift */; };
 		8B5F06F127F62434000C5CBF /* TerrainNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F027F62434000C5CBF /* TerrainNode.swift */; };
 		8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F427F64ABE000C5CBF /* Trig.swift */; };
 		8B5F06F827F92C2E000C5CBF /* JoystickNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */; };
@@ -69,6 +71,8 @@
 		8B1EA99F280F3444001FE930 /* LoadingScene.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingScene.swift; sourceTree = "<group>"; };
 		8B1EA9A1280F34B8001FE930 /* LoadingScene.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = LoadingScene.sks; sourceTree = "<group>"; };
 		8B1EA9A3280F365C001FE930 /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		8B3EF07528199D6E00346C5B /* Date+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "Date+Extension.swift"; sourceTree = "<group>"; };
+		8B3EF0772819A4D000346C5B /* LostScreen.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LostScreen.swift; sourceTree = "<group>"; };
 		8B5F06F027F62434000C5CBF /* TerrainNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TerrainNode.swift; sourceTree = "<group>"; };
 		8B5F06F427F64ABE000C5CBF /* Trig.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Trig.swift; sourceTree = "<group>"; };
 		8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = JoystickNode.swift; sourceTree = "<group>"; };
@@ -150,6 +154,7 @@
 			isa = PBXGroup;
 			children = (
 				8B1927CD27F5FC5700275E69 /* GameScene.swift */,
+				8B3EF0772819A4D000346C5B /* LostScreen.swift */,
 				8B1EA99D280DFDF3001FE930 /* PracticeScene.swift */,
 				8B1EA994280DDDD6001FE930 /* LaunchScene.swift */,
 				8B1EA99F280F3444001FE930 /* LoadingScene.swift */,
@@ -185,8 +190,8 @@
 				8B75248B28049359001B4BC1 /* StartingPlatform.swift */,
 				8BD8C24027F61736008EC7A8 /* PlayerNode.swift */,
 				8B8181F5280620FC00A2D503 /* PlayerLives.swift */,
-				8B75248F2804C7E7001B4BC1 /* Collectible.swift */,
 				8B8181F728071FA900A2D503 /* PlayerCollectibles.swift */,
+				8B75248F2804C7E7001B4BC1 /* Collectible.swift */,
 				8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */,
 				8B5F06F727F92C2E000C5CBF /* JoystickNode.swift */,
 				8B7524892800BA55001B4BC1 /* ButtonNode.swift */,
@@ -209,8 +214,9 @@
 		8BF1BAC827FDD90700C72602 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
 				8B752495280518A7001B4BC1 /* Constants.swift */,
+				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
+				8B3EF07528199D6E00346C5B /* Date+Extension.swift */,
 				8BF1BAC927FDD91B00C72602 /* DateFactory.swift */,
 				8BF1BAD127FE15D600C72602 /* RNGFactory.swift */,
 				8B5F072927FD1402000C5CBF /* MapFactory.swift */,
@@ -329,6 +335,7 @@
 				8B8181F428061CC600A2D503 /* BackgroundLabels.swift in Sources */,
 				8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */,
 				8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */,
+				8B3EF07628199D6E00346C5B /* Date+Extension.swift in Sources */,
 				8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */,
 				8B8181F6280620FC00A2D503 /* PlayerLives.swift in Sources */,
 				8BF1BAD227FE15D600C72602 /* RNGFactory.swift in Sources */,
@@ -339,6 +346,7 @@
 				8B8181F2280604A700A2D503 /* Score.swift in Sources */,
 				8B1EA9A4280F365C001FE930 /* ProgressBar.swift in Sources */,
 				8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */,
+				8B3EF0782819A4D000346C5B /* LostScreen.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -420,7 +428,9 @@
 				ONLY_ACTIVE_ARCH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 			};
 			name = Debug;
 		};
@@ -473,7 +483,9 @@
 				MTL_FAST_MATH = YES;
 				SDKROOT = iphoneos;
 				SWIFT_COMPILATION_MODE = wholemodule;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-O";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = NO;
 				VALIDATE_PRODUCT = YES;
 			};
 			name = Release;
@@ -486,6 +498,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q5C8ADQRUF;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -504,6 +520,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftgoose.Blasty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
@@ -517,6 +536,10 @@
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
 				DEVELOPMENT_TEAM = Q5C8ADQRUF;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
@@ -535,6 +558,9 @@
 				PRODUCT_BUNDLE_IDENTIFIER = com.swiftgoose.Blasty;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_INSTALL_OBJC_HEADER = NO;
+				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_PRECOMPILE_BRIDGING_HEADER = YES;
 				SWIFT_VERSION = 5.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};

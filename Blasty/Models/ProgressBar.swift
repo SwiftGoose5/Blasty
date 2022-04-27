@@ -34,7 +34,7 @@ class ProgressBar: SKNode {
     func buildProgressBar() {
         progressContainer = SKSpriteNode(texture: progressContainerTexture, size: progressContainerTexture.size())
         progressContainer.size.width = sceneFrame.width * 0.82 * 2
-        progressContainer.size.height = sceneFrame.height * 0.15
+        progressContainer.size.height = sceneFrame.height * 0.18
         progressContainer.physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: progressContainer.size.width, height: progressContainer.size.height))
         progressContainer.physicsBody?.affectedByGravity = false
         progressContainer.physicsBody?.isDynamic = false

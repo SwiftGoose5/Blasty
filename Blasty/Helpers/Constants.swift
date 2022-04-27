@@ -6,9 +6,20 @@
 //
 // YouTube: https://www.youtube.com/channel/UCeHYBwcVqOoyyNHiAf3ZrLg
 //
-
-
 import Foundation
+
+// MARK: - Daily Completion
+var isDayComplete = false
+var wasVictory = false
+
+var timeUntilMidnight = TimeInterval(0)
+
+var secondsUntilMidnight = 0
+var minutesUntilMidnight = 0
+var hoursUntilMidnight = 0
+
+var launchDate = Date()
+
 
 // MARK: - Map Tiling
 let columns = 64
@@ -17,8 +28,8 @@ let rows = 64
 
 
 // MARK: - Collectibles
-let totalCollectibles = 6
 let collectibleSet = CollectibleSet()
+let totalCollectibles = 6
 var collectibleCount = 0
 
 
@@ -30,7 +41,6 @@ var lifeCount = 0
 
 
 // MARK: - Collision Types
-
 enum CollisionType: UInt32 {
     case player = 1
     case ground = 2
@@ -40,15 +50,7 @@ enum CollisionType: UInt32 {
     case collectible = 32
 }
 
-let progressUpdate = Notification.Name("com.progress")
-let tenPercent = Notification.Name("10")
-let twentyPercent = Notification.Name("20")
-let thirtyPercent = Notification.Name("30")
-let fourtyPercent = Notification.Name("40")
-let fiftyPercent = Notification.Name("50")
-let sixtyPercent = Notification.Name("60")
-let seventyPercent = Notification.Name("70")
-let eightyPercent = Notification.Name("80")
-let ninetyPercent = Notification.Name("90")
-let hundredPercent = Notification.Name("100")
 
+
+// MARK: - Progress Notification
+let progressUpdate = Notification.Name("com.progress")
