@@ -98,10 +98,7 @@ class LaunchScene: SKScene {
         // MARK: - Player
         player.position = CGPoint(x: 0, y: 310)
         addChild(player)
-        
-        
-        // MARK: - Launcher
-        addChild(launcher)
+        player.addChild(launcher)
         
         
         // MARK: - Camera
@@ -218,13 +215,13 @@ class LaunchScene: SKScene {
         }
 
         
-        joystick.position.x = player.position.x - frame.width / 1.25
-        joystick.position.y = player.position.y - frame.height / 2.5
+        joystick.position.x = player.position.x - screenWidth / 1.25
+        joystick.position.y = player.position.y - screenHeight / 2.5
         
-        button.position.x = player.position.x + frame.width / 1.25
-        button.position.y = player.position.y - frame.height / 2.5
+        button.position.x = player.position.x + screenWidth / 1.25
+        button.position.y = player.position.y - screenHeight / 2.5
         
-        launcher.position = player.position
+//        launcher.position = player.position
         sceneCamera.position = player.position
         
         cloud.position.x = player.position.x + player.position.x * -cloudSpeed
@@ -298,4 +295,5 @@ extension LaunchScene: SKPhysicsContactDelegate {
         }
     }
 }
+
 

@@ -92,16 +92,11 @@ class MapFactory: SKNode {
     }
     
     func buildMap(isStartingMap: Bool = false) {
-        if isStartingMap {
-            buildStartingMap()
-            buildStartingPhysics()
-            addChild(topLayer)
-        } else {
-            buildTileSet()
-            buildCollectibles()
-            buildTilePhysics()
-            addChild(topLayer)
-        }
+
+        buildTileSet()
+        buildTilePhysics()
+        buildCollectibles()
+        addChild(topLayer)
     }
 
     required init?(coder aDecoder: NSCoder) {
@@ -109,50 +104,6 @@ class MapFactory: SKNode {
     }
 }
 
-extension MapFactory {
-    func buildStartingMap() {
-        for column in 0 ..< columns / 2 {
-            for row in 0 ..< rows / 2 {
-                
-                let location = vector2(Int32(row), Int32(column))
-                let terrainHeight = noiseMap.value(at: location)
-
-                if terrainHeight < -0.8 {
-                    topLayer.setTileGroup(sandyCobble, forColumn: column, row: row)
-                }
-            }
-        }
-    }
-    
-    func buildStartingPhysics() {
-        for column in 0 ..< columns / 2 {
-            for row in 0 ..< rows / 2 {
-
-                guard let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) else { continue }
-                
-                let tileArray = tileDefinition.textures
-                let tileTexture = tileArray[0]
-                
-                if tileTexture.description.contains("Center") { continue }
-                
-                let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-                let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-                let tileNode = SKNode()
-
-                tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
-                tileNode.physicsBody?.affectedByGravity = false
-                tileNode.physicsBody?.isDynamic = false
-
-                tileNode.position = CGPoint(x: x, y: y)
-
-                addChild(tileNode)
-
-                tileNode.position = CGPoint(x: tileNode.position.x + position.x,
-                                            y: tileNode.position.y + position.y)
-            }
-        }
-    }
-}
 
 extension MapFactory {
     func buildTileSet() {
@@ -167,7 +118,7 @@ extension MapFactory {
                 } else if terrainHeight > 0.99 {
                     topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
                 } else {
-                    availableCoordinates.append([column, row])
+//                    availableCoordinates.append([column, row])
                 }
             }
         }
@@ -203,14 +154,23 @@ extension MapFactory {
                 
                 if tileTexture.description.contains("Center") { continue }
                 
+                availableCoordinates.append([column, row])
+                
                 let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
                 let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
                 let tileNode = SKNode()
 
-//                let physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
-//                tileNode.physicsBody = physicsBody
+                var debug = true
                 
-                tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+                if debug {
+                    let physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+                    tileNode.physicsBody = physicsBody
+                } else {
+                    tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
+                }
+                
+                
+                
                 
                 tileNode.physicsBody?.affectedByGravity = false
                 tileNode.physicsBody?.isDynamic = false

@@ -32,3 +32,14 @@ func distance(_ a: CGPoint, _ b: CGPoint) -> CGFloat {
     let yDist = a.y - b.y
     return CGFloat(sqrt(xDist * xDist + yDist * yDist))
 }
+
+func getCirclePoints(centerPoint point: CGPoint, radius: CGFloat, n: Double) -> [CGPoint] {
+    let result: [CGPoint] = stride(from: 0.0, to: 360.0, by: Double(360 / n)).map {
+        let bearing = CGFloat($0) * .pi / 180
+        let x = point.x + radius * cos(bearing)
+        let y = point.y + radius * sin(bearing)
+        return CGPoint(x: x, y: y)
+    }
+
+    return result
+}

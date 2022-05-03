@@ -7,6 +7,7 @@
 // YouTube: https://www.youtube.com/channel/UCeHYBwcVqOoyyNHiAf3ZrLg
 //
 import Foundation
+import SpriteKit
 
 // MARK: - Daily Completion
 var isDayComplete = false
@@ -19,6 +20,12 @@ var minutesUntilMidnight = 0
 var hoursUntilMidnight = 0
 
 var launchDate = Date()
+
+
+var timeSinceNow = TimeInterval(0)
+
+var secondsSinceNow = 0
+var minutesSinceNow = 0
 
 
 // MARK: - Map Tiling
@@ -54,3 +61,10 @@ enum CollisionType: UInt32 {
 
 // MARK: - Progress Notification
 let progressUpdate = Notification.Name("com.progress")
+
+
+// MARK: - Screen Size
+
+let screenSize = UIScreen.main.bounds
+let screenWidth = UIScreen.main.bounds.width
+let screenHeight = UIScreen.main.bounds.height

@@ -32,7 +32,7 @@ class PlayerNode: SKSpriteNode {
         physicsBody?.fieldBitMask = CollisionType.field.rawValue
         physicsBody?.isDynamic = true
         physicsBody?.affectedByGravity = true
-        physicsBody?.allowsRotation = true
+        physicsBody?.allowsRotation = false
         physicsBody?.restitution = 0.0
         physicsBody?.friction = 0.2
         physicsBody?.angularDamping = 0.0

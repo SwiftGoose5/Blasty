@@ -17,21 +17,27 @@ class PlayerLives: SKNode {
     private var lives: [SKSpriteNode] = []
     private var livesContainer: [SKShapeNode] = []
     
+    private var circlePoints: [CGPoint] = []
+    
+    var width = CGFloat(0)
+    var height = CGFloat(0)
     
     override init() {
         
         super.init()
+        
+        circlePoints = getCirclePoints(centerPoint: self.position, radius: texture.size().width * 6, n: Double(totalLives))
 
         for index in 0 ..< totalLives {
             let life = SKSpriteNode(texture: texture, size: texture.size())
             
             life.name = "life\(index)"
             life.zPosition = 10
-            life.setScale(1)
             lives.append(life)
             
             addChild(life)
-            life.position = CGPoint(x: CGFloat(index) * texture.size().width * 2, y: 0)
+//            life.position = CGPoint(x: CGFloat(index) * texture.size().width * 2, y: 0)
+            life.position = circlePoints[index]
             
             
             // fill the containers behind
@@ -45,8 +51,14 @@ class PlayerLives: SKNode {
             livesContainer.append(container)
             
             addChild(container)
-            container.position = CGPoint(x: CGFloat(index) * texture.size().width * 2, y: 0)
+//            container.position = CGPoint(x: CGFloat(index) * texture.size().width * 2, y: 0)
+            container.position = circlePoints[index]
         }
+        
+        width = calculateAccumulatedFrame().width
+        height = calculateAccumulatedFrame().height
+        
+        run(.repeatForever(.rotate(byAngle: -1, duration: 11)))
     }
     
     func updateLives() {
@@ -61,6 +73,21 @@ class PlayerLives: SKNode {
         let seq = SKAction.sequence([sound, group, .removeFromParent()])
         
         current.run(seq)
+        
+        let container = livesContainer[lifeCount - 1]
+        container.run(.removeFromParent())
+        
+        
+//        refreshCirclePoints()
+    }
+    
+    func refreshCirclePoints() {
+        circlePoints = getCirclePoints(centerPoint: self.position, radius: texture.size().width * 6, n: Double(totalLives - lifeCount))
+        
+        for index in 0 ..< totalLives - lifeCount {
+            lives[index].run(.move(to: circlePoints[index], duration: 0.2))
+            livesContainer[index].run(.move(to: circlePoints[index], duration: 0.2))
+        }
     }
     
     required init?(coder aDecoder: NSCoder) {

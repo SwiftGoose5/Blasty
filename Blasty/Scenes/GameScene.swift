@@ -13,9 +13,11 @@ import GameplayKit
 
 
 class GameScene: SKScene {
+    let mapScale = CGFloat(3)
+    
+    
     var player = PlayerNode()
     var playerLives = PlayerLives()
-    
     var playerCollectibles = PlayerCollectibles()
     
     var ground: TerrainNode?
@@ -58,6 +60,12 @@ class GameScene: SKScene {
     var startingPlatform = StartingPlatform()
     
     var launchScene = SKScene()
+    var shape = SKShapeNode()
+    
+    var firstMove = true
+    
+    var timeSinceNowLabelNode = SKLabelNode()
+    var startingTime = Date()
     
     override func didMove(to view: SKView) {
         
@@ -68,12 +76,12 @@ class GameScene: SKScene {
         launchScene = SKScene(fileNamed: "LaunchScene")!
         
         
-        playerLives.setScale(1.25)
+//        playerLives.setScale(1.25)
         playerLives.alpha = 0.8
-        playerCollectibles.setScale(1.25)
+//        playerCollectibles.setScale(1.25)
         playerCollectibles.alpha = 0.8
-        addChild(playerLives)
-        addChild(playerCollectibles)
+//        addChild(playerLives)
+//        addChild(playerCollectibles)
         
         startingPlatform.buildPlatform()
         addChild(startingPlatform)
@@ -107,24 +115,35 @@ class GameScene: SKScene {
         
         // MARK: - Button
         button = Button()
-        addChild(button)
+//        addChild(button)
 
+        // MARK: - Launcher
+        launcher = LauncherParentNode()
         
         // MARK: - Player
         player = PlayerNode()
         player.position = CGPoint(x: 0, y: mapFactory.position.y - 5368)
         addChild(player)
-        
-        
-        // MARK: - Launcher
-        launcher = LauncherParentNode()
-        addChild(launcher)
-        
+        player.addChild(playerLives)
+        player.addChild(playerCollectibles)
+        player.addChild(launcher)
+        player.addChild(timeSinceNowLabelNode)
+        player.addChild(sceneCamera)
+        timeSinceNowLabelNode.position.y = screenHeight
+        timeSinceNowLabelNode.fontName = "Helvetica Neue"
+        timeSinceNowLabelNode.fontSize = 100
         
         // MARK: - Camera
-        scene?.addChild(sceneCamera)
+        
         scene?.camera = sceneCamera
-        sceneCamera.setScale(3)
+        sceneCamera.setScale(mapScale)
+//        sceneCamera.addChild(playerLives)
+//        sceneCamera.addChild(playerCollectibles)
+//        sceneCamera.addChild(joystick)
+        
+        playerLives.setScale(1/mapScale)
+        playerCollectibles.setScale(1/mapScale)
+//        scene?.addChild(sceneCamera)
         
         
         // Ground
@@ -151,7 +170,16 @@ class GameScene: SKScene {
         
         // MARK: - Map
         addChild(mapFactory)
+
+//        playerLives.position.x = (screenWidth * mapScale / 2 - playerLives.width) / 2
+//        playerLives.position.x = screenWidth / 2
+//        playerLives.position.y = screenHeight/2 - (screenHeight * mapScale / 10 - playerLives.height) / 2
+//        playerLives.position.y = screenHeight/2
         
+//        playerCollectibles.position.x = -screenWidth / 2 + (screenWidth * mapScale / 2 - playerCollectibles.width) / 2
+//        playerCollectibles.position.x = -screenWidth / 2
+//        playerCollectibles.position.y = screenHeight/2 - (screenHeight * mapScale / 10 - playerCollectibles.height) / 2
+//        playerCollectibles.position.y = screenHeight/2
     }
 
 
@@ -173,16 +201,20 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x <= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x <= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x <= player.position.x {
                     joystickActive = true
                 }
             }
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x >= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x >= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x >= player.position.x {
 //                    buttonData.startTime = Date()
                     button.isPressed = true
                 }
@@ -222,8 +254,10 @@ class GameScene: SKScene {
 //
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x <= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x <= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x <= player.position.x {
                     // We're touching the left side of the screen
                     joystickData = joystick.moveStick(jsLocation: joystick.position, touchLocation: location)
                     
@@ -239,8 +273,10 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x >= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x >= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x >= player.position.x {
 //                    print("button still being pressed")
                 }
             }
@@ -281,8 +317,10 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x <= frame.size.width * 0.5 - displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x <= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x <= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x <= player.position.x {
                     // Joystick finished moving
 //                    print("joystick done moving")
                     joystickActive = false
@@ -295,13 +333,17 @@ class GameScene: SKScene {
             
 //            if location.y < frame.size.height * 0.5 - displace.y {
 //                if location.x >= frame.size.width * 0.5 + displace.x {
-            if location.y < sceneCamera.position.y {
-                if location.x >= sceneCamera.position.x {
+//            if location.y < sceneCamera.position.y {
+//                if location.x >= sceneCamera.position.x {
+            if location.y < player.position.y {
+                if location.x >= player.position.x {
 //                    print("button done pressing")
                     
                     if !button.isPressed { continue }
                     
-                    
+                    if firstMove {
+                        firstMove = false
+                    }
                     
 //                    player?.physicsBody?.applyImpulse(CGVector(dx: joystickData.vector.dx * -joystickData.strength * 3,
 //                                                               dy: joystickData.vector.dy * -joystickData.strength * 3))
@@ -342,6 +384,22 @@ class GameScene: SKScene {
         } else {
             buttonData.endTime = currentTime
         }
+        
+        if firstMove {
+            startingTime = Date()
+        }
+        
+        timeSinceNow = -startingTime.timeIntervalSinceNow
+        
+        secondsSinceNow = Int(timeSinceNow) % 3600 % 60
+        minutesSinceNow = Int(timeSinceNow) % 3600 / 60
+        
+        let seconds = secondsSinceNow < 10 ? "0\(secondsSinceNow)" : String(secondsSinceNow)
+        let minutes = minutesSinceNow < 10 ? "0\(minutesSinceNow)" : String(minutesSinceNow)
+        
+        timeSinceNowLabelNode.text = "\(minutes) : \(seconds)"
+            
+        
 
 //        let playerVector = player?.physicsBody?.velocity
 //        
@@ -370,31 +428,15 @@ class GameScene: SKScene {
             }
             
         }
-
-//        if (player.physicsBody?.velocity.dx)! >= 100 {
-//            player.physicsBody?.velocity.dx = 100
-//        }
-//
-//        if (player.physicsBody?.velocity.dx)! <= -100 {
-//            player.physicsBody?.velocity.dx = -100
-//        }
-//
-//        if (player.physicsBody?.velocity.dy)! > 100 {
-//            player.physicsBody?.velocity.dy = 100
-//        }
-//
-//        if (player.physicsBody?.velocity.dy)! <= -100 {
-//            player.physicsBody?.velocity.dy = -100
-//        }
         
-        joystick.position.x = player.position.x - frame.width / 1.25
-        joystick.position.y = player.position.y - frame.height / 2.5
+        joystick.position.x = player.position.x - screenWidth / 1.25
+        joystick.position.y = player.position.y - screenHeight / 1.6
         
-        button.position.x = player.position.x + frame.width / 1.25
-        button.position.y = player.position.y - frame.height / 2.5
+        button.position.x = player.position.x + screenWidth / 1.25
+        button.position.y = player.position.y - screenHeight / 1.6
         
-        launcher.position = player.position
-        sceneCamera.position = player.position
+//        launcher.position = player.position
+//        sceneCamera.position = player.position
         
         cloud.position.x = player.position.x + player.position.x * -cloudSpeed
         cloud.position.y = player.position.y + player.position.y * -cloudSpeed
@@ -404,11 +446,15 @@ class GameScene: SKScene {
         
         backgroundLabels.position.y = player.position.y + player.position.y * -skySpeed
         
-        playerLives.position.x = player.position.x + frame.width / 2
-        playerLives.position.y = player.position.y + frame.height - 50
+//        playerLives.position.x = player.position.x + screenWidth / 3
+//        playerLives.position.x = player.position.x + (screenWidth * mapScale / 2 - playerLives.width) / 2
         
-        playerCollectibles.position.x = player.position.x - frame.width
-        playerCollectibles.position.y = player.position.y + frame.height - 50
+        
+//        playerCollectibles.position.x = player.position.x - screenWidth / 2 * mapScale + (screenWidth / 2 * mapScale - playerCollectibles.width) / 2
+//        playerCollectibles.position.x = player.position.x + (screenWidth * mapScale / 2 - playerLives.width) / 2
+        
+//        playerCollectibles.position.x = player.position.x + screenWidth / 3
+        
     }
 }
 
@@ -438,7 +484,6 @@ extension GameScene: SKPhysicsContactDelegate {
             
             // sometimes too many collisions are detected, so we have to get the last date and time
             lastSpikeHitTime = Date().timeIntervalSince(lastSpikeDate)
-            print("lastHitTime: \(lastSpikeHitTime)")
             
             if lastSpikeHitTime < 1 { return }
             
@@ -453,7 +498,6 @@ extension GameScene: SKPhysicsContactDelegate {
                 // game over
                 wasVictory = true
                 transitionToLaunchScreen()
-                
             }
             
             lastSpikeDate = Date()
@@ -492,8 +536,10 @@ extension GameScene {
     func transitionToLaunchScreen() {
         isDayComplete = true
         
-        let transition = SKTransition.fade(withDuration: 2)
-        launchScene.scaleMode = .aspectFill
-        self.view?.presentScene(launchScene, transition: transition)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+            let transition = SKTransition.fade(withDuration: 2)
+            self.launchScene.scaleMode = .aspectFill
+            self.view?.presentScene(self.launchScene, transition: transition)
+        }
     }
 }
