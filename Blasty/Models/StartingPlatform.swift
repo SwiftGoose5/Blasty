@@ -21,6 +21,7 @@ class StartingPlatform: SKNode {
     private var leftLabelNode = SKLabelNode()
     private var centerLabelNode = SKLabelNode()
     private var centerUnderLabelNode = SKLabelNode()
+    private var centerSecondUnderLabelNode = SKLabelNode()
     private var rightLabelNode = SKLabelNode()
     
     override init() {
@@ -47,6 +48,23 @@ extension StartingPlatform {
                 centerLabelNode.text = "Next Challenge Available In:"
                 centerLabelNode.fontSize = 150
                 centerLabelNode.position = CGPoint(x: 0, y: 600)
+                
+                if wasVictory {
+                    centerSecondUnderLabelNode.fontName = "Helvetica Neue Bold"
+                    centerSecondUnderLabelNode.fontSize = 100
+                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 400)
+                    centerSecondUnderLabelNode.name = "completion time node"
+                    
+                    completionSeconds = Int(completionTime) % 3600 % 60
+                    completionMinutes = Int(completionTime) % 3600 / 60
+                    
+                    let seconds = completionSeconds < 10 ? "0\(completionSeconds)" : String(completionSeconds)
+                    let minutes = completionMinutes < 10 ? "0\(completionMinutes)" : String(completionMinutes)
+                    
+                    centerSecondUnderLabelNode.text = "Today's Score: \(minutes) : \(seconds)"
+
+                    addChild(centerSecondUnderLabelNode)
+                }
             } else {
                 centerLabelNode.fontName = "Helvetica Neue Bold"
                 centerLabelNode.text = "Loading Today's Challenge"
@@ -54,11 +72,7 @@ extension StartingPlatform {
                 centerLabelNode.position = CGPoint(x: 0, y: 600)
             }
             
-//            centerUnderLabelNode.fontName = "Helvetica Neue Bold"
-//            centerUnderLabelNode.text = "Next Challenge Available: "
-//            centerUnderLabelNode.fontSize = 100
-//            centerUnderLabelNode.position = CGPoint(x: 0, y: 400)
-//            addChild(centerUnderLabelNode)
+
             
             rightLabelNode.fontName = "Helvetica Neue Bold"
             rightLabelNode.text = "Touch/Hold right to jump"

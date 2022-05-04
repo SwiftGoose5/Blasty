@@ -67,13 +67,24 @@ class PlayerCollectibles: SKNode {
     func updateScore() {
         
         let current = collectibles[collectibleCount - 1]
-        current.run(SKAction.scale(to: 2.5, duration: 0))
+        current.run(SKAction.scale(to: 5, duration: 0))
         
         let appear = SKAction.fadeIn(withDuration: 0.3)
         let blowdown = SKAction.scale(to: 0.5, duration: 0.4)
         let group = SKAction.group([appear, blowdown])
         
         current.run(group)
+        
+        let rotate = SKAction.rotate(byAngle: 4, duration: 1.5)
+        rotate.timingMode = .easeInEaseOut
+        run(rotate)
+    }
+    
+    func moveToBlackHoleLocation(_ location: CGPoint) {
+        let move = SKAction.move(to: location, duration: 3)
+        let fade = SKAction.fadeOut(withDuration: 3)
+        let seq = SKAction.sequence([move, fade, .removeFromParent()])
+        run(seq)
     }
     
     required init?(coder aDecoder: NSCoder) {

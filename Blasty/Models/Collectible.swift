@@ -64,6 +64,11 @@ class Collectible: SKSpriteNode {
         emitter.zPosition = -1
         
         addChild(emitter)
+        
+        let seq = SKAction.sequence([.scale(to: 1.2, duration: 1),
+                                     .scale(to: 1.0, duration: 1)])
+        
+        run(.repeatForever(seq))
     }
     
     func collect(_ soundIndex: Int) {

@@ -13,19 +13,20 @@ import SpriteKit
 var isDayComplete = false
 var wasVictory = false
 
-var timeUntilMidnight = TimeInterval(0)
+var launchDate = Date()
 
+var timeUntilMidnight = TimeInterval(0)
 var secondsUntilMidnight = 0
 var minutesUntilMidnight = 0
 var hoursUntilMidnight = 0
 
-var launchDate = Date()
-
-
 var timeSinceNow = TimeInterval(0)
-
 var secondsSinceNow = 0
 var minutesSinceNow = 0
+
+var completionTime = TimeInterval(0)
+var completionSeconds = 0
+var completionMinutes = 0
 
 
 // MARK: - Map Tiling

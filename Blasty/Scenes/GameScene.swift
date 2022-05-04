@@ -119,6 +119,7 @@ class GameScene: SKScene {
 
         // MARK: - Launcher
         launcher = LauncherParentNode()
+        launcher.zPosition = -1
         
         // MARK: - Player
         player = PlayerNode()
@@ -129,6 +130,7 @@ class GameScene: SKScene {
         player.addChild(launcher)
         player.addChild(timeSinceNowLabelNode)
         player.addChild(sceneCamera)
+        
         timeSinceNowLabelNode.position.y = screenHeight
         timeSinceNowLabelNode.fontName = "Helvetica Neue"
         timeSinceNowLabelNode.fontSize = 100
@@ -141,8 +143,8 @@ class GameScene: SKScene {
 //        sceneCamera.addChild(playerCollectibles)
 //        sceneCamera.addChild(joystick)
         
-        playerLives.setScale(1/mapScale)
-        playerCollectibles.setScale(1/mapScale)
+        playerLives.setScale(1.5/mapScale)
+        playerCollectibles.setScale(1.5/mapScale)
 //        scene?.addChild(sceneCamera)
         
         
@@ -496,7 +498,6 @@ extension GameScene: SKPhysicsContactDelegate {
             
             if lifeCount >= totalLives {
                 // game over
-                wasVictory = true
                 transitionToLaunchScreen()
             }
             
@@ -516,8 +517,11 @@ extension GameScene: SKPhysicsContactDelegate {
 //            score.updateScore()
             playerCollectibles.updateScore()
             
-            if collectibleCount == 6 {
+            if collectibleCount == totalCollectibles {
                 mapFactory.buildBlackHole()
+                
+                guard let bh = mapFactory.childNode(withName: "BlackHole") else { return }
+                playerCollectibles.moveToBlackHoleLocation(bh.position)
             }
         }
         
@@ -528,6 +532,11 @@ extension GameScene: SKPhysicsContactDelegate {
             player.physicsBody?.affectedByGravity = false
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player.run(SKAction.move(to: blackHole.position, duration: 0.2))
+            
+            wasVictory = true
+            completionTime = -startingTime.timeIntervalSinceNow
+            
+            transitionToLaunchScreen()
         }
     }
 }
@@ -536,7 +545,7 @@ extension GameScene {
     func transitionToLaunchScreen() {
         isDayComplete = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 2) {
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
             let transition = SKTransition.fade(withDuration: 2)
             self.launchScene.scaleMode = .aspectFill
             self.view?.presentScene(self.launchScene, transition: transition)

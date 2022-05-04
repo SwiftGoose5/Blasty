@@ -57,8 +57,9 @@ class LaunchScene: SKScene {
         
         nextDayLabelNode.fontName = "Helvetica Neue Bold"
         nextDayLabelNode.fontSize = 150
+        nextDayLabelNode.name = "next day node"
         nextDayLabelNode.position.y = 400
-        addChild(nextDayLabelNode)
+//        addChild(nextDayLabelNode)
         
         nextDayLabelNode.isHidden = !isDayComplete
 
@@ -98,6 +99,7 @@ class LaunchScene: SKScene {
         // MARK: - Player
         player.position = CGPoint(x: 0, y: 310)
         addChild(player)
+        launcher.zPosition = -1
         player.addChild(launcher)
         
         
@@ -248,7 +250,6 @@ class LaunchScene: SKScene {
 extension LaunchScene {
     func addProgressObserver() {
         NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [self] note in
-            print("\(progressCount)/\(columns)")
             self.progressCount += 1
             
             if self.progressCount <= columns { return }
@@ -278,12 +279,6 @@ extension LaunchScene: SKPhysicsContactDelegate {
         
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
-        
-        print("contact between \(firstNode.name) and \(secondNode.name)")
-        
-//        if nodeA.name == "L" {
-//            firstNode.physicsBody?.affectedByGravity = true
-//        }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
             blackHole.field?.isEnabled = false

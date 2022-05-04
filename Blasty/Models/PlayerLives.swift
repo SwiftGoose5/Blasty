@@ -62,23 +62,32 @@ class PlayerLives: SKNode {
     }
     
     func updateLives() {
+        if lifeCount < 0 { return }
+        
         let soundFile = "pop.m4a"
         
-        let current = lives[lifeCount - 1]
-
+//        let life = lives[lifeCount - 1]
+        var life = SKSpriteNode()
+        var container = SKShapeNode()
+        
+        if lifeCount == totalLives {
+            life = lives.removeFirst()
+            container = livesContainer.removeFirst()
+        } else {
+            life = lives.remove(at: Int.random(in: 0 ..< totalLives - lifeCount))
+            container = livesContainer.remove(at: Int.random(in: 0 ..< totalLives - lifeCount))
+        }
+       
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
         let blowup = SKAction.scale(to: 2.5, duration: 0.2)
         let fade = SKAction.fadeOut(withDuration: 0.2)
         let group = SKAction.group([blowup, fade])
         let seq = SKAction.sequence([sound, group, .removeFromParent()])
         
-        current.run(seq)
-        
-        let container = livesContainer[lifeCount - 1]
+        life.run(seq)
         container.run(.removeFromParent())
         
-        
-//        refreshCirclePoints()
+        refreshCirclePoints()
     }
     
     func refreshCirclePoints() {
@@ -86,7 +95,7 @@ class PlayerLives: SKNode {
         
         for index in 0 ..< totalLives - lifeCount {
             lives[index].run(.move(to: circlePoints[index], duration: 0.2))
-            livesContainer[index].run(.move(to: circlePoints[index], duration: 0.2))
+            livesContainer[index].run(.move(to: circlePoints[index], duration: 0))
         }
     }
     

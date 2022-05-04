@@ -94,7 +94,7 @@ class MapFactory: SKNode {
     func buildMap(isStartingMap: Bool = false) {
 
         buildTileSet()
-        buildTilePhysics()
+//        buildTilePhysics()
         buildCollectibles()
         addChild(topLayer)
     }
@@ -118,7 +118,7 @@ extension MapFactory {
                 } else if terrainHeight > 0.99 {
                     topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
                 } else {
-//                    availableCoordinates.append([column, row])
+                    availableCoordinates.append([column, row])
                 }
             }
         }
@@ -160,7 +160,7 @@ extension MapFactory {
                 let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
                 let tileNode = SKNode()
 
-                var debug = true
+                var debug = false
                 
                 if debug {
                     let physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
