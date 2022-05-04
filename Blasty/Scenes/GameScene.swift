@@ -521,7 +521,7 @@ extension GameScene: SKPhysicsContactDelegate {
                 mapFactory.buildBlackHole()
                 
                 guard let bh = mapFactory.childNode(withName: "BlackHole") else { return }
-                playerCollectibles.moveToBlackHoleLocation(bh.position)
+                playerCollectibles.moveToBlackHoleLocation(bh)
             }
         }
         

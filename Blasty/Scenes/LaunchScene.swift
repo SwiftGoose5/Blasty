@@ -55,11 +55,15 @@ class LaunchScene: SKScene {
             }
         }
         
+        for child in self.children {
+            child.removeFromParent()
+        }
+        
         nextDayLabelNode.fontName = "Helvetica Neue Bold"
         nextDayLabelNode.fontSize = 150
         nextDayLabelNode.name = "next day node"
         nextDayLabelNode.position.y = 400
-//        addChild(nextDayLabelNode)
+        addChild(nextDayLabelNode)
         
         nextDayLabelNode.isHidden = !isDayComplete
 
@@ -100,6 +104,7 @@ class LaunchScene: SKScene {
         player.position = CGPoint(x: 0, y: 310)
         addChild(player)
         launcher.zPosition = -1
+        launcher.removeFromParent()
         player.addChild(launcher)
         
         

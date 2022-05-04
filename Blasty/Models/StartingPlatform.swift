@@ -37,6 +37,10 @@ class StartingPlatform: SKNode {
 extension StartingPlatform {
     func buildPlatform(isStart: Bool = false) {
         
+        for child in self.children {
+            child.removeFromParent()
+        }
+        
         if isStart {
             leftLabelNode.fontName = "Helvetica Neue Bold"
             leftLabelNode.text = "Hold left to aim"
@@ -63,6 +67,7 @@ extension StartingPlatform {
                     
                     centerSecondUnderLabelNode.text = "Today's Score: \(minutes) : \(seconds)"
 
+                    
                     addChild(centerSecondUnderLabelNode)
                 }
             } else {

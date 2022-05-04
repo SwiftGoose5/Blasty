@@ -264,6 +264,7 @@ extension MapFactory {
 //            }
 //        }
     }
+    
     func buildCollectibles() {
         for collectible in collectibleSet.collectibles {
             

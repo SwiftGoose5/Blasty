@@ -81,9 +81,38 @@ class PlayerCollectibles: SKNode {
     }
     
     func moveToBlackHoleLocation(_ location: CGPoint) {
+        
         let move = SKAction.move(to: location, duration: 3)
+        let rotate = SKAction.rotate(byAngle: 4, duration: 2)
         let fade = SKAction.fadeOut(withDuration: 3)
-        let seq = SKAction.sequence([move, fade, .removeFromParent()])
+        let seq = SKAction.sequence([move, rotate, fade, .removeFromParent()])
+        run(seq)
+    }
+    
+    func moveToBlackHoleLocation(_ node: SKNode) {
+        
+        
+        move(toParent: node.parent!)
+        
+        
+//        print(node.position)
+//        let newLocation = node.convert(node.position, to: self)
+//        let otherLocation = convert(node.position, from: node)
+//        let sceneLocation = convert(node.position, to: scene!)
+//
+//        let myScene = self.convert(position, to: scene!)
+//
+//        print(newLocation)
+//        print(otherLocation)
+//        print(sceneLocation)
+//        print(myScene)
+
+        let move = SKAction.move(to: node.position, duration: 3)
+        move.timingMode = .easeIn
+        let scale = SKAction.scale(to: 1.2, duration: 3)
+        let rotate = SKAction.rotate(byAngle: 4, duration: 3)
+        rotate.timingMode = .easeIn
+        let seq = SKAction.group([move, rotate, scale])
         run(seq)
     }
     

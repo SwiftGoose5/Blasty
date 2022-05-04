@@ -20,6 +20,10 @@ class PlayerNode: SKSpriteNode {
         
         super.init(texture: texture, color: .white, size: texture.size())
         
+        for child in self.children {
+            child.removeFromParent()
+        }
+        
         name = "player"
         position = CGPoint(x: 0, y: 0)
         anchorPoint = CGPoint(x: 0.5, y: 0.5)
