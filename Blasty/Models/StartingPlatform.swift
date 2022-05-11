@@ -27,6 +27,7 @@ class StartingPlatform: SKNode {
     override init() {
         super.init()
         
+        removeAllChildren()
     }
     
     required init?(coder aDecoder: NSCoder) {
@@ -36,10 +37,10 @@ class StartingPlatform: SKNode {
 
 extension StartingPlatform {
     func buildPlatform(isStart: Bool = false) {
-        
-        for child in self.children {
-            child.removeFromParent()
-        }
+
+        let loadData = UserDefaults.standard
+        wasVictory = loadData.bool(forKey: "wasVictory")
+        isDayComplete = loadData.bool(forKey: "isDayComplete")
         
         if isStart {
             leftLabelNode.fontName = "Helvetica Neue Bold"
@@ -51,13 +52,14 @@ extension StartingPlatform {
                 centerLabelNode.fontName = "Helvetica Neue Bold"
                 centerLabelNode.text = "Next Challenge Available In:"
                 centerLabelNode.fontSize = 150
-                centerLabelNode.position = CGPoint(x: 0, y: 600)
+                centerLabelNode.position = CGPoint(x: 0, y: 700)
                 
                 if wasVictory {
                     centerSecondUnderLabelNode.fontName = "Helvetica Neue Bold"
                     centerSecondUnderLabelNode.fontSize = 100
-                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 400)
-                    centerSecondUnderLabelNode.name = "completion time node"
+                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 300)
+                    
+                    completionTime = UserDefaults.standard.double(forKey: "completionTime")
                     
                     completionSeconds = Int(completionTime) % 3600 % 60
                     completionMinutes = Int(completionTime) % 3600 / 60
@@ -67,17 +69,23 @@ extension StartingPlatform {
                     
                     centerSecondUnderLabelNode.text = "Today's Score: \(minutes) : \(seconds)"
 
+                    addChild(centerSecondUnderLabelNode)
+                } else {
+                    centerSecondUnderLabelNode.fontName = "Helvetica Neue Bold"
+                    centerSecondUnderLabelNode.fontSize = 100
+                    centerSecondUnderLabelNode.color = .orange
+                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 250)
                     
+                    centerSecondUnderLabelNode.text = "Better luck next time!"
+
                     addChild(centerSecondUnderLabelNode)
                 }
             } else {
                 centerLabelNode.fontName = "Helvetica Neue Bold"
                 centerLabelNode.text = "Loading Today's Challenge"
                 centerLabelNode.fontSize = 150
-                centerLabelNode.position = CGPoint(x: 0, y: 600)
+                centerLabelNode.position = CGPoint(x: 0, y: 700)
             }
-            
-
             
             rightLabelNode.fontName = "Helvetica Neue Bold"
             rightLabelNode.text = "Touch/Hold right to jump"
@@ -94,7 +102,7 @@ extension StartingPlatform {
             centerLabelNode.position = CGPoint(x: 0, y: -5000)
             
             centerUnderLabelNode.fontName = "Helvetica Neue Bold"
-            centerUnderLabelNode.text = "Mind the green grass please :>"
+            centerUnderLabelNode.text = "Be careful of the mustard :>"
             centerUnderLabelNode.fontSize = 120
             centerUnderLabelNode.position = isStart ? CGPoint(x: 0, y: 1200) : CGPoint(x: 0, y: -4400)
             addChild(centerUnderLabelNode)

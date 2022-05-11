@@ -27,11 +27,11 @@ extension Date {
         return Calendar.current.date(byAdding: .day, value: 1, to: today)!
     }
     
-    var isStillToday: Bool {
+    var launchDateIsInToday: Bool {
         var cal = Calendar.current
         cal.timeZone = TimeZone.current
-        
-        return cal.isDate(self, inSameDayAs: tomorrowAtMidnight)
+
+        return cal.isDate(self, inSameDayAs: launchDate)
 //        return cal.isDateInYesterday(self)
     }
 }

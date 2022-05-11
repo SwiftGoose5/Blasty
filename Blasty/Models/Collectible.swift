@@ -94,8 +94,9 @@ class Collectible: SKSpriteNode {
         let sound = SKAction.playSoundFileNamed(soundFile, waitForCompletion: false)
         let blowup = SKAction.scale(to: 1.4, duration: 0.1)
         let fade = SKAction.fadeOut(withDuration: 0.1)
-        let group = SKAction.group([sound, blowup, fade, .removeFromParent()])
+        let group = SKAction.group([sound, blowup, fade])
         run(group)
+        run(.removeFromParent())
     }
     
     required init?(coder aDecoder: NSCoder) {

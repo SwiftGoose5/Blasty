@@ -28,10 +28,6 @@ class LauncherParentNode: SKNode {
         
         super.init()
         
-        for child in self.children {
-            child.removeFromParent()
-        }
-        
         name = "launcherParent"
         zPosition = 2
         alpha = 1

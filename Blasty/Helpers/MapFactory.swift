@@ -13,9 +13,6 @@ import GameplayKit
 class MapFactory: SKNode {
 
     private let size = 128
-//    private let columns = 64
-//    private let rows = 64
-
     private var tileSize = CGSize(width: 0, height: 0)
     private var halfWidth = CGFloat(0)
     private var halfHeight = CGFloat(0)
@@ -33,11 +30,17 @@ class MapFactory: SKNode {
     private var cobbleTiles = SKTileGroup()
     private var grassTiles = SKTileGroup()
     private var sandTiles = SKTileGroup()
+    private var cobblyWater = SKTileGroup()
+    
+    private var blackHole = BlackHole()
     
     private var availableCoordinates = [[Int]]()
     
     override init() {
         super.init()
+        
+        removeAllChildren()
+        
         
         noiseMap = makeNoiseMap(columns: columns, rows: rows)
         
@@ -48,13 +51,13 @@ class MapFactory: SKNode {
         
         tileSet = SKTileSet(named: "StockTile")!
         
-        sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
-        cobblySand  = tileSet.tileGroups.first { $0.name == "CobblySand" }!
-        grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
-        grassTiles  = tileSet.tileGroups.first { $0.name == "Grass" }!
+//        sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
+//        cobblySand  = tileSet.tileGroups.first { $0.name == "CobblySand" }!
+//        grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
+//        grassTiles  = tileSet.tileGroups.first { $0.name == "Grass" }!
         cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
-        sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
-        waterTiles  = tileSet.tileGroups.first { $0.name == "Water" }!
+        sandTiles   = tileSet.tileGroups.first { $0.name == "Sand" }!
+//        waterTiles  = tileSet.tileGroups.first { $0.name == "Water" }!
         
 //        bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
@@ -63,39 +66,15 @@ class MapFactory: SKNode {
 //        bottomLayer.fill(with: waterTiles)
         
         buildMap()
-//        noiseMap = makeNoiseMap(columns: columns, rows: rows)
-//
-//        tileSize = CGSize(width: size, height: size)
-//
-//        halfWidth = CGFloat(columns) / 2.0 * tileSize.width
-//        halfHeight = CGFloat(rows) / 2.0 * tileSize.height
-//
-//        tileSet = SKTileSet(named: "StockTile")!
-//
-//        sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
-//        cobblySand = tileSet.tileGroups.first { $0.name == "CobblySand" }!
-//        grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
-//        grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
-//        cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
-////        waterTiles = tileSet.tileGroups.first { $0.name == "Water" }!
-//
-////        bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
-//        topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
-//
-//        topLayer.enableAutomapping = true
-////        bottomLayer.fill(with: waterTiles)
-//
-//        buildTileSet()
-//        buildTilePhysics()
-//        buildCollectibles()
-//        addChild(topLayer)
     }
     
     func buildMap(isStartingMap: Bool = false) {
-
+        
         buildTileSet()
-//        buildTilePhysics()
+        buildTilePhysics()
         buildCollectibles()
+        buildBlackHole()
+        
         addChild(topLayer)
     }
 
@@ -113,38 +92,23 @@ extension MapFactory {
                 let location = vector2(Int32(row), Int32(column))
                 let terrainHeight = noiseMap.value(at: location)
 
-                if terrainHeight < -0.8 {
+                if terrainHeight < -0.89 {
                     topLayer.setTileGroup(cobbleTiles, forColumn: column, row: row)
                 } else if terrainHeight > 0.99 {
                     topLayer.setTileGroup(sandTiles, forColumn: column, row: row)
-                } else {
-                    availableCoordinates.append([column, row])
                 }
+//                else {
+//                    availableCoordinates.append([column, row])
+//                }
             }
         }
     }
     
     func buildTilePhysics() {
-//        let blackHolePoint = RNGFactory.colRow
         for column in 0 ..< columns {
             NotificationCenter.default.post(name: progressUpdate, object: nil)
             
             for row in 0 ..< rows {
-//                if column == blackHolePoint[0] && row == blackHolePoint[1] {
-//                    print("spawning BH at cr: \(blackHolePoint)")
-//
-//                    let blackHole = BlackHole()
-//
-//                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-//                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-//
-//                    blackHole.position = CGPoint(x: x, y: y)
-//
-//                    addChild(blackHole)
-//
-//                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
-//                                                y: blackHole.position.y + position.y)
-//                }
                 
                 guard let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) else { continue }
                 
@@ -231,38 +195,14 @@ extension MapFactory {
             blackHolePoint = RNGFactory.colRow
         }
         
-        let blackHole = BlackHole()
-        
         let x = CGFloat(blackHolePoint[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
         let y = CGFloat(blackHolePoint[1]) * tileSize.height - halfHeight + (tileSize.height / 2)
 
         blackHole.position = CGPoint(x: x, y: y)
-        
+    }
+    
+    func addBlackHole() {
         addChild(blackHole)
-
-//        blackHole.position = CGPoint(x: blackHole.position.x + position.x,
-//                                     y: blackHole.position.y + position.y)
-        
-//        for column in 0 ..< columns {
-//            for row in 0 ..< rows {
-//                
-//                if column == blackHolePoint[0] && row == blackHolePoint[1] {
-//                    print("spawning BH at cr: \(blackHolePoint)")
-//                    
-//                    
-//
-//                    let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-//                    let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-//
-//                    blackHole.position = CGPoint(x: x, y: y)
-//
-//                    addChild(blackHole)
-//
-//                    blackHole.position = CGPoint(x: blackHole.position.x + position.x,
-//                                                y: blackHole.position.y + position.y)
-//                }
-//            }
-//        }
     }
     
     func buildCollectibles() {
@@ -280,35 +220,7 @@ extension MapFactory {
                 collectible.position = CGPoint(x: x, y: y)
             }
             addChild(collectible)
-//            
-//            collectible.position = CGPoint(x: collectible.position.x + position.x,
-//                                           y: collectible.position.y + position.y)
         }
-        
-//        for column in 0 ..< columns {
-//            for row in 0 ..< rows {
-//                for collectible in set.collectibles {
-//                    
-//                    if column == collectible.coords[0] && row == collectible.coords[1] {
-//                        print("collectible coord: \(column) x \(row)")
-//                        
-//                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-//                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-//
-//                        collectible.position = CGPoint(x: x, y: y)
-//
-//                        addChild(collectible)
-//
-//                        collectible.position = CGPoint(x: collectible.position.x + position.x,
-//                                                    y: collectible.position.y + position.y)
-//                    }
-//                }
-//            }
-//        }
-        
-//        let constantCollectible = Collectible()
-//        constantCollectible.position = CGPoint(x: 0, y: -5684)
-//        addChild(constantCollectible)
     }
 }
 

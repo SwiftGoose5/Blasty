@@ -47,21 +47,36 @@ class LaunchScene: SKScene {
 
     
     override func didMove(to view: SKView) {
+        removeChildrenRecursively()
+        collectibleSet = CollectibleSet()
+        
+        lifeCount = 0
+        collectibleCount = 0
+        
+        let loadData = UserDefaults.standard
+//        loadData.set(false, forKey: "wasVictory")
+//        loadData.set(false, forKey: "isDayComplete")
+        
+        wasVictory = loadData.bool(forKey: "wasVictory")
+        isDayComplete = loadData.bool(forKey: "isDayComplete")
+        
+        let debug = true
+        
+        if debug {
+            wasVictory = false
+            isDayComplete = false
+        }
         
         if !isDayComplete {
-            DispatchQueue.global(qos: .default).async { [weak self] in
-                self!.dailyScene = SKScene(fileNamed: "GameScene")!
-                self!.dailyScene.scaleMode = .aspectFill
+            DispatchQueue.global(qos: .default).async {
+                self.dailyScene = SKScene(fileNamed: "GameScene")!
+                self.dailyScene.scaleMode = .aspectFill
             }
         }
-        
-        for child in self.children {
-            child.removeFromParent()
-        }
-        
+
+
         nextDayLabelNode.fontName = "Helvetica Neue Bold"
         nextDayLabelNode.fontSize = 150
-        nextDayLabelNode.name = "next day node"
         nextDayLabelNode.position.y = 400
         addChild(nextDayLabelNode)
         
@@ -96,9 +111,6 @@ class LaunchScene: SKScene {
         // MARK: - Joystick
         addChild(joystick)
         
-        // MARK: - Button
-//        addChild(button)
-
         
         // MARK: - Player
         player.position = CGPoint(x: 0, y: 310)
@@ -114,9 +126,6 @@ class LaunchScene: SKScene {
         sceneCamera.setScale(3)
         
         addProgressObserver()
-        
-        
-        
     }
 
 
@@ -251,6 +260,7 @@ class LaunchScene: SKScene {
     }
 }
 
+
 // MARK: - Progress Notification Listener
 extension LaunchScene {
     func addProgressObserver() {
@@ -260,12 +270,14 @@ extension LaunchScene {
             if self.progressCount <= columns { return }
             
             portal.setScale(0)
+            portal.removeFromParent()
             addChild(portal)
             portal.run(SKAction.scale(to: 100, duration: 1.5))
             
             // Wait 1.5 seconds for scene to finish loading
             DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
                 let transition = SKTransition.fade(withDuration: 2)
+                self.dailyScene.scaleMode = .aspectFill
                 self.view?.presentScene(self.dailyScene, transition: transition)
             }
         }

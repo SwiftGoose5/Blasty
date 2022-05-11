@@ -13,17 +13,38 @@ import SpriteKit
 import GameplayKit
 
 class GameViewController: UIViewController {
+    
+    var previousScene = SKScene()
 
     override func viewDidLoad() {
         super.viewDidLoad()
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'GameScene.sks'
-            if let scene = SKScene(fileNamed: "GameScene") {
+            if let scene = SKScene(fileNamed: "LaunchScene") {
                 // Set the scale mode to scale to fit the window
+                
+                let loadData = UserDefaults.standard
+                wasVictory = loadData.bool(forKey: "wasVictory")
+                isDayComplete = loadData.bool(forKey: "isDayComplete")
+                let lastDay = loadData.object(forKey: "lastDate") as? Date
+                
+                if let lastDay = lastDay {
+                    var cal = Calendar.current
+                    cal.timeZone = TimeZone.current
+                    
+                    if !cal.isDateInToday(lastDay) {
+                        isDayComplete = false
+                        loadData.set(isDayComplete, forKey: "isDayComplete")
+                    }
+                }
+                
+                loadData.set(Date(), forKey: "lastDate")
+                
                 scene.scaleMode = .aspectFill
                 
                 // Present the scene
+                previousScene = scene
                 view.presentScene(scene)
             }
             

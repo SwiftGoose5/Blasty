@@ -36,7 +36,6 @@ class GameScene: SKScene {
     var buttonData = ButtonData()
     
     var lastCollectibleIndex = -1
-//    var score = Score()
     
     var lastSpikeHitTime = Double(0)
     var lastSpikeDate = Date()
@@ -68,27 +67,17 @@ class GameScene: SKScene {
     var startingTime = Date()
     
     override func didMove(to view: SKView) {
+        removeChildrenRecursively()
+
+        lifeCount = 0
+        collectibleCount = 0
         
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
-        
-        launchScene = SKScene(fileNamed: "LaunchScene")!
-        
-        
-//        playerLives.setScale(1.25)
-        playerLives.alpha = 0.8
-//        playerCollectibles.setScale(1.25)
-        playerCollectibles.alpha = 0.8
-//        addChild(playerLives)
-//        addChild(playerCollectibles)
-        
+
         startingPlatform.buildPlatform()
         addChild(startingPlatform)
-        
-//        score.zPosition = 10
-//        addChild(score)
-        
         addChild(backgroundLabels)
 
         backgroundColor = .purple
@@ -147,41 +136,8 @@ class GameScene: SKScene {
         playerCollectibles.setScale(1.5/mapScale)
 //        scene?.addChild(sceneCamera)
         
-        
-        // Ground
-        ground = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 20, height: 30), pos: CGPoint(x: 0, y: -450), rot: 0)
-//        self.addChild(ground!)
-        
-        ceiling = TerrainNode(size: CGSize(width: (scene?.frame.width)! * 10, height: 60), pos: CGPoint(x: 0, y: 550), rot: 1)
-//        self.addChild(ceiling!)
-        
-        
-        // Wall
-        wall = TerrainNode(size: CGSize(width: (scene?.frame.width)!, height: 60), pos: CGPoint(x: 40, y: -250), rot: 0.5)
-        wall?.name = "wall"
-//        self.addChild(wall!)
-        
-        
-//        // Breaker check
-//        wall2 = TerrainNode(size: CGSize(width: 600, height: 120), pos: CGPoint(x: -400, y: -250), rot: 0.75)
-//        wall2?.name = "wall2"
-//        wall2?.physicsBody?.isDynamic = true
-//        wall2?.physicsBody?.affectedByGravity = false
-//        wall2?.physicsBody?.mass = 0.5
-//        self.addChild(wall2!)
-        
         // MARK: - Map
         addChild(mapFactory)
-
-//        playerLives.position.x = (screenWidth * mapScale / 2 - playerLives.width) / 2
-//        playerLives.position.x = screenWidth / 2
-//        playerLives.position.y = screenHeight/2 - (screenHeight * mapScale / 10 - playerLives.height) / 2
-//        playerLives.position.y = screenHeight/2
-        
-//        playerCollectibles.position.x = -screenWidth / 2 + (screenWidth * mapScale / 2 - playerCollectibles.width) / 2
-//        playerCollectibles.position.x = -screenWidth / 2
-//        playerCollectibles.position.y = screenHeight/2 - (screenHeight * mapScale / 10 - playerCollectibles.height) / 2
-//        playerCollectibles.position.y = screenHeight/2
     }
 
 
@@ -447,16 +403,6 @@ class GameScene: SKScene {
         skyFactory.position.y = player.position.y + player.position.y * -skySpeed
         
         backgroundLabels.position.y = player.position.y + player.position.y * -skySpeed
-        
-//        playerLives.position.x = player.position.x + screenWidth / 3
-//        playerLives.position.x = player.position.x + (screenWidth * mapScale / 2 - playerLives.width) / 2
-        
-        
-//        playerCollectibles.position.x = player.position.x - screenWidth / 2 * mapScale + (screenWidth / 2 * mapScale - playerCollectibles.width) / 2
-//        playerCollectibles.position.x = player.position.x + (screenWidth * mapScale / 2 - playerLives.width) / 2
-        
-//        playerCollectibles.position.x = player.position.x + screenWidth / 3
-        
     }
 }
 
@@ -472,16 +418,7 @@ extension GameScene: SKPhysicsContactDelegate {
         
         let firstNode = sortedNodes[0]
         let secondNode = sortedNodes[1]
-        
-        
-//        if secondNode.name == "wall", let player = firstNode as? PlayerNode {
-//            player.physicsBody?.isDynamic = false
-//        }
-//
-//        if secondNode.name == "wall2", let player = firstNode as? PlayerNode {
-//            secondNode.physicsBody?.affectedByGravity = true
-//        }
-        
+
         if let player = firstNode as? PlayerNode, let _ = secondNode.name?.contains("sand") {
             
             // sometimes too many collisions are detected, so we have to get the last date and time
@@ -519,6 +456,7 @@ extension GameScene: SKPhysicsContactDelegate {
             
             if collectibleCount == totalCollectibles {
                 mapFactory.buildBlackHole()
+                mapFactory.addBlackHole()
                 
                 guard let bh = mapFactory.childNode(withName: "BlackHole") else { return }
                 playerCollectibles.moveToBlackHoleLocation(bh)
@@ -533,8 +471,15 @@ extension GameScene: SKPhysicsContactDelegate {
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player.run(SKAction.move(to: blackHole.position, duration: 0.2))
             
+            let soundFile = "flute_victory.m4a"
+            run(.playSoundFileNamed(soundFile, waitForCompletion: false))
+            
             wasVictory = true
             completionTime = -startingTime.timeIntervalSinceNow
+            
+            let saveData = UserDefaults.standard
+            saveData.set(wasVictory, forKey: "wasVictory")
+            saveData.set(completionTime, forKey: "completionTime")
             
             transitionToLaunchScreen()
         }
@@ -545,10 +490,15 @@ extension GameScene {
     func transitionToLaunchScreen() {
         isDayComplete = true
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) {
+        let saveData = UserDefaults.standard
+        saveData.set(isDayComplete, forKey: "isDayComplete")
+        
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
             let transition = SKTransition.fade(withDuration: 2)
-            self.launchScene.scaleMode = .aspectFill
-            self.view?.presentScene(self.launchScene, transition: transition)
+            let scene = SKScene(fileNamed: "LaunchScene")!
+            scene.scaleMode = .aspectFill
+            self!.view?.presentScene(scene, transition: transition)
+            self = nil
         }
     }
 }

@@ -58,6 +58,8 @@ class PlayerLives: SKNode {
         width = calculateAccumulatedFrame().width
         height = calculateAccumulatedFrame().height
         
+        alpha = 0.8
+        
         run(.repeatForever(.rotate(byAngle: -1, duration: 11)))
     }
     
@@ -73,7 +75,8 @@ class PlayerLives: SKNode {
         if lifeCount == totalLives {
             life = lives.removeFirst()
             container = livesContainer.removeFirst()
-        } else {
+        } else if lifeCount > totalLives { return }
+          else {
             life = lives.remove(at: Int.random(in: 0 ..< totalLives - lifeCount))
             container = livesContainer.remove(at: Int.random(in: 0 ..< totalLives - lifeCount))
         }

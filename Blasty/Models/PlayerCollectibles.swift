@@ -23,8 +23,9 @@ class PlayerCollectibles: SKNode {
     var height = CGFloat(0)
     
     override init() {
-        
         super.init()
+        
+        removeAllChildren()
         
         circlePoints = getCirclePoints(centerPoint: self.position, radius: texture.size().width * 5, n: Double(totalCollectibles))
 
@@ -60,6 +61,8 @@ class PlayerCollectibles: SKNode {
         
         width = calculateAccumulatedFrame().width
         height = calculateAccumulatedFrame().height
+        
+        alpha = 0.8
         
         run(.repeatForever(.rotate(byAngle: 1, duration: 10)))
     }

@@ -36,7 +36,7 @@ let rows = 64
 
 
 // MARK: - Collectibles
-let collectibleSet = CollectibleSet()
+var collectibleSet = CollectibleSet()
 let totalCollectibles = 6
 var collectibleCount = 0
 
