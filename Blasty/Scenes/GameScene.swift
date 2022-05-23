@@ -10,9 +10,10 @@
 
 import SpriteKit
 import GameplayKit
-
+import AVFoundation
 
 class GameScene: SKScene {
+    var music = AVAudioPlayer()
     let mapScale = CGFloat(3)
     
     
@@ -67,14 +68,16 @@ class GameScene: SKScene {
     var startingTime = Date()
     
     override func didMove(to view: SKView) {
+        name = "GameScene"
+        currentScene = name!
         removeChildrenRecursively()
 
+//        playMusic()
+        
         lifeCount = 0
         collectibleCount = 0
         
-        SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
-            
-        }
+        
 
         startingPlatform.buildPlatform()
         addChild(startingPlatform)
@@ -99,11 +102,29 @@ class GameScene: SKScene {
         
         
         // MARK: - Joystick
-        joystick = Joystick()
+//        joystick = Joystick()
         addChild(joystick)
+        let uiPoint = CGPoint(x: -UIScreen.main.bounds.width / 2, y: -UIScreen.main.bounds.height / 2)
+        let point = view.convert(uiPoint, to: self)
+        
+        print("points")
+        print(uiPoint)
+        print(point)
+        
+        let emp = SKShapeNode(circleOfRadius: 128)
+        emp.fillColor = .black
+        emp.strokeColor = .black
+        emp.position = point
+        print(UIScreen.main.bounds.width)
+        print(UIScreen.main.bounds.height)
+
+        print(emp.position)
+        addChild(emp)
+        emp.position = point
+        print(emp.position)
         
         // MARK: - Button
-        button = Button()
+//        button = Button()
 //        addChild(button)
 
         // MARK: - Launcher
@@ -111,7 +132,7 @@ class GameScene: SKScene {
         launcher.zPosition = -1
         
         // MARK: - Player
-        player = PlayerNode()
+//        player = PlayerNode()
         player.position = CGPoint(x: 0, y: mapFactory.position.y - 5368)
         addChild(player)
         player.addChild(playerLives)
@@ -119,6 +140,10 @@ class GameScene: SKScene {
         player.addChild(launcher)
         player.addChild(timeSinceNowLabelNode)
         player.addChild(sceneCamera)
+        
+//        player.addChild(joystick)
+//        joystick.position.x = -UIScreen.main.bounds.width * 0.75
+//        joystick.position.y = -UIScreen.main.bounds.height * 0.25
         
         timeSinceNowLabelNode.position.y = screenHeight
         timeSinceNowLabelNode.fontName = "Helvetica Neue"
@@ -138,6 +163,8 @@ class GameScene: SKScene {
         
         // MARK: - Map
         addChild(mapFactory)
+        
+        
     }
 
 
@@ -217,7 +244,12 @@ class GameScene: SKScene {
             if location.y < player.position.y {
                 if location.x <= player.position.x {
                     // We're touching the left side of the screen
+                    
+                    // Use this for when the JS is a child by itself in the scene
                     joystickData = joystick.moveStick(jsLocation: joystick.position, touchLocation: location)
+                    
+                    // Use this for when the JS is a child of the player in the scene
+//                    joystickData = joystick.moveStick(jsLocation: joystick.convert(joystick.position, to: self), touchLocation: location)
                     
                     joystick.setBaseAlpha(joystickData.strength)
                     joystick.setBaseScale(joystickData.strength)
@@ -285,7 +317,7 @@ class GameScene: SKScene {
                     joystick.centerStick()
                     joystick.resetBaseAlpha()
                     joystick.resetBaseScale()
-//                    joystickData = JoystickData()
+                    joystickData = JoystickData()
                 }
             }
             
@@ -389,9 +421,9 @@ class GameScene: SKScene {
         
         joystick.position.x = player.position.x - screenWidth / 1.25
         joystick.position.y = player.position.y - screenHeight / 1.6
-        
-        button.position.x = player.position.x + screenWidth / 1.25
-        button.position.y = player.position.y - screenHeight / 1.6
+//
+//        button.position.x = player.position.x + screenWidth / 1.25
+//        button.position.y = player.position.y - screenHeight / 1.6
         
 //        launcher.position = player.position
 //        sceneCamera.position = player.position
@@ -455,7 +487,7 @@ extension GameScene: SKPhysicsContactDelegate {
             playerCollectibles.updateScore()
             
             if collectibleCount == totalCollectibles {
-                mapFactory.buildBlackHole()
+//                mapFactory.buildBlackHole()
                 mapFactory.addBlackHole()
                 
                 guard let bh = mapFactory.childNode(withName: "BlackHole") else { return }
@@ -472,7 +504,7 @@ extension GameScene: SKPhysicsContactDelegate {
             player.run(SKAction.move(to: blackHole.position, duration: 0.2))
             
             let soundFile = "flute_victory.m4a"
-            run(.playSoundFileNamed(soundFile, waitForCompletion: false))
+            run(.playSoundFileNamed(soundFile, waitForCompletion: true))
             
             wasVictory = true
             completionTime = -startingTime.timeIntervalSinceNow
@@ -480,6 +512,7 @@ extension GameScene: SKPhysicsContactDelegate {
             let saveData = UserDefaults.standard
             saveData.set(wasVictory, forKey: "wasVictory")
             saveData.set(completionTime, forKey: "completionTime")
+            saveData.set(lifeCount, forKey: "lifeCount")
             
             transitionToLaunchScreen()
         }
@@ -493,12 +526,32 @@ extension GameScene {
         let saveData = UserDefaults.standard
         saveData.set(isDayComplete, forKey: "isDayComplete")
         
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
-            let transition = SKTransition.fade(withDuration: 2)
-            let scene = SKScene(fileNamed: "LaunchScene")!
-            scene.scaleMode = .aspectFill
-            self!.view?.presentScene(scene, transition: transition)
-            self = nil
-        }
+//        stopMusic()
+        self.run(SKAction.sequence([.wait(forDuration: 2),
+                                    .run({
+                                        let transition = SKTransition.fade(withDuration: 2)
+                                        let scene = SKScene(fileNamed: "LaunchScene")!
+                                        scene.scaleMode = .aspectFill
+                                        self.view?.presentScene(scene, transition: transition)
+                                    })
+        ])
+        )
     }
 }
+//
+//extension GameScene {
+//    func playMusic() {
+//        if let musicURL = Bundle.main.url(forResource: "bg_music_intro", withExtension: "m4a") {
+//            if let audioPlayer = try? AVAudioPlayer(contentsOf: musicURL) {
+//                music = audioPlayer
+//                music.numberOfLoops = -1
+//                music.volume = 0.3
+//                music.play()
+//            }
+//        }
+//    }
+//
+//    func stopMusic() {
+//        music.stop()
+//    }
+//}

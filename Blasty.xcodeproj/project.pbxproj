@@ -25,6 +25,8 @@
 		8B5F072327FCAD4F000C5CBF /* StockTile.sks in Resources */ = {isa = PBXBuildFile; fileRef = 8B5F072127FCAD4F000C5CBF /* StockTile.sks */; };
 		8B5F072A27FD1402000C5CBF /* MapFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072927FD1402000C5CBF /* MapFactory.swift */; };
 		8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072D27FD3863000C5CBF /* SkyFactory.swift */; };
+		8B6ECD772833E9D1002BD722 /* bg_music.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B6ECD752833E9D1002BD722 /* bg_music.m4a */; };
+		8B6ECD782833E9D1002BD722 /* bg_music_intro.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B6ECD762833E9D1002BD722 /* bg_music_intro.m4a */; };
 		8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7524892800BA55001B4BC1 /* ButtonNode.swift */; };
 		8B75248C28049359001B4BC1 /* StartingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248B28049359001B4BC1 /* StartingPlatform.swift */; };
 		8B7524902804C7E7001B4BC1 /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248F2804C7E7001B4BC1 /* Collectible.swift */; };
@@ -72,6 +74,8 @@
 		8B5F072127FCAD4F000C5CBF /* StockTile.sks */ = {isa = PBXFileReference; lastKnownFileType = file.sks; path = StockTile.sks; sourceTree = "<group>"; };
 		8B5F072927FD1402000C5CBF /* MapFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MapFactory.swift; sourceTree = "<group>"; };
 		8B5F072D27FD3863000C5CBF /* SkyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFactory.swift; sourceTree = "<group>"; };
+		8B6ECD752833E9D1002BD722 /* bg_music.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg_music.m4a; sourceTree = "<group>"; };
+		8B6ECD762833E9D1002BD722 /* bg_music_intro.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg_music_intro.m4a; sourceTree = "<group>"; };
 		8B7524892800BA55001B4BC1 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		8B75248B28049359001B4BC1 /* StartingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingPlatform.swift; sourceTree = "<group>"; };
 		8B75248F2804C7E7001B4BC1 /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
@@ -136,6 +140,7 @@
 				8BF1BAC827FDD90700C72602 /* Helpers */,
 				8B5F06F627F781F1000C5CBF /* Models */,
 				8B1927CF27F5FC5700275E69 /* GameViewController.swift */,
+				8B752495280518A7001B4BC1 /* Constants.swift */,
 				8B1927C727F5FC5700275E69 /* AppDelegate.swift */,
 				8B1927D127F5FC5700275E69 /* Main.storyboard */,
 				8B1927D427F5FC5900275E69 /* Assets.xcassets */,
@@ -158,6 +163,8 @@
 		8B4137302805CB7E003BB1D0 /* Sounds */ = {
 			isa = PBXGroup;
 			children = (
+				8B6ECD762833E9D1002BD722 /* bg_music_intro.m4a */,
+				8B6ECD752833E9D1002BD722 /* bg_music.m4a */,
 				8B8181F92807476600A2D503 /* pop.m4a */,
 				8B8181E6280600BA00A2D503 /* flute_a.m4a */,
 				8B8181E5280600BA00A2D503 /* flute_b.m4a */,
@@ -204,7 +211,6 @@
 		8BF1BAC827FDD90700C72602 /* Helpers */ = {
 			isa = PBXGroup;
 			children = (
-				8B752495280518A7001B4BC1 /* Constants.swift */,
 				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
 				8B3EF07528199D6E00346C5B /* Date+Extension.swift */,
 				8BFB4EFE282984FE00E7BBDE /* SKNode+Extension.swift */,
@@ -284,6 +290,7 @@
 			files = (
 				8B8181E9280600EB00A2D503 /* flute_a.m4a in Resources */,
 				8B8181EA280600EB00A2D503 /* flute_b.m4a in Resources */,
+				8B6ECD782833E9D1002BD722 /* bg_music_intro.m4a in Resources */,
 				8B8181EB280600EB00A2D503 /* flute_c.m4a in Resources */,
 				8B8181EC280600EB00A2D503 /* flute_d.m4a in Resources */,
 				8B8181ED280600EB00A2D503 /* flute_g.m4a in Resources */,
@@ -298,6 +305,7 @@
 				8B7524932804C89F001B4BC1 /* CollectibleParticle.sks in Resources */,
 				8B1927CA27F5FC5700275E69 /* GameScene.sks in Resources */,
 				8B1927D527F5FC5900275E69 /* Assets.xcassets in Resources */,
+				8B6ECD772833E9D1002BD722 /* bg_music.m4a in Resources */,
 				8B7524942804C89F001B4BC1 /* Assets.xcassets in Resources */,
 				8B1927D827F5FC5900275E69 /* LaunchScreen.storyboard in Resources */,
 			);

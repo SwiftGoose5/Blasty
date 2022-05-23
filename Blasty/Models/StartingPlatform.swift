@@ -38,9 +38,9 @@ class StartingPlatform: SKNode {
 extension StartingPlatform {
     func buildPlatform(isStart: Bool = false) {
 
-        let loadData = UserDefaults.standard
-        wasVictory = loadData.bool(forKey: "wasVictory")
-        isDayComplete = loadData.bool(forKey: "isDayComplete")
+//        let loadData = UserDefaults.standard
+//        wasVictory = loadData.bool(forKey: "wasVictory")
+//        isDayComplete = loadData.bool(forKey: "isDayComplete")
         
         if isStart {
             leftLabelNode.fontName = "Helvetica Neue Bold"
@@ -73,8 +73,8 @@ extension StartingPlatform {
                 } else {
                     centerSecondUnderLabelNode.fontName = "Helvetica Neue Bold"
                     centerSecondUnderLabelNode.fontSize = 100
-                    centerSecondUnderLabelNode.color = .orange
-                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 250)
+                    centerSecondUnderLabelNode.color = .red
+                    centerSecondUnderLabelNode.position = CGPoint(x: 0, y: 280)
                     
                     centerSecondUnderLabelNode.text = "Better luck next time!"
 

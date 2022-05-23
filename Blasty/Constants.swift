@@ -69,3 +69,7 @@ let progressUpdate = Notification.Name("com.progress")
 let screenSize = UIScreen.main.bounds
 let screenWidth = UIScreen.main.bounds.width
 let screenHeight = UIScreen.main.bounds.height
+
+
+// MARK: - Scene Information
+var currentScene = ""

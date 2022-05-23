@@ -10,10 +10,11 @@
 
 import SpriteKit
 import GameplayKit
+import AVFoundation
 
 
 class LaunchScene: SKScene {
-    
+//    var music = AVAudioPlayer()
     var player = PlayerNode()
     
     var startingPlatform = StartingPlatform()
@@ -44,23 +45,45 @@ class LaunchScene: SKScene {
     let progressBar = ProgressBar()
     
     var nextDayLabelNode = SKLabelNode()
-
+    
+    override func sceneDidLoad() {
+        print("scene loaded")
+        
+    }
     
     override func didMove(to view: SKView) {
+        name = "LaunchScene"
+        currentScene = name!
         removeChildrenRecursively()
+        
+        SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
+            
+        }
+
+        run(.playSoundFileNamed("pop.m4a", waitForCompletion: false))
+//        playMusic()
+        
+//        run(.playSoundFileNamed("flute_g.m4a", waitForCompletion: false))
+//        run(.sequence([.wait(forDuration: 2),
+//                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+//                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+//                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.27)
+//        ]))
+        
+        
         collectibleSet = CollectibleSet()
         
         lifeCount = 0
         collectibleCount = 0
         
         let loadData = UserDefaults.standard
-//        loadData.set(false, forKey: "wasVictory")
-//        loadData.set(false, forKey: "isDayComplete")
+        loadData.set(false, forKey: "wasVictory")
+        loadData.set(false, forKey: "isDayComplete")
         
         wasVictory = loadData.bool(forKey: "wasVictory")
         isDayComplete = loadData.bool(forKey: "isDayComplete")
         
-        let debug = true
+        let debug = false
         
         if debug {
             wasVictory = false
@@ -68,6 +91,7 @@ class LaunchScene: SKScene {
         }
         
         if !isDayComplete {
+            loadData.set(lifeCount, forKey: "lifeCount")
             DispatchQueue.global(qos: .default).async {
                 self.dailyScene = SKScene(fileNamed: "GameScene")!
                 self.dailyScene.scaleMode = .aspectFill
@@ -190,6 +214,7 @@ class LaunchScene: SKScene {
                     joystick.centerStick()
                     joystick.resetBaseAlpha()
                     joystick.resetBaseScale()
+                    joystickData = JoystickData()
                 }
             }
 
@@ -248,7 +273,7 @@ class LaunchScene: SKScene {
         
         timeUntilMidnight = Date().numberOfSecondsUntilMidnight!
         
-        secondsUntilMidnight = Int(timeUntilMidnight) % 3600 % 60
+        secondsUntilMidnight = Int(timeUntilMidnight) % 60
         minutesUntilMidnight = Int(timeUntilMidnight) % 3600 / 60
         hoursUntilMidnight   = Int(timeUntilMidnight) / 3600
         
@@ -274,12 +299,18 @@ extension LaunchScene {
             addChild(portal)
             portal.run(SKAction.scale(to: 100, duration: 1.5))
             
-            // Wait 1.5 seconds for scene to finish loading
-            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
-                let transition = SKTransition.fade(withDuration: 2)
-                self.dailyScene.scaleMode = .aspectFill
-                self.view?.presentScene(self.dailyScene, transition: transition)
-            }
+//            stopMusic()
+            
+            // Wait for scene to finish loading
+            
+            self.run(SKAction.sequence([.wait(forDuration: 2),
+                                        .run({
+                                            let transition = SKTransition.fade(withDuration: 2)
+                                            self.dailyScene.scaleMode = .aspectFill
+                                            self.view?.presentScene(self.dailyScene, transition: transition)
+                                        })
+            ])
+            )
         }
     }
 }
@@ -308,4 +339,19 @@ extension LaunchScene: SKPhysicsContactDelegate {
     }
 }
 
-
+//extension LaunchScene {
+//    func playMusic() {
+//        if let musicURL = Bundle.main.url(forResource: "bg_music_intro", withExtension: "m4a") {
+//            if let audioPlayer = try? AVAudioPlayer(contentsOf: musicURL) {
+//                music = audioPlayer
+//                music.numberOfLoops = -1
+//                music.volume = 0.3
+//                music.play()
+//            }
+//        }
+//    }
+//    
+//    func stopMusic() {
+//        music.stop()
+//    }
+//}

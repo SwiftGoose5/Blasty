@@ -12,6 +12,7 @@ import GameplayKit
 
 class MapFactory: SKNode {
 
+    let debug = false
     private let size = 128
     private var tileSize = CGSize(width: 0, height: 0)
     private var halfWidth = CGFloat(0)
@@ -23,13 +24,14 @@ class MapFactory: SKNode {
     private var bottomLayer = SKTileMapNode()
     private var topLayer = SKTileMapNode()
     
+    private var cobbleTiles = SKTileGroup()
+    private var sandTiles = SKTileGroup()
+    
     private var waterTiles = SKTileGroup()
     private var sandyCobble = SKTileGroup()
     private var cobblySand = SKTileGroup()
     private var grassyWater = SKTileGroup()
-    private var cobbleTiles = SKTileGroup()
     private var grassTiles = SKTileGroup()
-    private var sandTiles = SKTileGroup()
     private var cobblyWater = SKTileGroup()
     
     private var blackHole = BlackHole()
@@ -124,7 +126,8 @@ extension MapFactory {
                 let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
                 let tileNode = SKNode()
 
-                var debug = false
+                
+                // MARK: - DEBUG PHYSICS REMOVAL
                 
                 if debug {
                     let physicsBody = SKPhysicsBody(rectangleOf: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
@@ -133,17 +136,12 @@ extension MapFactory {
                     tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
                 }
                 
-                
-                
-                
                 tileNode.physicsBody?.affectedByGravity = false
                 tileNode.physicsBody?.isDynamic = false
                 
                 if tileTexture.description.contains("Sand") {
                     tileNode.name = "sand\(column)\(row)"
                     tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
-//                    tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
-//                    tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
                 }
 
                 tileNode.position = CGPoint(x: x, y: y)
@@ -152,38 +150,6 @@ extension MapFactory {
 
                 tileNode.position = CGPoint(x: tileNode.position.x + position.x,
                                             y: tileNode.position.y + position.y)
-
-//                if let tileDefinition = topLayer.tileDefinition(atColumn: column, row: row) {
-//                    let tileArray = tileDefinition.textures
-//                    let tileTexture = tileArray[0]
-//
-//
-//
-//                    if !tileTexture.description.contains("Center") {
-//                        let x = CGFloat(column) * tileSize.width - halfWidth + (tileSize.width / 2)
-//                        let y = CGFloat(row) * tileSize.height - halfHeight + (tileSize.height / 2)
-//                        let tileNode = SKNode()
-//
-//                        tileNode.physicsBody = SKPhysicsBody(texture: tileTexture, size: CGSize(width: tileTexture.size().width, height: tileTexture.size().height))
-//                        tileNode.physicsBody?.affectedByGravity = false
-//                        tileNode.physicsBody?.isDynamic = false
-//
-//                        // Check for grass aka spike texture
-//                        if tileTexture.description.contains("Grass") {
-//                            tileNode.name = "spikes"
-//                            tileNode.physicsBody?.categoryBitMask = CollisionType.spikes.rawValue
-//                            tileNode.physicsBody?.collisionBitMask = CollisionType.player.rawValue
-//                            tileNode.physicsBody?.contactTestBitMask = CollisionType.player.rawValue
-//                        }
-//
-//                        tileNode.position = CGPoint(x: x, y: y)
-//
-//                        addChild(tileNode)
-//
-//                        tileNode.position = CGPoint(x: tileNode.position.x + position.x,
-//                                                    y: tileNode.position.y + position.y)
-//                    }
-//                }
             }
         }
     }
