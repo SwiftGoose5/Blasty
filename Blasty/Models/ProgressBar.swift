@@ -54,9 +54,12 @@ class ProgressBar: SKNode {
     }
     
     func addProgressObserver() {
-        NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [self] note in
-            self.updateProgressBar()
-            self.progress += 1
+        NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [weak self] note in
+            guard let strongSelf = self else { return }
+//            self!.updateProgressBar()
+//            self!.progress += 1
+            strongSelf.updateProgressBar()
+            strongSelf.progress += 1
         }
     }
     

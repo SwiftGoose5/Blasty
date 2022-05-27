@@ -27,13 +27,6 @@ class MapFactory: SKNode {
     private var cobbleTiles = SKTileGroup()
     private var sandTiles = SKTileGroup()
     
-    private var waterTiles = SKTileGroup()
-    private var sandyCobble = SKTileGroup()
-    private var cobblySand = SKTileGroup()
-    private var grassyWater = SKTileGroup()
-    private var grassTiles = SKTileGroup()
-    private var cobblyWater = SKTileGroup()
-    
     private var blackHole = BlackHole()
     
     private var availableCoordinates = [[Int]]()
@@ -53,13 +46,8 @@ class MapFactory: SKNode {
         
         tileSet = SKTileSet(named: "StockTile")!
         
-//        sandyCobble = tileSet.tileGroups.first { $0.name == "SandyCobble" }!
-//        cobblySand  = tileSet.tileGroups.first { $0.name == "CobblySand" }!
-//        grassyWater = tileSet.tileGroups.first { $0.name == "GrassyWater" }!
-//        grassTiles  = tileSet.tileGroups.first { $0.name == "Grass" }!
         cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
         sandTiles   = tileSet.tileGroups.first { $0.name == "Sand" }!
-//        waterTiles  = tileSet.tileGroups.first { $0.name == "Water" }!
         
 //        bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
@@ -108,7 +96,6 @@ extension MapFactory {
     
     func buildTilePhysics() {
         for column in 0 ..< columns {
-            NotificationCenter.default.post(name: progressUpdate, object: nil)
             
             for row in 0 ..< rows {
                 
@@ -118,6 +105,8 @@ extension MapFactory {
                 let tileArray = tileDefinition.textures
                 let tileTexture = tileArray[0]
                 
+                
+                // MARK: - Skip Center tiles so that collectibles can't spawn inside inaccessible areas
                 if tileTexture.description.contains("Center") { continue }
                 
                 availableCoordinates.append([column, row])
@@ -151,15 +140,18 @@ extension MapFactory {
                 tileNode.position = CGPoint(x: tileNode.position.x + position.x,
                                             y: tileNode.position.y + position.y)
             }
+            
+            print("\(column)/\(columns)")
+            NotificationCenter.default.post(name: progressUpdate, object: nil)
         }
     }
     
     func buildBlackHole() {
         var blackHolePoint = RNGFactory.colRow
         
-        while !availableCoordinates.contains(blackHolePoint) {
-            blackHolePoint = RNGFactory.colRow
-        }
+//        while !availableCoordinates.contains(blackHolePoint) {
+//            blackHolePoint = RNGFactory.colRow
+//        }
         
         let x = CGFloat(blackHolePoint[0]) * tileSize.width - halfWidth + (tileSize.width / 2)
         let y = CGFloat(blackHolePoint[1]) * tileSize.height - halfHeight + (tileSize.height / 2)

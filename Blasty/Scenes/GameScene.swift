@@ -13,21 +13,13 @@ import GameplayKit
 import AVFoundation
 
 class GameScene: SKScene {
-    var music = AVAudioPlayer()
     let mapScale = CGFloat(3)
-    
     
     var player = PlayerNode()
     var playerLives = PlayerLives()
     var playerCollectibles = PlayerCollectibles()
-    
-    var ground: TerrainNode?
-    var ceiling: TerrainNode?
-    
+
     var backgroundLabels = BackgroundLabels()
-    
-    var wall: TerrainNode?
-    var wall2: TerrainNode?
     
     var joystick = Joystick()
     var joystickActive = false
@@ -77,8 +69,6 @@ class GameScene: SKScene {
         lifeCount = 0
         collectibleCount = 0
         
-        
-
         startingPlatform.buildPlatform()
         addChild(startingPlatform)
         addChild(backgroundLabels)
@@ -87,7 +77,6 @@ class GameScene: SKScene {
 
         // MARK: - Sky & Clouds
         addChild(skyFactory)
-        
         
         cloud = SKSpriteNode(texture: cloud1Texture, size: cloud1Texture.size())
         cloud.setScale(20)
@@ -163,11 +152,7 @@ class GameScene: SKScene {
         
         // MARK: - Map
         addChild(mapFactory)
-        
-        
     }
-
-
     
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
@@ -388,18 +373,6 @@ class GameScene: SKScene {
         let minutes = minutesSinceNow < 10 ? "0\(minutesSinceNow)" : String(minutesSinceNow)
         
         timeSinceNowLabelNode.text = "\(minutes) : \(seconds)"
-            
-        
-
-//        let playerVector = player?.physicsBody?.velocity
-//        
-//        if abs(playerVector!.dx.rounded()) >= 10.0 || abs(playerVector!.dy.rounded()) >= 10.0 {
-//            player?.isMoving = true
-//            joystick!.alpha = 0.3
-//        } else {
-//            player?.isMoving = false
-//            joystick!.alpha = 1
-//        }
         
         
         if abs(player.position.x) > 10000 || abs(player.position.y) > 10000 {
@@ -421,12 +394,6 @@ class GameScene: SKScene {
         
         joystick.position.x = player.position.x - screenWidth / 1.25
         joystick.position.y = player.position.y - screenHeight / 1.6
-//
-//        button.position.x = player.position.x + screenWidth / 1.25
-//        button.position.y = player.position.y - screenHeight / 1.6
-        
-//        launcher.position = player.position
-//        sceneCamera.position = player.position
         
         cloud.position.x = player.position.x + player.position.x * -cloudSpeed
         cloud.position.y = player.position.y + player.position.y * -cloudSpeed
@@ -483,11 +450,9 @@ extension GameScene: SKPhysicsContactDelegate {
             collectibleCount += 1
             lastCollectibleIndex = collectible.index
             
-//            score.updateScore()
             playerCollectibles.updateScore()
             
             if collectibleCount == totalCollectibles {
-//                mapFactory.buildBlackHole()
                 mapFactory.addBlackHole()
                 
                 guard let bh = mapFactory.childNode(withName: "BlackHole") else { return }
@@ -496,6 +461,9 @@ extension GameScene: SKPhysicsContactDelegate {
         }
         
         if let blackHole = firstNode as? BlackHole, let player = secondNode as? PlayerNode {
+            blackHole.physicsBody?.categoryBitMask = 100
+            blackHole.physicsBody?.contactTestBitMask = 100
+            blackHole.physicsBody?.collisionBitMask = 100
             blackHole.field?.isEnabled = false
             player.physicsBody?.collisionBitMask = 0
             player.physicsBody?.contactTestBitMask = 0
@@ -514,7 +482,9 @@ extension GameScene: SKPhysicsContactDelegate {
             saveData.set(completionTime, forKey: "completionTime")
             saveData.set(lifeCount, forKey: "lifeCount")
             
-            transitionToLaunchScreen()
+            blackHole.run(.scale(to: 100, duration: 2))
+            
+            transitionToLaunchScreen()           
         }
     }
 }
@@ -526,32 +496,17 @@ extension GameScene {
         let saveData = UserDefaults.standard
         saveData.set(isDayComplete, forKey: "isDayComplete")
         
-//        stopMusic()
-        self.run(SKAction.sequence([.wait(forDuration: 2),
+        
+        self.run(SKAction.sequence([.wait(forDuration: 4),
                                     .run({
-                                        let transition = SKTransition.fade(withDuration: 2)
+                                        let transition = SKTransition.fade(withDuration: 3)
                                         let scene = SKScene(fileNamed: "LaunchScene")!
                                         scene.scaleMode = .aspectFill
+                                        self.removeAllActions()
+                                        self.removeChildrenRecursively()
                                         self.view?.presentScene(scene, transition: transition)
                                     })
         ])
         )
     }
 }
-//
-//extension GameScene {
-//    func playMusic() {
-//        if let musicURL = Bundle.main.url(forResource: "bg_music_intro", withExtension: "m4a") {
-//            if let audioPlayer = try? AVAudioPlayer(contentsOf: musicURL) {
-//                music = audioPlayer
-//                music.numberOfLoops = -1
-//                music.volume = 0.3
-//                music.play()
-//            }
-//        }
-//    }
-//
-//    func stopMusic() {
-//        music.stop()
-//    }
-//}

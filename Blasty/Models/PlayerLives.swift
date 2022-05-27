@@ -60,7 +60,13 @@ class PlayerLives: SKNode {
         
         alpha = 0.8
         
-        run(.repeatForever(.rotate(byAngle: -1, duration: 11)))
+        let animation = {
+            [weak self] in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.run(.repeatForever(.rotate(byAngle: -1, duration: 11)))
+        }
+        animation()
     }
     
     func updateLives() {

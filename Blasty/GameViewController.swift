@@ -18,6 +18,7 @@ class GameViewController: UIViewController {
         super.viewDidLoad()
         
         addNotificationObservers()
+        addVictoryShareObserver()
         
         if let view = self.view as! SKView? {
             // Load the SKScene from 'LaunchScene.sks'
@@ -130,11 +131,21 @@ extension UIViewController {
         let seconds = completionSeconds < 10 ? "0\(completionSeconds)" : String(completionSeconds)
         let minutes = completionMinutes < 10 ? "0\(completionMinutes)" : String(completionMinutes)
         
-        let balls = String(repeating: "🎾", count: UserDefaults.standard.integer(forKey: "lifeCount"))
+        let balls = String(repeating: "🎾", count: totalLives - UserDefaults.standard.integer(forKey: "lifeCount"))
         
         let items = ["Blasty: \(dateFormatter.string(from: date))\n\(minutes):\(seconds): \(balls)"]
         let ac = UIActivityViewController(activityItems: items, applicationActivities: nil)
         
         present(ac, animated: true)
+    }
+}
+
+// MARK: - Adding Notification Observer to listen for victory and share
+extension GameViewController {
+    func addVictoryShareObserver() {
+        NotificationCenter.default.addObserver(forName: victoryToShare, object: nil, queue: .main) { [weak self] note in
+            guard let strongSelf = self else { return }
+            strongSelf.share()
+        }
     }
 }

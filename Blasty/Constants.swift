@@ -60,8 +60,9 @@ enum CollisionType: UInt32 {
 
 
 
-// MARK: - Progress Notification
+// MARK: - Notifications
 let progressUpdate = Notification.Name("com.progress")
+let victoryToShare = Notification.Name("com.victory")
 
 
 // MARK: - Screen Size

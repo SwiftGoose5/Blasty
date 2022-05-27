@@ -64,7 +64,12 @@ class PlayerCollectibles: SKNode {
         
         alpha = 0.8
         
-        run(.repeatForever(.rotate(byAngle: 1, duration: 10)))
+        let animation = {
+            [weak self] in
+            guard let strongSelf = self else { return }
+            strongSelf.run(.repeatForever(.rotate(byAngle: 1, duration: 10)))
+        }
+        animation()
     }
     
     func updateScore() {

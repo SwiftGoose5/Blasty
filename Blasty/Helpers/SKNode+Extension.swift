@@ -24,6 +24,8 @@ import GameplayKit
 extension SKNode {
     func removeChildrenRecursively() {
         for child in children {
+            if child.physicsBody != nil { child.physicsBody = nil }
+            child.removeAllActions()
             child.removeFromParent()
             removeChildrenRecursively()
         }

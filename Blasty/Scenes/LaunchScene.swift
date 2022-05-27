@@ -14,7 +14,6 @@ import AVFoundation
 
 
 class LaunchScene: SKScene {
-//    var music = AVAudioPlayer()
     var player = PlayerNode()
     
     var startingPlatform = StartingPlatform()
@@ -46,11 +45,6 @@ class LaunchScene: SKScene {
     
     var nextDayLabelNode = SKLabelNode()
     
-    override func sceneDidLoad() {
-        print("scene loaded")
-        
-    }
-    
     override func didMove(to view: SKView) {
         name = "LaunchScene"
         currentScene = name!
@@ -60,15 +54,13 @@ class LaunchScene: SKScene {
             
         }
 
-        run(.playSoundFileNamed("pop.m4a", waitForCompletion: false))
-//        playMusic()
-        
+//        run(.playSoundFileNamed("pop.m4a", waitForCompletion: false))
 //        run(.playSoundFileNamed("flute_g.m4a", waitForCompletion: false))
-//        run(.sequence([.wait(forDuration: 2),
-//                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
-//                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
-//                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.27)
-//        ]))
+        run(.sequence([.wait(forDuration: 0.5),
+                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.25),
+                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.25),
+                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.25)
+        ]))
         
         
         collectibleSet = CollectibleSet()
@@ -77,18 +69,11 @@ class LaunchScene: SKScene {
         collectibleCount = 0
         
         let loadData = UserDefaults.standard
-        loadData.set(false, forKey: "wasVictory")
-        loadData.set(false, forKey: "isDayComplete")
+//        loadData.set(false, forKey: "wasVictory")
+//        loadData.set(false, forKey: "isDayComplete")
         
         wasVictory = loadData.bool(forKey: "wasVictory")
         isDayComplete = loadData.bool(forKey: "isDayComplete")
-        
-        let debug = false
-        
-        if debug {
-            wasVictory = false
-            isDayComplete = false
-        }
         
         if !isDayComplete {
             loadData.set(lifeCount, forKey: "lifeCount")
@@ -96,6 +81,13 @@ class LaunchScene: SKScene {
                 self.dailyScene = SKScene(fileNamed: "GameScene")!
                 self.dailyScene.scaleMode = .aspectFill
             }
+        }
+        
+        if wasVictory {
+            run(.sequence([.wait(forDuration: 3),
+                           .run {
+                               NotificationCenter.default.post(name: victoryToShare, object: nil)
+                           }]))
         }
 
 
@@ -140,7 +132,6 @@ class LaunchScene: SKScene {
         player.position = CGPoint(x: 0, y: 310)
         addChild(player)
         launcher.zPosition = -1
-        launcher.removeFromParent()
         player.addChild(launcher)
         
         
@@ -255,14 +246,9 @@ class LaunchScene: SKScene {
             run(SKAction.playSoundFileNamed("pop.m4a", waitForCompletion: false))
         }
 
-        
         joystick.position.x = player.position.x - screenWidth / 1.25
         joystick.position.y = player.position.y - screenHeight / 2.5
         
-        button.position.x = player.position.x + screenWidth / 1.25
-        button.position.y = player.position.y - screenHeight / 2.5
-        
-//        launcher.position = player.position
         sceneCamera.position = player.position
         
         cloud.position.x = player.position.x + player.position.x * -cloudSpeed
@@ -272,6 +258,16 @@ class LaunchScene: SKScene {
         skyFactory.position.y = player.position.y + player.position.y * -skySpeed
         
         timeUntilMidnight = Date().numberOfSecondsUntilMidnight!
+        
+        if timeUntilMidnight <= 0 {
+            let launchScene = SKScene(fileNamed: "LaunchScene")
+            let transition = SKTransition.fade(withDuration: 1.5)
+            launchScene!.scaleMode = .aspectFill
+            removeAllActions()
+            removeChildrenRecursively()
+            NotificationCenter.default.removeObserver(self)
+            self.view?.presentScene(launchScene!, transition: transition)
+        }
         
         secondsUntilMidnight = Int(timeUntilMidnight) % 60
         minutesUntilMidnight = Int(timeUntilMidnight) % 3600 / 60
@@ -289,25 +285,29 @@ class LaunchScene: SKScene {
 // MARK: - Progress Notification Listener
 extension LaunchScene {
     func addProgressObserver() {
-        NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [self] note in
-            self.progressCount += 1
+        NotificationCenter.default.addObserver(forName: progressUpdate, object: nil, queue: .main) { [weak self] note in
             
-            if self.progressCount <= columns { return }
+            guard let strongSelf = self else { return }
             
-            portal.setScale(0)
-            portal.removeFromParent()
-            addChild(portal)
-            portal.run(SKAction.scale(to: 100, duration: 1.5))
+            strongSelf.progressCount += 1
             
-//            stopMusic()
+            if strongSelf.progressCount <= columns { return }
+            
+            strongSelf.portal.setScale(0)
+            strongSelf.portal.removeFromParent()
+            strongSelf.addChild(strongSelf.portal)
+            strongSelf.portal.run(SKAction.scale(to: 100, duration: 1.5))
             
             // Wait for scene to finish loading
             
-            self.run(SKAction.sequence([.wait(forDuration: 2),
+            strongSelf.run(SKAction.sequence([.wait(forDuration: 2),
                                         .run({
-                                            let transition = SKTransition.fade(withDuration: 2)
-                                            self.dailyScene.scaleMode = .aspectFill
-                                            self.view?.presentScene(self.dailyScene, transition: transition)
+                                            let transition = SKTransition.fade(withDuration: 1.5)
+                                            strongSelf.dailyScene.scaleMode = .aspectFill
+                                            strongSelf.removeAllActions()
+                                            strongSelf.removeChildrenRecursively()
+                                            NotificationCenter.default.removeObserver(strongSelf)
+                                            strongSelf.view?.presentScene(strongSelf.dailyScene, transition: transition)
                                         })
             ])
             )
@@ -338,19 +338,19 @@ extension LaunchScene: SKPhysicsContactDelegate {
         }
     }
 }
-
+//
 //extension LaunchScene {
 //    func playMusic() {
 //        if let musicURL = Bundle.main.url(forResource: "bg_music_intro", withExtension: "m4a") {
 //            if let audioPlayer = try? AVAudioPlayer(contentsOf: musicURL) {
 //                music = audioPlayer
 //                music.numberOfLoops = -1
-//                music.volume = 0.3
+//                music.volume = 0.2
 //                music.play()
 //            }
 //        }
 //    }
-//    
+//
 //    func stopMusic() {
 //        music.stop()
 //    }

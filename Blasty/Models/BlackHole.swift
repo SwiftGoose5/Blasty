@@ -51,7 +51,7 @@ class BlackHole: SKSpriteNode {
         field!.categoryBitMask = CollisionType.field.rawValue
         addChild(field!)
         
-        run(SKAction.repeatForever(SKAction.rotate(byAngle: 1, duration: 1)))
+//        run(SKAction.repeatForever(SKAction.rotate(byAngle: 1, duration: 1)))
         
         // cool blow up effect
 //        run(SKAction.repeatForever(SKAction.scale(by: CGFloat.random(in: 0...2.0), duration: 1)))

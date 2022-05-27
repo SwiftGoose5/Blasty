@@ -65,10 +65,16 @@ class Collectible: SKSpriteNode {
         
         addChild(emitter)
         
-        let seq = SKAction.sequence([.scale(to: 1.2, duration: 1),
-                                     .scale(to: 1.0, duration: 1)])
-        
-        run(.repeatForever(seq))
+        let animation = {
+            [weak self] in
+            guard let strongSelf = self else { return }
+                
+            let seq = SKAction.sequence([.scale(to: 1.2, duration: 1),
+                                         .scale(to: 1.0, duration: 1)])
+            
+            strongSelf.run(.repeatForever(seq))
+        }
+        animation()
     }
     
     func collect(_ soundIndex: Int) {
