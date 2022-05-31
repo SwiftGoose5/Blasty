@@ -35,8 +35,8 @@ class GameViewController: UIViewController {
             }
             
             view.ignoresSiblingOrder = true
-            view.showsFPS = true
-            view.showsNodeCount = true
+            view.showsFPS = false
+            view.showsNodeCount = false
             view.showsPhysics = false
         }
     }
@@ -104,6 +104,19 @@ extension GameViewController {
         
         if currentScene == "LaunchScene" && wasVictory {
             share()
+        } else if currentScene == "LaunchScene" {
+            if let view = self.view as! SKView? {
+                if let scene = SKScene(fileNamed: "LaunchScene") {
+                    // Set the scale mode to scale to fit the window
+                    
+                    checkLastDateVsToday()
+                    
+                    scene.scaleMode = .aspectFill
+                    
+                    // Present the scene
+                    view.presentScene(scene)
+                }
+            }
         }
     }
     

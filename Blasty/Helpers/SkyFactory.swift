@@ -28,10 +28,10 @@ class SkyFactory: SKNode {
     private var topLayer = SKTileMapNode()
     
     private var waterTiles = SKTileGroup()
-    private var grassTiles = SKTileGroup()
-    private var sandTiles = SKTileGroup()
-    private var cobbleTiles = SKTileGroup()
-    private var cobblyWater = SKTileGroup()
+//    private var grassTiles = SKTileGroup()
+//    private var sandTiles = SKTileGroup()
+//    private var cobbleTiles = SKTileGroup()
+//    private var cobblyWater = SKTileGroup()
     
     override init() {
         super.init()
@@ -49,27 +49,33 @@ class SkyFactory: SKNode {
         
         tileSet = SKTileSet(named: "StockTile")!
         waterTiles = tileSet.tileGroups.first { $0.name == "Water" }!
-        grassTiles = tileSet.tileGroups.first { $0.name == "Grass" }!
-        sandTiles = tileSet.tileGroups.first { $0.name == "Sand" }!
-        cobbleTiles = tileSet.tileGroups.first { $0.name == "Cobblestone" }!
-        cobblyWater = tileSet.tileGroups.first { $0.name == "CobblyWater" }!
         
         bottomLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         topLayer = SKTileMapNode(tileSet: tileSet, columns: columns, rows: rows, tileSize: tileSize)
         
+        topLayer.name = "SkyFactory_top"
+        bottomLayer.name = "SkyFactory_bottom"
+        
         topLayer.enableAutomapping = true
 //        bottomLayer.fill(with: waterTiles)
-        bottomLayer.fill(with: sandTiles)
+//        bottomLayer.fill(with: sandTiles)
         
         buildTileSet()
         
         addChild(topLayer)
-        addChild(bottomLayer)
+//        addChild(bottomLayer)
     }
 
     
     required init?(coder aDecoder: NSCoder) {
         fatalError("init(coder:) has not been implemented")
+    }
+}
+
+extension SkyFactory {
+    func teardown() {
+        topLayer.eraseTileSet()
+        bottomLayer.eraseTileSet()
     }
 }
 

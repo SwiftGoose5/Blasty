@@ -45,6 +45,12 @@ class LaunchScene: SKScene {
     
     var nextDayLabelNode = SKLabelNode()
     
+    override func willMove(from view: SKView) {
+        removeAllActions()
+        removeChildrenRecursively()
+        skyFactory.teardown()
+    }
+    
     override func didMove(to view: SKView) {
         name = "LaunchScene"
         currentScene = name!
@@ -53,13 +59,10 @@ class LaunchScene: SKScene {
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
-
-//        run(.playSoundFileNamed("pop.m4a", waitForCompletion: false))
-//        run(.playSoundFileNamed("flute_g.m4a", waitForCompletion: false))
         run(.sequence([.wait(forDuration: 0.5),
-                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.25),
-                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.25),
-                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.25)
+                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.27)
         ]))
         
         
@@ -69,13 +72,14 @@ class LaunchScene: SKScene {
         collectibleCount = 0
         
         let loadData = UserDefaults.standard
-//        loadData.set(false, forKey: "wasVictory")
-//        loadData.set(false, forKey: "isDayComplete")
+        loadData.set(false, forKey: "wasVictory")
+        loadData.set(false, forKey: "isDayComplete")
         
         wasVictory = loadData.bool(forKey: "wasVictory")
         isDayComplete = loadData.bool(forKey: "isDayComplete")
         
         if !isDayComplete {
+            addProgressObserver()
             loadData.set(lifeCount, forKey: "lifeCount")
             DispatchQueue.global(qos: .default).async {
                 self.dailyScene = SKScene(fileNamed: "GameScene")!
@@ -123,8 +127,6 @@ class LaunchScene: SKScene {
         isUserInteractionEnabled = true
         backgroundColor = .blue
         
-        
-        // MARK: - Joystick
         addChild(joystick)
         
         
@@ -134,17 +136,12 @@ class LaunchScene: SKScene {
         launcher.zPosition = -1
         player.addChild(launcher)
         
-        
         // MARK: - Camera
         scene?.addChild(sceneCamera)
         scene?.camera = sceneCamera
         sceneCamera.setScale(3)
-        
-        addProgressObserver()
     }
 
-
-    
     override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent?) {
         for touch in touches {
             let location = touch.location(in: self)
@@ -228,7 +225,6 @@ class LaunchScene: SKScene {
         joystick.centerStick()
     }
     
-    
     // MARK: - Update
     
     override func update(_ currentTime: TimeInterval) {
@@ -238,7 +234,6 @@ class LaunchScene: SKScene {
             buttonData.endTime = currentTime
         }
         
-        
         if abs(player.position.x) > 10000 || abs(player.position.y) > 10000 {
             player.physicsBody?.velocity = CGVector(dx: 0, dy: 0)
             player.position = CGPoint(x: 0, y: 310)
@@ -246,8 +241,14 @@ class LaunchScene: SKScene {
             run(SKAction.playSoundFileNamed("pop.m4a", waitForCompletion: false))
         }
 
-        joystick.position.x = player.position.x - screenWidth / 1.25
-        joystick.position.y = player.position.y - screenHeight / 2.5
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            joystick.position.x = player.position.x - screenWidth / 0.75
+            joystick.position.y = player.position.y - screenHeight / 1.5
+
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            joystick.position.x = player.position.x - screenWidth / 1.25
+            joystick.position.y = player.position.y - screenHeight / 1.4
+        }
         
         sceneCamera.position = player.position
         
@@ -258,16 +259,6 @@ class LaunchScene: SKScene {
         skyFactory.position.y = player.position.y + player.position.y * -skySpeed
         
         timeUntilMidnight = Date().numberOfSecondsUntilMidnight!
-        
-        if timeUntilMidnight <= 0 {
-            let launchScene = SKScene(fileNamed: "LaunchScene")
-            let transition = SKTransition.fade(withDuration: 1.5)
-            launchScene!.scaleMode = .aspectFill
-            removeAllActions()
-            removeChildrenRecursively()
-            NotificationCenter.default.removeObserver(self)
-            self.view?.presentScene(launchScene!, transition: transition)
-        }
         
         secondsUntilMidnight = Int(timeUntilMidnight) % 60
         minutesUntilMidnight = Int(timeUntilMidnight) % 3600 / 60
@@ -298,17 +289,15 @@ extension LaunchScene {
             strongSelf.addChild(strongSelf.portal)
             strongSelf.portal.run(SKAction.scale(to: 100, duration: 1.5))
             
-            // Wait for scene to finish loading
-            
-            strongSelf.run(SKAction.sequence([.wait(forDuration: 2),
-                                        .run({
-                                            let transition = SKTransition.fade(withDuration: 1.5)
-                                            strongSelf.dailyScene.scaleMode = .aspectFill
-                                            strongSelf.removeAllActions()
-                                            strongSelf.removeChildrenRecursively()
-                                            NotificationCenter.default.removeObserver(strongSelf)
-                                            strongSelf.view?.presentScene(strongSelf.dailyScene, transition: transition)
-                                        })
+            strongSelf.run(.sequence([.wait(forDuration: 2),
+                                      .run({
+                                          let transition = SKTransition.fade(withDuration: 0.5)
+                                          strongSelf.dailyScene.scaleMode = .aspectFill
+                                          strongSelf.removeAllActions()
+                                          strongSelf.removeChildrenRecursively()
+                                          NotificationCenter.default.removeObserver(strongSelf)
+                                          strongSelf.view?.presentScene(strongSelf.dailyScene, transition: transition)
+                                      })
             ])
             )
         }

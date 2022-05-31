@@ -27,6 +27,7 @@
 		8B5F072E27FD3863000C5CBF /* SkyFactory.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B5F072D27FD3863000C5CBF /* SkyFactory.swift */; };
 		8B6ECD772833E9D1002BD722 /* bg_music.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B6ECD752833E9D1002BD722 /* bg_music.m4a */; };
 		8B6ECD782833E9D1002BD722 /* bg_music_intro.m4a in Resources */ = {isa = PBXBuildFile; fileRef = 8B6ECD762833E9D1002BD722 /* bg_music_intro.m4a */; };
+		8B714E9D284659D100DEE4FD /* SKTileMapNode+Extension.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B714E9C284659D100DEE4FD /* SKTileMapNode+Extension.swift */; };
 		8B75248A2800BA55001B4BC1 /* ButtonNode.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B7524892800BA55001B4BC1 /* ButtonNode.swift */; };
 		8B75248C28049359001B4BC1 /* StartingPlatform.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248B28049359001B4BC1 /* StartingPlatform.swift */; };
 		8B7524902804C7E7001B4BC1 /* Collectible.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8B75248F2804C7E7001B4BC1 /* Collectible.swift */; };
@@ -76,6 +77,7 @@
 		8B5F072D27FD3863000C5CBF /* SkyFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkyFactory.swift; sourceTree = "<group>"; };
 		8B6ECD752833E9D1002BD722 /* bg_music.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg_music.m4a; sourceTree = "<group>"; };
 		8B6ECD762833E9D1002BD722 /* bg_music_intro.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = bg_music_intro.m4a; sourceTree = "<group>"; };
+		8B714E9C284659D100DEE4FD /* SKTileMapNode+Extension.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = "SKTileMapNode+Extension.swift"; sourceTree = "<group>"; };
 		8B7524892800BA55001B4BC1 /* ButtonNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ButtonNode.swift; sourceTree = "<group>"; };
 		8B75248B28049359001B4BC1 /* StartingPlatform.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StartingPlatform.swift; sourceTree = "<group>"; };
 		8B75248F2804C7E7001B4BC1 /* Collectible.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Collectible.swift; sourceTree = "<group>"; };
@@ -93,6 +95,7 @@
 		8B8181F5280620FC00A2D503 /* PlayerLives.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerLives.swift; sourceTree = "<group>"; };
 		8B8181F728071FA900A2D503 /* PlayerCollectibles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerCollectibles.swift; sourceTree = "<group>"; };
 		8B8181F92807476600A2D503 /* pop.m4a */ = {isa = PBXFileReference; lastKnownFileType = file; path = pop.m4a; sourceTree = "<group>"; };
+		8BC144372846572400EBEAB1 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		8BD8C24027F61736008EC7A8 /* PlayerNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PlayerNode.swift; sourceTree = "<group>"; };
 		8BD8C24227F6187B008EC7A8 /* LauncherNode.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LauncherNode.swift; sourceTree = "<group>"; };
 		8BF1BAC927FDD91B00C72602 /* DateFactory.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFactory.swift; sourceTree = "<group>"; };
@@ -133,6 +136,7 @@
 		8B1927C627F5FC5700275E69 /* Blasty */ = {
 			isa = PBXGroup;
 			children = (
+				8BC144372846572400EBEAB1 /* Info.plist */,
 				8B4137302805CB7E003BB1D0 /* Sounds */,
 				8B5F072027FC91F6000C5CBF /* Particles */,
 				8BF1BAD327FE24F000C72602 /* Textures */,
@@ -214,6 +218,7 @@
 				8B5F06F427F64ABE000C5CBF /* Trig.swift */,
 				8B3EF07528199D6E00346C5B /* Date+Extension.swift */,
 				8BFB4EFE282984FE00E7BBDE /* SKNode+Extension.swift */,
+				8B714E9C284659D100DEE4FD /* SKTileMapNode+Extension.swift */,
 				8BF1BAC927FDD91B00C72602 /* DateFactory.swift */,
 				8BF1BAD127FE15D600C72602 /* RNGFactory.swift */,
 				8B5F072927FD1402000C5CBF /* MapFactory.swift */,
@@ -332,6 +337,7 @@
 				8B5F06F527F64ABE000C5CBF /* Trig.swift in Sources */,
 				8BD8C24327F6187B008EC7A8 /* LauncherNode.swift in Sources */,
 				8B3EF07628199D6E00346C5B /* Date+Extension.swift in Sources */,
+				8B714E9D284659D100DEE4FD /* SKTileMapNode+Extension.swift in Sources */,
 				8BD8C24127F61736008EC7A8 /* PlayerNode.swift in Sources */,
 				8B8181F6280620FC00A2D503 /* PlayerLives.swift in Sources */,
 				8BF1BAD227FE15D600C72602 /* RNGFactory.swift in Sources */,
@@ -499,6 +505,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blasty/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;
@@ -537,6 +544,7 @@
 					"$(PROJECT_DIR)",
 				);
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = Blasty/Info.plist;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UILaunchStoryboardName = LaunchScreen;
 				INFOPLIST_KEY_UIMainStoryboardFile = Main;

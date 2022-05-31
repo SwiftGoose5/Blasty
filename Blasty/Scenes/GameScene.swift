@@ -37,7 +37,6 @@ class GameScene: SKScene {
     
     let sceneCamera = SKCameraNode()
     
-    let map = SKNode()
     let mapFactory = MapFactory()
     
     let skyFactory = SkyFactory()
@@ -58,6 +57,14 @@ class GameScene: SKScene {
     
     var timeSinceNowLabelNode = SKLabelNode()
     var startingTime = Date()
+    
+    override func willMove(from view: SKView) {
+        removeAllActions()
+        removeChildrenRecursively()
+        skyFactory.teardown()
+        mapFactory.teardown()
+        mapFactory.removeChildrenRecursively()
+    }
     
     override func didMove(to view: SKView) {
         name = "GameScene"
@@ -302,7 +309,7 @@ class GameScene: SKScene {
                     joystick.centerStick()
                     joystick.resetBaseAlpha()
                     joystick.resetBaseScale()
-                    joystickData = JoystickData()
+//                    joystickData = JoystickData()
                 }
             }
             
@@ -392,8 +399,14 @@ class GameScene: SKScene {
             
         }
         
-        joystick.position.x = player.position.x - screenWidth / 1.25
-        joystick.position.y = player.position.y - screenHeight / 1.6
+        if UIDevice.current.userInterfaceIdiom == .phone {
+            joystick.position.x = player.position.x - screenWidth / 0.75
+            joystick.position.y = player.position.y - screenHeight / 1.5
+
+        } else if UIDevice.current.userInterfaceIdiom == .pad {
+            joystick.position.x = player.position.x - screenWidth / 1.25
+            joystick.position.y = player.position.y - screenHeight / 1.4
+        }
         
         cloud.position.x = player.position.x + player.position.x * -cloudSpeed
         cloud.position.y = player.position.y + player.position.y * -cloudSpeed
@@ -496,17 +509,21 @@ extension GameScene {
         let saveData = UserDefaults.standard
         saveData.set(isDayComplete, forKey: "isDayComplete")
         
-        
-        self.run(SKAction.sequence([.wait(forDuration: 4),
-                                    .run({
-                                        let transition = SKTransition.fade(withDuration: 3)
-                                        let scene = SKScene(fileNamed: "LaunchScene")!
-                                        scene.scaleMode = .aspectFill
-                                        self.removeAllActions()
-                                        self.removeChildrenRecursively()
-                                        self.view?.presentScene(scene, transition: transition)
-                                    })
-        ])
-        )
+        let transition = { [weak self] in
+            guard let strongSelf = self else { return }
+            
+            strongSelf.run(SKAction.sequence([.wait(forDuration: 4),
+                                        .run({
+                                            let transition = SKTransition.fade(withDuration: 3)
+                                            let scene = SKScene(fileNamed: "LaunchScene")!
+                                            scene.scaleMode = .aspectFill
+                                            strongSelf.removeAllActions()
+                                            strongSelf.removeChildrenRecursively()
+                                            strongSelf.view?.presentScene(scene, transition: transition)
+                                        })
+            ])
+            )
+        }
+        transition()
     }
 }

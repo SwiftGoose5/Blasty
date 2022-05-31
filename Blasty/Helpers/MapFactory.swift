@@ -34,7 +34,7 @@ class MapFactory: SKNode {
     override init() {
         super.init()
         
-        removeAllChildren()
+        removeChildrenRecursively()
         
         
         noiseMap = makeNoiseMap(columns: columns, rows: rows)
@@ -179,6 +179,13 @@ extension MapFactory {
             }
             addChild(collectible)
         }
+    }
+}
+
+extension MapFactory {
+    func teardown() {
+        topLayer.eraseTileSet()
+        bottomLayer.eraseTileSet()
     }
 }
 
