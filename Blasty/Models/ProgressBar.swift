@@ -44,6 +44,7 @@ class ProgressBar: SKNode {
         progressBar.position = CGPoint(x: -(sceneFrame.width * 0.8), y: 0)
         progressBar.size.width = 0
         progressBar.size.height = sceneFrame.height * 0.12
+        progressBar.zPosition = 10
         
         addChild(progressContainer)
         addChild(progressBar)

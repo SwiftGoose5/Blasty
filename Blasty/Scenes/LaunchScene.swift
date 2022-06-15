@@ -10,8 +10,6 @@
 
 import SpriteKit
 import GameplayKit
-import AVFoundation
-
 
 class LaunchScene: SKScene {
     var player = PlayerNode()
@@ -59,26 +57,27 @@ class LaunchScene: SKScene {
         SKTextureAtlas(named: "Grid Tile Sprite Atlas").preload {
             
         }
-        run(.sequence([.wait(forDuration: 0.5),
-                       .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
-                       .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
-                       .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.27)
-        ]))
-        
         
         collectibleSet = CollectibleSet()
         
         lifeCount = 0
         collectibleCount = 0
         
+
+        
         let loadData = UserDefaults.standard
-        loadData.set(false, forKey: "wasVictory")
-        loadData.set(false, forKey: "isDayComplete")
+//        loadData.set(false, forKey: "wasVictory")
+//        loadData.set(false, forKey: "isDayComplete")
         
         wasVictory = loadData.bool(forKey: "wasVictory")
         isDayComplete = loadData.bool(forKey: "isDayComplete")
         
         if !isDayComplete {
+            run(.sequence([.wait(forDuration: 0.5),
+                           .playSoundFileNamed("flute_g.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+                           .playSoundFileNamed("flute_b.m4a", waitForCompletion: false), .wait(forDuration: 0.27),
+                           .playSoundFileNamed("flute_d.m4a", waitForCompletion: false), .wait(forDuration: 0.27)
+            ]))
             addProgressObserver()
             loadData.set(lifeCount, forKey: "lifeCount")
             DispatchQueue.global(qos: .default).async {
@@ -104,7 +103,6 @@ class LaunchScene: SKScene {
 
         
         // MARK: - Progress Bar
-
         progressBar.getSceneFrame(frame)
         progressBar.buildProgressBar()
         addChild(progressBar)
@@ -284,6 +282,10 @@ extension LaunchScene {
             
             if strongSelf.progressCount <= columns { return }
             
+            strongSelf.progressBar.removeAllActions()
+            strongSelf.progressBar.removeFromParent()
+            strongSelf.nextDayLabelNode.removeFromParent()
+            
             strongSelf.portal.setScale(0)
             strongSelf.portal.removeFromParent()
             strongSelf.addChild(strongSelf.portal)
@@ -304,8 +306,8 @@ extension LaunchScene {
     }
 }
 
-// MARK: - Physics Delegate
 
+// MARK: - Physics Delegate
 extension LaunchScene: SKPhysicsContactDelegate {
     func didBegin(_ contact: SKPhysicsContact) {
 

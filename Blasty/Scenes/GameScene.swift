@@ -10,7 +10,6 @@
 
 import SpriteKit
 import GameplayKit
-import AVFoundation
 
 class GameScene: SKScene {
     let mapScale = CGFloat(3)
@@ -100,24 +99,6 @@ class GameScene: SKScene {
         // MARK: - Joystick
 //        joystick = Joystick()
         addChild(joystick)
-        let uiPoint = CGPoint(x: -UIScreen.main.bounds.width / 2, y: -UIScreen.main.bounds.height / 2)
-        let point = view.convert(uiPoint, to: self)
-        
-        print("points")
-        print(uiPoint)
-        print(point)
-        
-        let emp = SKShapeNode(circleOfRadius: 128)
-        emp.fillColor = .black
-        emp.strokeColor = .black
-        emp.position = point
-        print(UIScreen.main.bounds.width)
-        print(UIScreen.main.bounds.height)
-
-        print(emp.position)
-        addChild(emp)
-        emp.position = point
-        print(emp.position)
         
         // MARK: - Button
 //        button = Button()
@@ -309,7 +290,7 @@ class GameScene: SKScene {
                     joystick.centerStick()
                     joystick.resetBaseAlpha()
                     joystick.resetBaseScale()
-//                    joystickData = JoystickData()
+                    joystickData = JoystickData()
                 }
             }
             
@@ -514,7 +495,7 @@ extension GameScene {
             
             strongSelf.run(SKAction.sequence([.wait(forDuration: 4),
                                         .run({
-                                            let transition = SKTransition.fade(withDuration: 3)
+                                            let transition = SKTransition.fade(withDuration: 5)
                                             let scene = SKScene(fileNamed: "LaunchScene")!
                                             scene.scaleMode = .aspectFill
                                             strongSelf.removeAllActions()
